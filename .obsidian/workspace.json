@@ -185,6 +185,18 @@
   },
   "active": "525e6ad8e71058d1",
   "lastOpenFiles": [
+    "package.json",
+    "apps/desktop",
+    "apps/desktop/package.json",
+    "apps/desktop/vite.config.ts",
+    "apps/desktop/src-tauri",
+    "apps/desktop/src",
+    "README.MD",
+    "assets",
+    "scripts",
+    "packages",
+    "services",
+    "docs/services",
     "docs/vision.md",
     "docs/user_journey.md"
   ]
