@@ -8,7 +8,8 @@ function Sidebar() {
 
             <nav>
                 <ul className="sidebar-nav">
-                    <li><Link to="/dashboard">🏠 Dashboard</Link></li>
+                    <li><Link to="/">🏠 Home</Link></li>
+                    <li><Link to="/dashboard">📊 Dashboard</Link></li>
                     <li><Link to="/resume">📄 Resume</Link></li>
                     <li><Link to="/jobs">💼 Jobs</Link></li>
                     <li><Link to="/settings">⚙️ Settings</Link></li>
