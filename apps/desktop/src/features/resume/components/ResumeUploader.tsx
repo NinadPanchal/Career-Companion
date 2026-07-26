@@ -1,14 +1,27 @@
-import { useCallback,useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { UploadCloud, FileText, X, Eye } from "lucide-react";
+import { UploadCloud, FileText, X, Eye, CheckCircle2, AlertCircle } from "lucide-react";
 import { Collapsible } from "../../../components/ui/Collapsible";
+import { resumeService } from "../services/resume.service";
+
+type ResumeUploadResult = {
+  message: string;
+  word_count: number;
+  text_preview: string;
+};
 
 export default function ResumeUploader() {
-const [previewUrl, setPreviewUrl] = useState("");
-const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [status, setStatus] = useState<"idle" | "uploading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+  const [extraction, setExtraction] = useState<ResumeUploadResult | null>(null);
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       setFile(acceptedFiles[0]);
+      setStatus("idle");
+      setMessage("");
+      setExtraction(null);
     }
   }, []);
 
@@ -36,6 +49,24 @@ const [file, setFile] = useState<File | null>(null);
       URL.revokeObjectURL(url);
     };
   }, [file]);
+
+  const handleAnalyze = async () => {
+    if (!file) return;
+
+    setStatus("uploading");
+    setMessage("");
+
+    try {
+      const response = await resumeService.uploadResume(file) as ResumeUploadResult;
+      setStatus("success");
+      setMessage(response.message);
+      setExtraction(response);
+    } catch (error) {
+      setStatus("error");
+      setMessage("We couldn't upload your resume. Make sure the API is running, then try again.");
+      setExtraction(null);
+    }
+  };
 
   return (
     <div className="mt-8">
@@ -79,13 +110,57 @@ const [file, setFile] = useState<File | null>(null);
             </div>
           </div>
 
-          <button
-            onClick={() => setFile(null)}
-            className="rounded-lg p-2 transition hover:bg-zinc-800"
-          >
-            <X size={18} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleAnalyze}
+              disabled={status === "uploading"}
+              className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-500"
+            >
+              {status === "uploading" ? "Uploading…" : "Analyze Resume"}
+            </button>
+
+            <button
+              onClick={() => {
+                setFile(null);
+                setPreviewUrl("");
+                setStatus("idle");
+                setMessage("");
+                setExtraction(null);
+              }}
+              className="rounded-lg p-2 transition hover:bg-zinc-800"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
+      )}
+
+      {message && (
+        <div
+          role="status"
+          className={`mt-4 flex items-center gap-2 rounded-lg p-3 text-sm ${
+            status === "success"
+              ? "bg-emerald-500/10 text-emerald-300"
+              : "bg-red-500/10 text-red-300"
+          }`}
+        >
+          {status === "success" ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
+          {message}
+        </div>
+      )}
+
+      {extraction && (
+        <Collapsible
+          className="mt-6"
+          title={`Extracted text · ${extraction.word_count} words`}
+          icon={<FileText className="h-5 w-5 text-emerald-500" />}
+          defaultOpen
+        >
+          <p className="whitespace-pre-wrap text-sm leading-6 text-zinc-300">
+            {extraction.text_preview}
+            {extraction.text_preview.length === 500 ? "…" : ""}
+          </p>
+        </Collapsible>
       )}
 
       {file && (
