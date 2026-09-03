@@ -11,7 +11,6 @@ const isTauri = Boolean(process.env.TAURI_ENV_PLATFORM);
 export default defineConfig(async () => ({
   plugins: [react(), tailwindcss()],
 
-  // Prevent Vite from obscuring Rust errors during Tauri dev
   clearScreen: false,
 
   server: {
@@ -31,7 +30,6 @@ export default defineConfig(async () => ({
   },
 
   build: {
-    // Tauri defaults to custom webview targets; standard web fallback targets ES2020 for Vercel
     target: isTauri
       ? process.env.TAURI_ENV_PLATFORM === "windows"
         ? "chrome105"
