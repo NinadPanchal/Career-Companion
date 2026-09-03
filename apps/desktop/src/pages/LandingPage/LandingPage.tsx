@@ -16,8 +16,12 @@ import {
   CheckCircle2,
   User,
   Terminal,
+  BarChart3,
+  BriefcaseBusiness,
+  ChevronRight,
 } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "../../components/ui/Icons";
+import "./LandingPage.css";
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -103,10 +107,10 @@ function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-[#fafafa] selection:bg-emerald-500/20 selection:text-emerald-300">
+    <div className="landing-shell min-h-screen bg-[#09090b] text-[#fafafa] selection:bg-emerald-500/20 selection:text-emerald-300">
       {/* Top Header / Navigation Bar */}
-      <header className="sticky top-0 z-50 border-b border-white/[0.08] bg-[#09090b]/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
+      <header className="landing-nav sticky top-0 z-50 border-b border-white/[0.08] bg-[#09090b]/90 backdrop-blur-md">
+        <div className="landing-container flex items-center justify-between">
           <a
             href="#hero"
             className="flex items-center gap-2.5 text-sm font-semibold tracking-tight text-white transition-opacity hover:opacity-90"
@@ -164,7 +168,7 @@ function LandingPage() {
         <section
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto max-w-4xl px-6 pb-20 pt-20 text-center sm:pt-28"
+          className="landing-hero landing-container text-center"
         >
           {/* Engineering Student Context Badge */}
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-1 text-xs text-zinc-400">
@@ -176,13 +180,13 @@ function LandingPage() {
 
           <h1
             id="hero-title"
-            className="text-3xl font-bold tracking-tight text-white sm:text-5xl sm:leading-[1.15]"
+            className="landing-title text-3xl font-bold tracking-tight text-white sm:text-5xl sm:leading-[1.15]"
           >
             A focused engineering workbench for{" "}
             <span className="text-emerald-400">tech job searches</span>.
           </h1>
 
-          <p className="mx-auto mt-5 max-w-2xl text-base text-zinc-400 sm:text-lg sm:leading-relaxed">
+          <p className="landing-lead mx-auto mt-5 max-w-2xl text-base text-zinc-400 sm:text-lg sm:leading-relaxed">
             Career Companion replaces disorganized spreadsheets with an integrated, local-first platform.
             Parse resumes, calculate skill match percentages against live openings, structure STAR interview responses, and track your application lifecycle.
           </p>
@@ -219,6 +223,29 @@ function LandingPage() {
             </a>
           </div>
 
+          <div className="hero-preview" aria-label="Career Companion workspace preview">
+            <div className="hero-preview__topbar">
+              <div className="hero-preview__dots"><i /><i /><i /></div>
+              <span>Career Companion / Workspace</span>
+              <span className="hero-preview__sync"><i />Synced</span>
+            </div>
+            <div className="hero-preview__body">
+              <div className="hero-preview__sidebar">
+                <span className="hero-preview__brand">CC</span>
+                <span className="is-active">Overview</span><span>Pipeline</span><span>Jobs</span><span>Resume</span>
+              </div>
+              <div className="hero-preview__content">
+                <div className="hero-preview__headline"><div><small>THIS WEEK</small><strong>Keep the search moving.</strong></div><button type="button" onClick={() => navigate("/applications")}>+ Track job</button></div>
+                <div className="hero-preview__metrics">
+                  <div><small>APPLICATIONS</small><strong>42</strong><em>+8 this week</em></div>
+                  <div><small>IN INTERVIEW</small><strong>5</strong><em className="amber">Next: Tomorrow</em></div>
+                  <div><small>AVG. MATCH</small><strong className="green">84.6%</strong><em>High signal</em></div>
+                </div>
+                <div className="hero-preview__jobs"><div><BarChart3 size={15}/><span>Interview prep</span><b>2:00</b></div><div><BriefcaseBusiness size={15}/><span>Senior Software Engineer</span><b className="green">91% match</b></div></div>
+              </div>
+            </div>
+          </div>
+
           {/* Quick Technical Highlights Strip */}
           <div className="mt-14 flex flex-wrap items-center justify-center gap-y-2 gap-x-6 border-t border-white/[0.06] pt-6 text-xs text-zinc-500">
             <span className="flex items-center gap-1.5">
@@ -243,7 +270,7 @@ function LandingPage() {
         <section
           id="features"
           aria-labelledby="features-title"
-          className="mx-auto max-w-6xl border-t border-white/[0.06] px-6 py-20"
+          className="landing-section landing-container border-t border-white/[0.06]"
         >
           <div className="mb-12">
             <p className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
@@ -257,7 +284,7 @@ function LandingPage() {
             </p>
           </div>
 
-          <div className="grid gap-px overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.06] sm:grid-cols-2 lg:grid-cols-3">
+          <div className="feature-grid grid gap-px overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.06] sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => (
               <article
                 key={feature.id}
@@ -281,8 +308,7 @@ function LandingPage() {
                     onClick={() => navigate(feature.path)}
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 transition-colors hover:text-emerald-300"
                   >
-                    <span>{feature.actionText}</span>
-                    <ArrowRight size={12} />
+                    <span>{feature.actionText}</span><ChevronRight size={14} />
                   </button>
                 </div>
               </article>
@@ -294,9 +320,9 @@ function LandingPage() {
         <section
           id="architecture"
           aria-labelledby="architecture-title"
-          className="border-t border-white/[0.06] bg-[#0c0c0e] py-20"
+          className="landing-section landing-section--muted border-t border-white/[0.06] bg-[#0c0c0e]"
         >
-          <div className="mx-auto max-w-6xl px-6">
+          <div className="landing-container">
             <div className="mb-12">
               <p className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
                 System Design
@@ -309,7 +335,7 @@ function LandingPage() {
               </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="architecture-grid grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {techStack.map((item) => (
                 <div
                   key={item.title}
@@ -360,7 +386,7 @@ function LandingPage() {
         <section
           id="about"
           aria-labelledby="about-title"
-          className="mx-auto max-w-6xl border-t border-white/[0.06] px-6 py-20"
+          className="landing-section landing-container border-t border-white/[0.06]"
         >
           <div className="grid gap-10 lg:grid-cols-12 items-start">
             <div className="lg:col-span-5">
@@ -427,9 +453,9 @@ function LandingPage() {
         <section
           id="contact"
           aria-labelledby="contact-title"
-          className="border-t border-white/[0.06] bg-[#0c0c0e] py-20"
+          className="landing-section landing-section--muted border-t border-white/[0.06] bg-[#0c0c0e]"
         >
-          <div className="mx-auto max-w-4xl px-6 text-center">
+          <div className="landing-container landing-container--narrow text-center">
             <p className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
               Connect & Feedback
             </p>
@@ -504,8 +530,8 @@ function LandingPage() {
       </main>
 
       {/* Semantic Footer */}
-      <footer className="border-t border-white/[0.08] bg-[#09090b] px-6 py-8 text-xs text-zinc-500">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 sm:flex-row">
+      <footer className="landing-footer border-t border-white/[0.08] bg-[#09090b] text-xs text-zinc-500">
+        <div className="landing-container flex flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex items-center gap-2">
             <span className="flex h-5 w-5 items-center justify-center rounded bg-emerald-500/20 text-[10px] font-bold text-emerald-400">
               CC
