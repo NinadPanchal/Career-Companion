@@ -1,5 +1,4 @@
 import { Card } from "../../components/ui/Cards";
-import { Button } from "../../components/ui/Button";
 import ResumeUpload from "../../features/resume/components/ResumeUploader";
 
 function Resume() {
