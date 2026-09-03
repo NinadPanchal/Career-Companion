@@ -1,26 +1,32 @@
-    
 .sidebar {
   width: 260px;
   min-height: 100vh;
-  background: #18181b;
+  background: #030712;
   color: #fff;
-  padding: 2rem 1.25rem;
+  padding: 1.75rem 1.25rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-right: 1px solid #27272a;
+  border-right: 1px solid rgba(30, 41, 59, 0.6);
 }
 
 .sidebar-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.2rem;
+  background: linear-gradient(135deg, #34d399 0%, #10b981 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .sidebar-subtitle {
-  color: #a1a1aa;
-  font-size: 0.9rem;
-  margin-bottom: 2rem;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .sidebar-nav {
@@ -30,29 +36,32 @@
 }
 
 .sidebar-nav li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .sidebar-nav a {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.85rem 1rem;
-  color: #d4d4d8;
+  padding: 0.75rem 1rem;
+  color: #94a3b8;
   text-decoration: none;
   border-radius: 12px;
-  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-nav a:hover {
-  background: #27272a;
+  background: rgba(30, 41, 59, 0.5);
   color: #ffffff;
 }
 
 .sidebar-nav a.active {
-  background: #22c55e;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #ffffff;
   font-weight: 600;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
 }
 
 .sidebar-profile {
@@ -60,26 +69,30 @@
   align-items: center;
   gap: 0.75rem;
   padding-top: 1.25rem;
-  border-top: 1px solid #27272a;
+  border-top: 1px solid rgba(30, 41, 59, 0.6);
 }
 
 .sidebar-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #27272a;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(51, 65, 85, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #34d399;
 }
 
 .sidebar-name {
   margin: 0;
   font-weight: 600;
+  font-size: 0.875rem;
+  color: #f1f5f9;
 }
 
 .sidebar-role {
-  margin: 0.2rem 0 0;
-  color: #a1a1aa;
-  font-size: 0.85rem;
+  margin: 0.15rem 0 0;
+  color: #64748b;
+  font-size: 0.775rem;
 }

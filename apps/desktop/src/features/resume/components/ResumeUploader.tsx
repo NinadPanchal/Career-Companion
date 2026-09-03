@@ -3,27 +3,21 @@ import { useDropzone } from "react-dropzone";
 import { UploadCloud, FileText, X, Eye, CheckCircle2, AlertCircle } from "lucide-react";
 import { Collapsible } from "../../../components/ui/Collapsible";
 import { resumeService } from "../services/resume.service";
-
-type ResumeUploadResult = {
-  message: string;
-  word_count: number;
-  text_preview: string;
-};
+import { type ResumeAnalysisResult, useResumeStore } from "../stores/resume.store";
 
 export default function ResumeUploader() {
   const [previewUrl, setPreviewUrl] = useState("");
-  const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<"idle" | "uploading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
-  const [extraction, setExtraction] = useState<ResumeUploadResult | null>(null);
+  const { file, analysis, setFile, setAnalysis, clearResume } = useResumeStore();
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       setFile(acceptedFiles[0]);
       setStatus("idle");
       setMessage("");
-      setExtraction(null);
     }
-  }, []);
+  }, [setFile]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -57,14 +51,13 @@ export default function ResumeUploader() {
     setMessage("");
 
     try {
-      const response = await resumeService.uploadResume(file) as ResumeUploadResult;
+      const response = await resumeService.uploadResume(file) as ResumeAnalysisResult;
       setStatus("success");
       setMessage(response.message);
-      setExtraction(response);
+      setAnalysis(response);
     } catch (error) {
       setStatus("error");
       setMessage("We couldn't upload your resume. Make sure the API is running, then try again.");
-      setExtraction(null);
     }
   };
 
@@ -121,11 +114,10 @@ export default function ResumeUploader() {
 
             <button
               onClick={() => {
-                setFile(null);
                 setPreviewUrl("");
                 setStatus("idle");
                 setMessage("");
-                setExtraction(null);
+                clearResume();
               }}
               className="rounded-lg p-2 transition hover:bg-zinc-800"
             >
@@ -149,17 +141,58 @@ export default function ResumeUploader() {
         </div>
       )}
 
-      {extraction && (
+      {analysis && (
         <Collapsible
           className="mt-6"
-          title={`Extracted text · ${extraction.word_count} words`}
+          title={`Extracted text · ${analysis.word_count} words`}
           icon={<FileText className="h-5 w-5 text-emerald-500" />}
           defaultOpen
         >
           <p className="whitespace-pre-wrap text-sm leading-6 text-zinc-300">
-            {extraction.text_preview}
-            {extraction.text_preview.length === 500 ? "…" : ""}
+            {analysis.text_preview}
+            {analysis.text_preview.length === 500 ? "…" : ""}
           </p>
+        </Collapsible>
+      )}
+
+      {analysis && Object.keys(analysis.sections).length > 0 && (
+        <Collapsible
+          className="mt-6"
+          title={`Detected sections · ${Object.keys(analysis.sections).length}`}
+          icon={<FileText className="h-5 w-5 text-emerald-500" />}
+        >
+          <div className="grid gap-3 sm:grid-cols-2">
+            {Object.entries(analysis.sections).map(([section, content]) => (
+              <div key={section} className="rounded-lg bg-zinc-950 p-4">
+                <h3 className="text-sm font-semibold capitalize text-emerald-300">
+                  {section}
+                </h3>
+                <p className="mt-2 line-clamp-4 whitespace-pre-wrap text-sm leading-6 text-zinc-400">
+                  {content}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Collapsible>
+      )}
+
+      {analysis && analysis.skills.length > 0 && (
+        <Collapsible
+          className="mt-6"
+          title={`Detected skills · ${analysis.skills.length}`}
+          icon={<FileText className="h-5 w-5 text-emerald-500" />}
+          defaultOpen
+        >
+          <div className="flex flex-wrap gap-2">
+            {analysis.skills.map((skill) => (
+              <span
+                key={skill}
+                className="rounded-full bg-emerald-500/10 px-3 py-1.5 text-sm font-medium text-emerald-300"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
         </Collapsible>
       )}
 

@@ -3,6 +3,8 @@ from uuid import uuid4
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from services.resume_parser import ResumeExtractionError, extract_resume_text
+from services.resume_sections import detect_resume_sections
+from services.skill_extractor import extract_skills
 
 router = APIRouter(
     prefix="/resume",
@@ -59,11 +61,16 @@ async def upload_resume(file: UploadFile = File(...)):
             detail=str(error),
         ) from error
 
+    sections = detect_resume_sections(extracted_text)
+    skills = extract_skills(extracted_text)
+
     return {
-        "message": "Resume uploaded and text extracted successfully.",
+        "message": "Resume uploaded and analyzed successfully.",
         "original_filename": file.filename,
         "stored_filename": stored_filename,
         "size_bytes": len(content),
         "word_count": len(extracted_text.split()),
         "text_preview": extracted_text[:500],
+        "sections": sections,
+        "skills": skills,
     }
