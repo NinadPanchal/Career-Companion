@@ -171,7 +171,7 @@ function LandingPage() {
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
             <span>Final-Year B.E. AI & DS Capstone Project</span>
             <span className="text-zinc-600">•</span>
-            <span className="text-zinc-400">Bengaluru, India</span>
+            <span className="text-zinc-400">Mumbai, India</span>
           </div>
 
           <h1
@@ -372,7 +372,7 @@ function LandingPage() {
               </h2>
               <p className="mt-3 text-sm text-zinc-400 leading-relaxed">
                 Career Companion was conceptualized and developed by <strong className="text-zinc-200">Ninad Panchal</strong>,
-                a final-year Bachelor of Engineering student specializing in Artificial Intelligence and Data Science in Bengaluru, India.
+                a final-year Bachelor of Engineering student specializing in Artificial Intelligence and Data Science in Mumbai, India.
               </p>
 
               <div className="mt-6 rounded-xl border border-white/[0.08] bg-[#0f0f12] p-4 text-xs text-zinc-300">
@@ -382,7 +382,7 @@ function LandingPage() {
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-white">Ninad Panchal</p>
-                    <p className="text-[11px] text-zinc-400">B.E. AI & Data Science Candidate • Bengaluru</p>
+                    <p className="text-[11px] text-zinc-400">B.E. AI & Data Science Candidate • Mumbai, India</p>
                   </div>
                 </div>
                 <p className="mt-3 text-[11px] text-zinc-400 leading-relaxed">

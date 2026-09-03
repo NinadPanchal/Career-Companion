@@ -22,7 +22,7 @@ export default function EasyApplyModal({ job, isOpen, onClose, onSuccess }: Easy
   const [fullName, setFullName] = useState("Ninad Panchal");
   const [email, setEmail] = useState("ninad.panchal@career-companion.app");
   const [phone, setPhone] = useState("+91 98765 43210");
-  const [location, setLocation] = useState("Bengaluru, Karnataka, India");
+  const [location, setLocation] = useState("Mumbai, Maharashtra, India");
   const [coverNote, setCoverNote] = useState(
     `Hi Hiring Team at ${job?.company_name || 'Company'},\n\nI am excited to apply for the ${job?.title || 'position'} role. With strong skills in ${analysis?.skills?.slice(0, 4).join(', ') || 'software engineering, Python, and React'}, I am confident in delivering high impact.`
   );

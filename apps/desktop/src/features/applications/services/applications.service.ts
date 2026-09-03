@@ -81,7 +81,7 @@ export const applicationsService = {
           id: Date.now(),
           title: payload.title || "Software Engineer",
           company_name: payload.company_name || "Tech Corp",
-          location: payload.location || "Remote / Bengaluru",
+          location: payload.location || "Remote / Mumbai",
           url: payload.url || ""
         }
       };

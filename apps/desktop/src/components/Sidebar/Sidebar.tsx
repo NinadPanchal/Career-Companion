@@ -130,7 +130,7 @@ function Sidebar({ onOpenCommandPalette }: SidebarProps) {
         </div>
         <div className="min-w-0">
           <p className="sidebar-name truncate">Ninad Panchal</p>
-          <p className="sidebar-role truncate">B.E. AI & DS • Bengaluru</p>
+          <p className="sidebar-role truncate">B.E. AI & DS • Mumbai, India</p>
         </div>
       </div>
     </aside>

@@ -69,7 +69,7 @@ export default function Applications() {
     addApplication({
       title: newTitle.trim(),
       company_name: newCompany.trim(),
-      location: newLocation.trim() || "Bengaluru, India",
+      location: newLocation.trim() || "Mumbai, India",
       url: newUrl.trim(),
       status: newStatus,
       notes: newNotes.trim()
@@ -388,7 +388,7 @@ export default function Applications() {
                     <label className="mb-1 block text-xs font-semibold text-zinc-300">Location</label>
                     <input
                       type="text"
-                      placeholder="e.g. Bengaluru / Remote"
+                      placeholder="e.g. Mumbai / Remote"
                       value={newLocation}
                       onChange={(e) => setNewLocation(e.target.value)}
                       className="w-full rounded-xl border border-zinc-800 bg-zinc-950 p-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-indigo-500"

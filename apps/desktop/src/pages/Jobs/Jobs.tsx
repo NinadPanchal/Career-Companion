@@ -50,7 +50,7 @@ function Jobs() {
     if (discoveredJobs.length > 0) return;
     setIsSearching(true);
     try {
-      const jobs = await jobsService.discoverJobs("Software Engineer", "Bengaluru", false);
+      const jobs = await jobsService.discoverJobs("Software Engineer", "Mumbai", false);
       setDiscoveredJobs(Array.isArray(jobs) ? jobs : []);
     } catch (err) {
       console.error("Failed to auto-load jobs:", err);
@@ -188,7 +188,7 @@ function Jobs() {
                     type="text"
                     value={searchLocation}
                     onChange={(e) => setSearchLocation(e.target.value)}
-                    placeholder="e.g. Bengaluru, Hyderabad, Pune"
+                    placeholder="e.g. Mumbai, Bengaluru, Pune"
                     className="w-full h-11 rounded-lg border border-white/[0.08] bg-white/[0.03] pl-10 pr-4 text-sm text-white placeholder:text-zinc-500 outline-none transition-colors focus:border-emerald-500"
                   />
                 </div>
