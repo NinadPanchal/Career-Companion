@@ -10,6 +10,7 @@ from sqlalchemy import select
 from app.routers.jobs import router as jobs_router
 from app.routers.resume import router as resume_router
 from app.routers.applications import router as applications_router
+from app.routers.ai import router as ai_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -60,6 +61,7 @@ app.add_middleware(
 app.include_router(resume_router)
 app.include_router(jobs_router)
 app.include_router(applications_router)
+app.include_router(ai_router)
 
 @app.get("/")
 def root():
