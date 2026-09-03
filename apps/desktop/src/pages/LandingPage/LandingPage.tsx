@@ -192,22 +192,22 @@ function LandingPage() {
           </p>
 
           {/* Primary Action Buttons */}
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
             <button
               type="button"
               onClick={() => navigate("/dashboard")}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-emerald-400"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl bg-emerald-500 px-7 py-4 text-base font-semibold text-black transition-colors hover:bg-emerald-400"
             >
               <span>Open Dashboard</span>
-              <ArrowRight size={16} />
+              <ArrowRight size={19} />
             </button>
 
             <button
               type="button"
               onClick={() => navigate("/resume")}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-white/[0.1] bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-zinc-200 transition-colors hover:border-white/[0.18] hover:bg-white/[0.06]"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl border border-white/[0.12] bg-white/[0.03] px-7 py-4 text-base font-medium text-zinc-100 transition-colors hover:border-white/[0.22] hover:bg-white/[0.06]"
             >
-              <FileText size={16} />
+              <FileText size={19} />
               <span>Resume & ATS Scanner</span>
             </button>
 
@@ -215,11 +215,11 @@ function LandingPage() {
               href="https://github.com/NinadPanchal/Career-Companion"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 rounded-lg border border-transparent px-4 py-2.5 text-sm font-medium text-zinc-400 transition-colors hover:text-white"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-transparent px-5 py-4 text-base font-medium text-zinc-300 transition-colors hover:bg-white/[0.04] hover:text-white"
             >
-              <GithubIcon width={15} height={15} />
+              <GithubIcon width={18} height={18} />
               <span>GitHub Code</span>
-              <ExternalLink size={12} className="text-zinc-500" />
+              <ExternalLink size={14} className="text-zinc-500" />
             </a>
           </div>
 
