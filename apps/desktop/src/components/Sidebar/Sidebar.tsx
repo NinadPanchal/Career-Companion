@@ -4,12 +4,11 @@ import {
   FileText,
   Briefcase,
   Settings,
-  Home,
-  User,
   Kanban,
   Send,
   Bot,
   Search,
+  User,
 } from "lucide-react";
 import "./Sidebar.css";
 
@@ -21,82 +20,72 @@ function Sidebar({ onOpenCommandPalette }: SidebarProps) {
   return (
     <aside className="sidebar">
       <div>
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h2 className="sidebar-title">Career Companion</h2>
-            <p className="sidebar-subtitle">AI Career Operating System</p>
-          </div>
+        <div className="sidebar-brand">
+          <h2 className="sidebar-title">Career Companion</h2>
         </div>
 
-        {/* Command Palette Trigger */}
+        {/* Quick search */}
         <button
           type="button"
           onClick={onOpenCommandPalette}
-          className="mb-5 flex w-full items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/90 px-3 py-2 text-xs text-zinc-400 transition hover:border-zinc-700 hover:text-white"
+          className="mb-4 flex w-full items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.03] px-2.5 py-[7px] text-xs text-zinc-500 transition-colors hover:border-white/[0.1] hover:text-zinc-400"
         >
           <div className="flex items-center gap-2">
-            <Search size={14} className="text-zinc-500" />
-            <span>Search / Commands</span>
+            <Search size={13} />
+            <span>Search…</span>
           </div>
-          <kbd className="rounded border border-zinc-700 bg-zinc-800 px-1.5 py-0.5 text-[10px] font-bold text-zinc-300">
-            ⌘K
-          </kbd>
+          <kbd>⌘K</kbd>
         </button>
 
         <nav>
           <ul className="sidebar-nav">
-            <li>
-              <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>
-                <Home size={18} />
-                <span>Home</span>
-              </NavLink>
-            </li>
-
+            {/* Overview */}
+            <li className="sidebar-section-label">Overview</li>
             <li>
               <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "active" : "")}>
-                <LayoutDashboard size={18} />
+                <LayoutDashboard size={16} />
                 <span>Dashboard</span>
               </NavLink>
             </li>
-
             <li>
               <NavLink to="/applications" className={({ isActive }) => (isActive ? "active" : "")}>
-                <Kanban size={18} />
-                <span>Pipeline Tracker</span>
+                <Kanban size={16} />
+                <span>Pipeline</span>
               </NavLink>
             </li>
-
             <li>
               <NavLink to="/jobs" className={({ isActive }) => (isActive ? "active" : "")}>
-                <Briefcase size={18} />
-                <span>Discover Jobs</span>
+                <Briefcase size={16} />
+                <span>Jobs</span>
               </NavLink>
             </li>
 
+            {/* Tools */}
+            <li className="sidebar-section-label">Tools</li>
             <li>
               <NavLink to="/resume" className={({ isActive }) => (isActive ? "active" : "")}>
-                <FileText size={18} />
-                <span>Resume & ATS</span>
+                <FileText size={16} />
+                <span>Resume</span>
               </NavLink>
             </li>
-
             <li>
               <NavLink to="/cover-letter" className={({ isActive }) => (isActive ? "active" : "")}>
-                <Send size={18} />
-                <span>AI Cover Letter</span>
+                <Send size={16} />
+                <span>Cover Letter</span>
               </NavLink>
             </li>
-
             <li>
               <NavLink to="/interview-prep" className={({ isActive }) => (isActive ? "active" : "")}>
-                <Bot size={18} />
-                <span>Mock Interview</span>
+                <Bot size={16} />
+                <span>Interview Prep</span>
               </NavLink>
             </li>
 
+            {/* System */}
+            <li className="sidebar-section-label">System</li>
             <li>
               <NavLink to="/settings" className={({ isActive }) => (isActive ? "active" : "")}>
-                <Settings size={18} />
+                <Settings size={16} />
                 <span>Settings</span>
               </NavLink>
             </li>
@@ -106,11 +95,11 @@ function Sidebar({ onOpenCommandPalette }: SidebarProps) {
 
       <div className="sidebar-profile">
         <div className="sidebar-avatar">
-          <User size={20} />
+          <User size={16} />
         </div>
         <div className="min-w-0">
           <p className="sidebar-name truncate">Ninad Panchal</p>
-          <p className="sidebar-role truncate">Bengaluru, India 🇮🇳</p>
+          <p className="sidebar-role truncate">Bengaluru, India</p>
         </div>
       </div>
     </aside>

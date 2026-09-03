@@ -3,16 +3,14 @@ import clsx from "clsx";
 
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "ghost" | "outline";
   size?: "sm" | "md" | "lg";
-  rounded?: "sm" | "md" | "lg" | "full";
   children: ReactNode;
 }
 
 export default function Button({
   variant = "primary",
   size = "md",
-  rounded = "lg",
   className,
   children,
   ...props
@@ -20,28 +18,26 @@ export default function Button({
   return (
     <button
       className={clsx(
-        "font-medium transition-all duration-200",
-        "focus:outline-none focus:ring-2 focus:ring-emerald-500",
+        "inline-flex items-center justify-center font-medium transition-colors duration-150 rounded-lg",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090b]",
+        "disabled:opacity-50 disabled:pointer-events-none",
         {
-          "px-3 py-2 text-sm": size === "sm",
-          "px-5 py-2.5 text-base": size === "md",
-          "px-7 py-3.5 text-lg": size === "lg",
+          "px-3 py-1.5 text-xs gap-1.5": size === "sm",
+          "px-4 py-2 text-sm gap-2": size === "md",
+          "px-5 py-2.5 text-sm gap-2": size === "lg",
         },
         {
-          "rounded-sm": rounded === "sm",
-          "rounded-md": rounded === "md",
-          "rounded-lg": rounded === "lg",
-          "rounded-full": rounded === "full",
-        },
-        {
-          "bg-emerald-500 text-black hover:bg-emerald-400 active:scale-95":
+          "bg-emerald-500 text-black font-semibold hover:bg-emerald-400":
             variant === "primary",
 
-          "bg-zinc-800 text-white hover:bg-zinc-700":
+          "bg-white/[0.06] text-zinc-200 hover:bg-white/[0.1] border border-white/[0.06]":
             variant === "secondary",
 
-          "bg-transparent text-zinc-300 hover:bg-zinc-800":
+          "bg-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]":
             variant === "ghost",
+
+          "bg-transparent text-zinc-300 border border-white/[0.1] hover:border-white/[0.16] hover:bg-white/[0.03]":
+            variant === "outline",
         },
         className
       )}
