@@ -4,24 +4,38 @@
   --surface-1: #0f0f12;
   --surface-2: #18181b;
   --surface-3: #1f1f23;
+  --surface-base: #09090b;
+  --surface-card: #0f0f12;
+  --surface-subtle: #27272a;
+  --surface-overlay: #18181b;
 
   /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-subtle: rgba(255, 255, 255, 0.08);
   --border-default: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.12);
-  --border-active: rgba(255, 255, 255, 0.16);
+  --border-hover: rgba(255, 255, 255, 0.16);
+  --border-active: rgba(255, 255, 255, 0.24);
 
   /* Text */
   --text-primary: #fafafa;
   --text-secondary: #a1a1aa;
   --text-tertiary: #71717a;
   --text-quaternary: #52525b;
+  --text-muted: #71717a;
 
-  /* Accent — single, used sparingly */
+  /* Accent & Brand */
+  --primary: #10b981;
+  --primary-hover: #34d399;
+  --primary-subtle: rgba(16, 185, 129, 0.1);
   --accent: #10b981;
   --accent-hover: #34d399;
   --accent-muted: rgba(16, 185, 129, 0.12);
   --accent-subtle: rgba(16, 185, 129, 0.06);
+
+  /* Semantic Statuses */
+  --status-applied: #38bdf8;
+  --status-interview: #f59e0b;
+  --status-offer: #10b981;
+  --status-rejected: #f43f5e;
 
   /* Spacing scale */
   --space-1: 4px;

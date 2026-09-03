@@ -34,19 +34,28 @@
   color: var(--text-quaternary);
 }
 
-/* Kbd styling */
-kbd {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 5px;
-  font-family: inherit;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  color: var(--text-tertiary);
-  background: var(--surface-2);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-sm);
+/* Stitch surface & border utilities */
+.bg-surface-base { background-color: var(--surface-base); }
+.bg-surface-card { background-color: var(--surface-card); }
+.bg-surface-subtle { background-color: var(--surface-subtle); }
+.bg-surface-overlay { background-color: var(--surface-overlay); }
+
+.border-border-subtle { border-color: var(--border-subtle); }
+.border-border-hover { border-color: var(--border-hover); }
+.border-border-active { border-color: var(--border-active); }
+
+.text-status-applied { color: var(--status-applied); }
+.text-status-interview { color: var(--status-interview); }
+.text-status-offer { color: var(--status-offer); }
+.text-status-rejected { color: var(--status-rejected); }
+
+.bg-status-applied { background-color: var(--status-applied); }
+.bg-status-interview { background-color: var(--status-interview); }
+.bg-status-offer { background-color: var(--status-offer); }
+.bg-status-rejected { background-color: var(--status-rejected); }
+
+.font-mono-metric {
+  font-family: 'JetBrains Mono', monospace;
+  font-feature-settings: 'tnum';
 }
+
