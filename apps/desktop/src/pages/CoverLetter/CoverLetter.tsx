@@ -70,7 +70,7 @@ export default function CoverLetter() {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-950 p-8 text-white">
+    <div className="space-y-8 animate-fade-in">
       {/* Header */}
       <div className="mb-8">
         <div className="mb-2 flex items-center gap-2">
@@ -298,6 +298,6 @@ export default function CoverLetter() {
           </Card>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

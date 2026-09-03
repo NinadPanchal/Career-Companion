@@ -96,7 +96,7 @@ export default function InterviewPrep() {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-950 p-8 text-white">
+    <div className="space-y-8 animate-fade-in">
       {/* Header */}
       <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
@@ -389,6 +389,6 @@ export default function InterviewPrep() {
           )}
         </div>
       </div>
-    </main>
+    </div>
   );
 }

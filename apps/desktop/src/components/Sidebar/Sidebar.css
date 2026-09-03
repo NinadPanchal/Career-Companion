@@ -1,24 +1,25 @@
 .sidebar {
-  width: 240px;
+  width: 264px;
   min-height: 100vh;
   background: var(--surface-0);
   color: var(--text-primary);
-  padding: 20px 12px;
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border-right: 1px solid var(--border-subtle);
+  flex-shrink: 0;
 }
 
 .sidebar-brand {
-  padding: 0 8px;
+  padding: 0 4px;
   margin-bottom: 24px;
 }
 
 .sidebar-title {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   color: var(--text-primary);
 }
 
@@ -32,24 +33,24 @@
   font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   color: var(--text-quaternary);
-  padding: 16px 8px 6px;
+  padding: 18px 10px 6px;
 }
 
 .sidebar-nav li {
-  margin-bottom: 1px;
+  margin-bottom: 2px;
 }
 
 .sidebar-nav a {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 8px;
+  gap: 10px;
+  padding: 9px 12px;
   color: var(--text-tertiary);
   text-decoration: none;
   border-radius: var(--radius-md);
-  font-size: 0.8125rem;
+  font-size: 0.84rem;
   font-weight: 500;
   transition: color 0.15s ease, background 0.15s ease;
   position: relative;
@@ -69,11 +70,11 @@
 .sidebar-nav a.active::before {
   content: '';
   position: absolute;
-  left: -4px;
+  left: -2px;
   top: 50%;
   transform: translateY(-50%);
   width: 3px;
-  height: 16px;
+  height: 18px;
   background: var(--accent);
   border-radius: 2px;
 }
@@ -81,14 +82,14 @@
 .sidebar-profile {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 8px 0;
+  gap: 12px;
+  padding: 16px 8px 4px;
   border-top: 1px solid var(--border-subtle);
 }
 
 .sidebar-avatar {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-md);
   background: var(--surface-2);
   border: 1px solid var(--border-default);
@@ -102,12 +103,12 @@
 .sidebar-name {
   margin: 0;
   font-weight: 600;
-  font-size: 0.8125rem;
+  font-size: 0.84rem;
   color: var(--text-primary);
 }
 
 .sidebar-role {
-  margin: 1px 0 0;
+  margin: 2px 0 0;
   color: var(--text-tertiary);
-  font-size: 0.6875rem;
+  font-size: 0.72rem;
 }

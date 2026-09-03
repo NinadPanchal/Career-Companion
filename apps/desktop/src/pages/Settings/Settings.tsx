@@ -34,7 +34,7 @@ function Settings() {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-950 p-8 text-white">
+    <div className="space-y-8 animate-fade-in">
       <div className="mb-8">
         <div className="mb-2 flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400 border border-emerald-500/20">
@@ -262,7 +262,7 @@ function Settings() {
           </Button>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 

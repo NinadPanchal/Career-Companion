@@ -21,8 +21,10 @@ function DashboardLayout() {
     <div className="flex min-h-screen bg-[#09090b] text-white">
       <Sidebar onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
 
-      <main className="flex-1 overflow-y-auto">
-        <Outlet />
+      <main className="flex-1 overflow-y-auto min-w-0 bg-[#09090b]">
+        <div className="mx-auto w-full max-w-6xl px-6 py-8 sm:px-10 sm:py-10 lg:px-12 lg:py-12">
+          <Outlet />
+        </div>
       </main>
 
       <CommandPalette

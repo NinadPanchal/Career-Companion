@@ -105,9 +105,9 @@ function Dashboard() {
   ];
 
   return (
-    <main className="min-h-screen p-6 sm:p-8" id="dashboard-content">
+    <div className="space-y-8 animate-fade-in">
       {/* Page Header */}
-      <header className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+      <header className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <div className="flex items-center gap-2 text-xs text-zinc-500 mb-1">
             <Link to="/" className="hover:text-zinc-300 transition-colors">
@@ -269,7 +269,7 @@ function Dashboard() {
           </section>
         </div>
       )}
-    </main>
+    </div>
   );
 }
 
