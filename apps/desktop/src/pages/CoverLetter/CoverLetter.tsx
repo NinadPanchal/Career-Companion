@@ -74,11 +74,11 @@ export default function CoverLetter() {
       {/* Header */}
       <div className="mb-8">
         <div className="mb-2 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-500/20 bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-400">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
             <Sparkles size={14} /> AI Outreach Suite
           </span>
         </div>
-        <h1 className="text-4xl font-bold tracking-tight">AI Cover Letter & Outreach</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-zinc-100">Cover Letter & Outreach</h1>
         <p className="mt-1 text-zinc-400">
           Generate tailored cover letters, LinkedIn referral messages, and cold pitch emails matching your resume to any job description.
         </p>
@@ -89,7 +89,7 @@ export default function CoverLetter() {
         <div className="space-y-6 lg:col-span-5">
           <Card className="border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur-xl">
             <h2 className="mb-4 text-lg font-bold flex items-center gap-2">
-              <SlidersHorizontal size={18} className="text-purple-400" /> Target Role Configuration
+              <SlidersHorizontal size={18} className="text-emerald-400" /> Target Role Configuration
             </h2>
 
             {/* Format Type Selector */}
@@ -101,11 +101,11 @@ export default function CoverLetter() {
                   onClick={() => setFormatType("cover_letter")}
                   className={`flex flex-col items-center justify-center rounded-xl border p-3 text-center transition ${
                     formatType === "cover_letter"
-                      ? "border-purple-500 bg-purple-500/10 text-white shadow-lg shadow-purple-500/10"
+                      ? "border-emerald-500/50 bg-emerald-500/10 text-white"
                       : "border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700"
                   }`}
                 >
-                  <FileText size={18} className="mb-1 text-purple-400" />
+                  <FileText size={18} className="mb-1 text-emerald-400" />
                   <span className="text-xs font-semibold">Cover Letter</span>
                 </button>
 
@@ -114,7 +114,7 @@ export default function CoverLetter() {
                   onClick={() => setFormatType("linkedin_outreach")}
                   className={`flex flex-col items-center justify-center rounded-xl border p-3 text-center transition ${
                     formatType === "linkedin_outreach"
-                      ? "border-purple-500 bg-purple-500/10 text-white shadow-lg shadow-purple-500/10"
+                      ? "border-emerald-500/50 bg-emerald-500/10 text-white"
                       : "border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700"
                   }`}
                 >
@@ -127,7 +127,7 @@ export default function CoverLetter() {
                   onClick={() => setFormatType("cold_email")}
                   className={`flex flex-col items-center justify-center rounded-xl border p-3 text-center transition ${
                     formatType === "cold_email"
-                      ? "border-purple-500 bg-purple-500/10 text-white shadow-lg shadow-purple-500/10"
+                      ? "border-emerald-500/50 bg-emerald-500/10 text-white"
                       : "border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700"
                   }`}
                 >
@@ -146,7 +146,7 @@ export default function CoverLetter() {
                   value={jobTitle}
                   onChange={(e) => setJobTitle(e.target.value)}
                   placeholder="e.g. Lead Platform Engineer"
-                  className="w-full rounded-xl border border-zinc-800 bg-zinc-950 p-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-purple-500"
+                  className="w-full rounded-lg border border-white/[0.08] bg-[#09090b] p-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -157,7 +157,7 @@ export default function CoverLetter() {
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   placeholder="e.g. Stripe / Flipkart"
-                  className="w-full rounded-xl border border-zinc-800 bg-zinc-950 p-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-purple-500"
+                  className="w-full rounded-lg border border-white/[0.08] bg-[#09090b] p-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -172,7 +172,7 @@ export default function CoverLetter() {
                       onClick={() => setTone(t)}
                       className={`rounded-lg border px-3 py-2 text-xs font-medium capitalize transition ${
                         tone === t
-                          ? "border-purple-500 bg-purple-500/10 text-purple-300"
+                          ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-300"
                           : "border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-zinc-700"
                       }`}
                     >
@@ -192,14 +192,14 @@ export default function CoverLetter() {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste JD requirements to extract ATS matching keywords automatically..."
-                  className="w-full rounded-xl border border-zinc-800 bg-zinc-950 p-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-purple-500 resize-none"
+                  className="w-full rounded-lg border border-white/[0.08] bg-[#09090b] p-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
 
               <Button
                 onClick={handleGenerate}
                 disabled={isLoading || !jobTitle.trim() || !companyName.trim()}
-                className="w-full justify-center gap-2 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-600/20"
+                className="w-full justify-center gap-2 py-3 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-none"
               >
                 {isLoading ? (
                   <>
@@ -243,7 +243,7 @@ export default function CoverLetter() {
             <div className="flex-1">
               {isLoading ? (
                 <div className="flex h-64 flex-col items-center justify-center space-y-3 text-center">
-                  <div className="rounded-2xl bg-purple-500/10 p-4 text-purple-400 animate-pulse">
+                  <div className="rounded-xl bg-emerald-500/10 p-4 text-emerald-400 animate-pulse">
                     <Sparkles size={32} />
                   </div>
                   <p className="text-sm font-semibold text-white">Analyzing role requirements & matching resume skills...</p>
@@ -258,11 +258,11 @@ export default function CoverLetter() {
                   {result.subject_line && (
                     <div className="rounded-xl border border-zinc-800 bg-zinc-950/80 p-3">
                       <span className="text-xs font-semibold text-zinc-500">Subject: </span>
-                      <span className="text-xs font-bold text-indigo-300">{result.subject_line}</span>
+                      <span className="text-xs font-bold text-emerald-300">{result.subject_line}</span>
                     </div>
                   )}
 
-                  <div className="rounded-2xl border border-zinc-800/80 bg-zinc-950/90 p-5 font-mono text-sm leading-relaxed text-zinc-200 whitespace-pre-wrap selection:bg-purple-500/30">
+                  <div className="rounded-xl border border-white/[0.08] bg-[#09090b] p-5 font-mono text-sm leading-relaxed text-zinc-200 whitespace-pre-wrap selection:bg-emerald-500/30">
                     {result.content}
                   </div>
 
@@ -270,13 +270,13 @@ export default function CoverLetter() {
                   {result.target_keywords?.length > 0 && (
                     <div className="pt-2">
                       <p className="mb-2 text-xs font-semibold text-zinc-400 flex items-center gap-1.5">
-                        <Tag size={12} className="text-purple-400" /> Target Keywords Included:
+                        <Tag size={12} className="text-emerald-400" /> Target Keywords Included:
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {result.target_keywords.map((kw) => (
                           <span
                             key={kw}
-                            className="rounded-md border border-purple-500/20 bg-purple-500/10 px-2 py-0.5 text-xs font-medium text-purple-300"
+                            className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-300"
                           >
                             {kw}
                           </span>

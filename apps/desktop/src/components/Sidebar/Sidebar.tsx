@@ -16,15 +16,18 @@ import "./Sidebar.css";
 
 interface SidebarProps {
   onOpenCommandPalette?: () => void;
+  isOpen?: boolean;
+  onNavigate?: () => void;
 }
 
-function Sidebar({ onOpenCommandPalette }: SidebarProps) {
+function Sidebar({ onOpenCommandPalette, isOpen = false, onNavigate }: SidebarProps) {
   return (
-    <aside className="sidebar" aria-label="Application sidebar">
+    <aside className={`sidebar ${isOpen ? "sidebar--open" : ""}`} aria-label="Application sidebar">
       <div>
         <div className="sidebar-brand">
           <NavLink
             to="/"
+            onClick={onNavigate}
             className="group flex flex-col transition-opacity hover:opacity-90"
             title="Return to Project Overview"
           >
@@ -60,19 +63,19 @@ function Sidebar({ onOpenCommandPalette }: SidebarProps) {
             {/* Overview */}
             <li className="sidebar-section-label">Pipeline</li>
             <li>
-              <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "active" : "")}>
+              <NavLink to="/dashboard" onClick={onNavigate} className={({ isActive }) => (isActive ? "active" : "")}>
                 <LayoutDashboard size={15} />
                 <span>Dashboard</span>
               </NavLink>
             </li>
             <li>
-              <NavLink to="/applications" className={({ isActive }) => (isActive ? "active" : "")}>
+              <NavLink to="/applications" onClick={onNavigate} className={({ isActive }) => (isActive ? "active" : "")}>
                 <Kanban size={15} />
                 <span>Applications</span>
               </NavLink>
             </li>
             <li>
-              <NavLink to="/jobs" className={({ isActive }) => (isActive ? "active" : "")}>
+              <NavLink to="/jobs" onClick={onNavigate} className={({ isActive }) => (isActive ? "active" : "")}>
                 <Briefcase size={15} />
                 <span>Job Board</span>
               </NavLink>
@@ -81,19 +84,19 @@ function Sidebar({ onOpenCommandPalette }: SidebarProps) {
             {/* Preparation Tools */}
             <li className="sidebar-section-label">Preparation</li>
             <li>
-              <NavLink to="/resume" className={({ isActive }) => (isActive ? "active" : "")}>
+              <NavLink to="/resume" onClick={onNavigate} className={({ isActive }) => (isActive ? "active" : "")}>
                 <FileText size={15} />
                 <span>Resume & ATS</span>
               </NavLink>
             </li>
             <li>
-              <NavLink to="/cover-letter" className={({ isActive }) => (isActive ? "active" : "")}>
+              <NavLink to="/cover-letter" onClick={onNavigate} className={({ isActive }) => (isActive ? "active" : "")}>
                 <Send size={15} />
                 <span>Cover Letters</span>
               </NavLink>
             </li>
             <li>
-              <NavLink to="/interview-prep" className={({ isActive }) => (isActive ? "active" : "")}>
+              <NavLink to="/interview-prep" onClick={onNavigate} className={({ isActive }) => (isActive ? "active" : "")}>
                 <Bot size={15} />
                 <span>Interview Prep</span>
               </NavLink>
@@ -102,7 +105,7 @@ function Sidebar({ onOpenCommandPalette }: SidebarProps) {
             {/* System / Preferences */}
             <li className="sidebar-section-label">System</li>
             <li>
-              <NavLink to="/settings" className={({ isActive }) => (isActive ? "active" : "")}>
+              <NavLink to="/settings" onClick={onNavigate} className={({ isActive }) => (isActive ? "active" : "")}>
                 <Settings size={15} />
                 <span>Settings & DB</span>
               </NavLink>

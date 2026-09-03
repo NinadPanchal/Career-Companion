@@ -201,7 +201,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
                         onMouseEnter={() => setSelectedIndex(idx)}
                         className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm transition ${
                           isSelected
-                            ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
+                            ? "bg-emerald-500 text-zinc-950 shadow-sm"
                             : "text-zinc-300 hover:bg-zinc-800/60"
                         }`}
                       >
@@ -210,7 +210,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
                           <span className="font-medium">{item.title}</span>
                         </div>
                         <span className={`text-[10px] font-semibold uppercase tracking-wider ${
-                          isSelected ? "text-indigo-200" : "text-zinc-500"
+                          isSelected ? "text-emerald-950" : "text-zinc-500"
                         }`}>
                           {item.category}
                         </span>

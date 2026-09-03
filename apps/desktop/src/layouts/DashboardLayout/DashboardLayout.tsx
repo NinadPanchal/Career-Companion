@@ -1,10 +1,24 @@
 import { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { Menu, PanelLeftClose } from "lucide-react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import CommandPalette from "../../components/CommandPalette/CommandPalette";
+import "./DashboardLayout.css";
 
 function DashboardLayout() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
+  const workspaceLabels: Record<string, string> = {
+    "/dashboard": "Workspace",
+    "/applications": "Applications",
+    "/jobs": "Job discovery",
+    "/resume": "Resume & ATS",
+    "/cover-letter": "Cover letter studio",
+    "/interview-prep": "Interview practice",
+    "/settings": "Settings",
+  };
+  const pageLabel = workspaceLabels[location.pathname] ?? "Workspace";
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -18,18 +32,26 @@ function DashboardLayout() {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-[#09090b] text-white">
-      <Sidebar onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
+    <div className="app-shell">
+      <div className={`sidebar-scrim ${isSidebarOpen ? "sidebar-scrim--visible" : ""}`} onClick={() => setIsSidebarOpen(false)} />
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onNavigate={() => setIsSidebarOpen(false)}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+      />
 
-      <div className="flex-1 flex flex-col min-w-0 bg-[#09090b]">
+      <div className="app-main">
         {/* Top Control Bar (Stitch Design Specification) */}
-        <header className="sticky top-0 z-30 h-12 flex items-center justify-between px-6 sm:px-10 lg:px-12 bg-[#09090b]/90 backdrop-blur border-b border-white/[0.08] select-none">
+        <header className="workspace-header select-none">
           {/* Left: Breadcrumbs & Live Sync Pill */}
           <div className="flex items-center gap-3">
+            <button type="button" className="mobile-menu-trigger" onClick={() => setIsSidebarOpen((open) => !open)} aria-label={isSidebarOpen ? "Close navigation" : "Open navigation"}>
+              {isSidebarOpen ? <PanelLeftClose size={17} /> : <Menu size={17} />}
+            </button>
             <div className="flex items-center gap-1.5 text-xs text-zinc-400">
               <span className="text-zinc-500">Project Overview</span>
               <span className="text-zinc-600">/</span>
-              <span className="text-zinc-200 font-medium">Workspace</span>
+              <span className="text-zinc-200 font-medium">{pageLabel}</span>
             </div>
             <div className="h-3 w-px bg-white/[0.08]" />
             {/* Live Sync Pill */}
@@ -56,19 +78,19 @@ function DashboardLayout() {
 
           {/* Right: Actions & Tools */}
           <div className="flex items-center gap-2">
-            <a
-              href="/jobs"
+            <Link
+              to="/jobs"
               className="h-7 px-3 rounded bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-zinc-200 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
               <span className="text-xs">⚡</span>
               <span>Discover Jobs</span>
-            </a>
-            <a
-              href="/applications"
+            </Link>
+            <Link
+              to="/applications"
               className="h-7 px-3 rounded bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold text-xs flex items-center gap-1 transition-colors"
             >
               <span>+ Track Job</span>
-            </a>
+            </Link>
             <div className="h-3 w-px bg-white/[0.08] mx-1" />
             <a
               href="https://github.com/NinadPanchal/Career-Companion"
@@ -83,8 +105,8 @@ function DashboardLayout() {
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto">
-          <div className="mx-auto w-full max-w-7xl px-6 py-8 sm:px-10 sm:py-10 lg:px-12 lg:py-12">
+        <main className="workspace-content">
+          <div className="mx-auto w-full max-w-7xl">
             <Outlet />
           </div>
         </main>

@@ -105,7 +105,7 @@ export default function InterviewPrep() {
               <Sparkles size={14} /> AI Interview Coach
             </span>
           </div>
-          <h1 className="text-4xl font-bold tracking-tight">Mock Interview Simulator</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-100">Mock Interview Simulator</h1>
           <p className="mt-1 text-zinc-400">
             Practice behavioral and technical questions with live STAR-framework scoring and coaching feedback.
           </p>
@@ -262,7 +262,7 @@ export default function InterviewPrep() {
                   <button
                     type="button"
                     onClick={() => setShowSampleAnswer(!showSampleAnswer)}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition"
+                    className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition"
                   >
                     <BookOpen size={14} />
                     {showSampleAnswer ? "Hide Model Answer" : "View Top-Tier Model Answer"}
@@ -272,7 +272,7 @@ export default function InterviewPrep() {
                   <Button
                     onClick={handleEvaluate}
                     disabled={isEvaluating || !candidateAnswer.trim()}
-                    className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-lg shadow-emerald-600/20"
+                    className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-none"
                   >
                     <Bot size={16} />
                     {isEvaluating ? "Evaluating STAR Structure..." : "Evaluate My Answer"}
@@ -287,19 +287,19 @@ export default function InterviewPrep() {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="mt-6 overflow-hidden rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-5 text-sm text-zinc-300"
+                    className="mt-6 overflow-hidden rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5 text-sm text-zinc-300"
                   >
-                    <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-400">
+                    <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-400">
                       <Sparkles size={14} /> Model Answer & Talking Points
                     </div>
                     <p className="italic leading-relaxed text-zinc-200">"{activeQuestion.sample_answer}"</p>
 
-                    <div className="mt-4 border-t border-indigo-500/20 pt-3">
-                      <p className="mb-1.5 text-xs font-semibold text-indigo-300">STAR Checklist for this question:</p>
+                    <div className="mt-4 border-t border-emerald-500/20 pt-3">
+                      <p className="mb-1.5 text-xs font-semibold text-emerald-300">STAR Checklist for this question:</p>
                       <ul className="space-y-1 text-xs text-zinc-400">
                         {activeQuestion.star_tips.map((tip, i) => (
                           <li key={i} className="flex items-start gap-1.5">
-                            <span className="text-indigo-400">•</span> {tip}
+                            <span className="text-emerald-400">•</span> {tip}
                           </li>
                         ))}
                       </ul>
