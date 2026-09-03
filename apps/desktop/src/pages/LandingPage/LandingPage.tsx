@@ -21,6 +21,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "../../components/ui/Icons";
+import { SpecularButton } from "../../components/ui/SpecularButton";
 import "./LandingPage.css";
 
 function LandingPage() {
@@ -193,14 +194,9 @@ function LandingPage() {
 
           {/* Primary Action Buttons */}
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-            <button
-              type="button"
-              onClick={() => navigate("/dashboard")}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl bg-emerald-500 px-7 py-4 text-base font-semibold text-black transition-colors hover:bg-emerald-400"
-            >
-              <span>Open Dashboard</span>
-              <ArrowRight size={19} />
-            </button>
+            <SpecularButton onClick={() => navigate("/dashboard")} lineColor="#ecfdf5" baseColor="#047857" textColor="#022c22" radius={14} intensity={1.35} followMouse className="w-full sm:w-auto">
+              <span>Open Dashboard</span><ArrowRight size={19} />
+            </SpecularButton>
 
             <button
               type="button"
