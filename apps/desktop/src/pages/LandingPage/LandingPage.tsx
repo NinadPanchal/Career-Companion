@@ -198,25 +198,13 @@ function LandingPage() {
               <span>Open Dashboard</span><ArrowRight size={19} />
             </SpecularButton>
 
-            <button
-              type="button"
-              onClick={() => navigate("/resume")}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl border border-white/[0.12] bg-white/[0.03] px-7 py-4 text-base font-medium text-zinc-100 transition-colors hover:border-white/[0.22] hover:bg-white/[0.06]"
-            >
-              <FileText size={19} />
-              <span>Resume & ATS Scanner</span>
-            </button>
+            <SpecularButton onClick={() => navigate("/resume")} tint="#18181b" tintOpacity={1} textColor="#fafafa" lineColor="#a7f3d0" baseColor="#52525b" radius={14} intensity={1.1} followMouse className="w-full sm:w-auto">
+              <FileText size={19} /><span>Resume & ATS Scanner</span>
+            </SpecularButton>
 
-            <a
-              href="https://github.com/NinadPanchal/Career-Companion"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-transparent px-5 py-4 text-base font-medium text-zinc-300 transition-colors hover:bg-white/[0.04] hover:text-white"
-            >
-              <GithubIcon width={18} height={18} />
-              <span>GitHub Code</span>
-              <ExternalLink size={14} className="text-zinc-500" />
-            </a>
+            <SpecularButton onClick={() => window.open("https://github.com/NinadPanchal/Career-Companion", "_blank", "noopener,noreferrer")} tint="#09090b" tintOpacity={1} textColor="#d4d4d8" lineColor="#a7f3d0" baseColor="#3f3f46" radius={14} intensity={0.9} followMouse className="w-full sm:w-auto">
+              <GithubIcon width={18} height={18} /><span>GitHub Code</span><ExternalLink size={14} className="text-zinc-500" />
+            </SpecularButton>
           </div>
 
           <div className="hero-preview" aria-label="Career Companion workspace preview">
