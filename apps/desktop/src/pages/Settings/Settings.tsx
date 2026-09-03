@@ -56,8 +56,8 @@ function Settings() {
                 <Server size={22} />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">Local FastAPI Engine</h2>
-                <p className="text-xs text-zinc-400">Backend service running on http://127.0.0.1:8000</p>
+                <h2 className="text-lg font-bold text-white">FastAPI Backend Engine</h2>
+                <p className="text-xs text-zinc-400">Local service running on http://127.0.0.1:8000</p>
               </div>
             </div>
 
@@ -78,6 +78,36 @@ function Settings() {
                 <RefreshCw size={16} />
               </Button>
             </div>
+          </div>
+        </Card>
+
+        {/* Database Architecture Card */}
+        <Card className="border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur-xl">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-bold text-emerald-400">
+                  100% Free & Open Source
+                </span>
+                <span className="rounded-md border border-zinc-700 bg-zinc-800 px-2 py-0.5 text-[11px] font-semibold text-zinc-300">
+                  SQLAlchemy 2.0 Async
+                </span>
+              </div>
+              <h2 className="mt-2 text-base font-bold text-white">Database Engine</h2>
+              <p className="mt-1 text-xs text-zinc-400 leading-relaxed max-w-xl">
+                Career Companion uses an open-source database engine that runs locally on <strong className="text-white">SQLite</strong> without any cost or accounts, and seamlessly connects to free cloud <strong className="text-white">PostgreSQL</strong> (via Neon or Supabase) with zero code changes.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2 border-t border-zinc-800/80 pt-4 text-xs text-zinc-400">
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={13} className="text-emerald-400" /> Users & Profile</span>
+            <span>•</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={13} className="text-emerald-400" /> Resumes & Parse History</span>
+            <span>•</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={13} className="text-emerald-400" /> Jobs Discovery Cache</span>
+            <span>•</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={13} className="text-emerald-400" /> Applications Pipeline</span>
           </div>
         </Card>
 

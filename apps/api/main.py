@@ -2,9 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from app.core.database import engine, Base
-from app.models import User
-from app.core.database import async_session_maker
+from app.core.database import engine, async_session_maker
+from app.models import Base, User, Job, Resume, Application, Skill
 from sqlalchemy import select
 
 from app.routers.jobs import router as jobs_router
