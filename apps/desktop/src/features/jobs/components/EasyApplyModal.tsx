@@ -46,37 +46,37 @@ export default function EasyApplyModal({ job, isOpen, onClose, onSuccess }: Easy
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-emerald-500/30 bg-zinc-950 p-6 text-white shadow-2xl"
+          className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0c0d12] p-6 text-white shadow-2xl font-sans"
         >
           {/* Top banner */}
-          <div className="mb-6 flex items-center justify-between border-b border-zinc-800 pb-4">
+          <div className="mb-5 flex items-center justify-between border-b border-white/[0.08] pb-4">
             <div className="flex items-center gap-2.5">
-              <div className="rounded-xl bg-emerald-500/20 p-2.5 text-emerald-400">
-                <Zap size={22} className="fill-emerald-400" />
+              <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-2 text-emerald-400">
+                <Zap size={20} className="fill-emerald-400" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-extrabold text-white">⚡ Easy Apply</h2>
-                  <span className="rounded bg-emerald-500/20 px-2 py-0.5 text-xs font-semibold text-emerald-400 border border-emerald-500/30">
-                    LinkedIn Style 1-Click
+                  <h2 className="text-lg font-bold text-white">⚡ 1-Click Application</h2>
+                  <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-mono font-semibold text-emerald-400 border border-emerald-500/20">
+                    Verified Direct
                   </span>
                 </div>
-                <p className="text-xs text-zinc-400">
-                  {job.title} • <span className="font-semibold text-zinc-300">{job.company_name}</span>
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  {job.title} • <span className="font-semibold text-zinc-200">{job.company_name}</span>
                 </p>
               </div>
             </div>
 
             <button
               onClick={onClose}
-              className="rounded-xl p-2 text-zinc-400 transition hover:bg-zinc-900 hover:text-white"
+              className="rounded-lg p-1.5 text-zinc-400 transition hover:bg-white/[0.08] hover:text-white cursor-pointer"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
           </div>
 

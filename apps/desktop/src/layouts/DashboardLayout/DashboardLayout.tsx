@@ -41,66 +41,58 @@ function DashboardLayout() {
       />
 
       <div className="app-main">
-        {/* Top Control Bar (Stitch Design Specification) */}
+        {/* Top Control Bar (Clean Minimalist Glass) */}
         <header className="workspace-header select-none">
-          {/* Left: Breadcrumbs & Live Sync Pill */}
+          {/* Left: Breadcrumbs & Subtle Status */}
           <div className="flex items-center gap-3">
-            <button type="button" className="mobile-menu-trigger" onClick={() => setIsSidebarOpen((open) => !open)} aria-label={isSidebarOpen ? "Close navigation" : "Open navigation"}>
-              {isSidebarOpen ? <PanelLeftClose size={17} /> : <Menu size={17} />}
+            <button
+              type="button"
+              className="mobile-menu-trigger"
+              onClick={() => setIsSidebarOpen((open) => !open)}
+              aria-label={isSidebarOpen ? "Close navigation" : "Open navigation"}
+            >
+              {isSidebarOpen ? <PanelLeftClose size={16} /> : <Menu size={16} />}
             </button>
-            <div className="flex items-center gap-1.5 text-xs text-zinc-400">
-              <span className="text-zinc-500">Project Overview</span>
-              <span className="text-zinc-600">/</span>
-              <span className="text-zinc-200 font-medium">{pageLabel}</span>
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-zinc-500 font-medium">Workspace</span>
+              <span className="text-zinc-700">/</span>
+              <span className="text-zinc-200 font-semibold">{pageLabel}</span>
             </div>
-            <div className="h-3 w-px bg-white/[0.08]" />
-            {/* Live Sync Pill */}
-            <div className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#0f0f12] border border-white/[0.08] text-[11px] font-mono text-zinc-300">
+            <div className="hidden sm:inline-flex items-center gap-1.5 ml-2 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-mono text-emerald-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Local Engine • Neon synced</span>
+              <span>Neon Synced</span>
             </div>
           </div>
 
-          {/* Center: Search Input Bar */}
-          <div className="hidden md:flex items-center relative w-72">
+          {/* Center: Search Trigger Bar */}
+          <div className="hidden md:flex items-center relative w-80">
             <button
               type="button"
               onClick={() => setIsCommandPaletteOpen(true)}
-              className="w-full h-8 pl-8 pr-12 rounded bg-[#0f0f12] border border-white/[0.08] hover:border-white/[0.16] text-left text-xs text-zinc-400 flex items-center transition-colors"
+              className="w-full h-8.5 pl-9 pr-12 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.14] text-left text-xs text-zinc-400 flex items-center transition-all cursor-pointer group"
             >
-              <span className="absolute left-2.5 text-zinc-500 text-xs">⌘</span>
-              <span>Filter applications or commands...</span>
-              <span className="absolute right-2 px-1 py-0.2 rounded bg-white/[0.04] border border-white/[0.08] text-[10px] text-zinc-400 font-mono">
+              <span className="absolute left-3 text-zinc-500 group-hover:text-zinc-400 transition-colors text-xs">⌘</span>
+              <span className="truncate">Search commands, pages, jobs...</span>
+              <span className="absolute right-2 px-1.5 py-0.5 rounded bg-white/[0.05] border border-white/[0.08] text-[10px] text-zinc-400 font-mono">
                 ⌘K
               </span>
             </button>
           </div>
 
-          {/* Right: Actions & Tools */}
+          {/* Right: Actions */}
           <div className="flex items-center gap-2">
             <Link
               to="/jobs"
-              className="h-7 px-3 rounded bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-zinc-200 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-colors"
+              className="hidden sm:inline-flex h-8 px-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-white/[0.14] text-zinc-300 hover:text-white text-xs font-medium items-center gap-1.5 transition-all"
             >
-              <span className="text-xs">⚡</span>
               <span>Discover Jobs</span>
             </Link>
             <Link
               to="/applications"
-              className="h-7 px-3 rounded bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold text-xs flex items-center gap-1 transition-colors"
+              className="h-8 px-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold text-xs flex items-center gap-1.5 shadow-[0_2px_10px_rgba(16,185,129,0.25)] hover:shadow-[0_4px_16px_rgba(16,185,129,0.35)] transition-all cursor-pointer"
             >
               <span>+ Track Job</span>
             </Link>
-            <div className="h-3 w-px bg-white/[0.08] mx-1" />
-            <a
-              href="https://github.com/NinadPanchal/Career-Companion"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-7 h-7 rounded border border-white/[0.08] hover:border-white/[0.16] flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
-              title="Documentation & Source"
-            >
-              <span className="text-xs font-mono">?</span>
-            </a>
           </div>
         </header>
 

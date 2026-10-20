@@ -29,11 +29,11 @@ export function Collapsible({
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex w-full items-center justify-between px-5 py-4 text-left transition hover:bg-zinc-800"
+        className="flex w-full items-center justify-between px-6 py-5 text-left transition hover:bg-zinc-800/60"
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           {icon}
-          <span className="font-semibold">{title}</span>
+          <span className="font-semibold text-base">{title}</span>
         </div>
 
         <ChevronDown
@@ -45,8 +45,10 @@ export function Collapsible({
       </button>
 
       {isOpen && (
-        <div className="border-t border-zinc-800 p-5">
-          {children}
+        <div className="border-t border-zinc-800/60 p-6">
+          <div className="space-y-4">
+            {children}
+          </div>
         </div>
       )}
     </div>

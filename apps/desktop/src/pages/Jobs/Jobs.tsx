@@ -1,23 +1,18 @@
 import { FormEvent, useEffect, useState, useCallback } from "react";
 import { 
   MapPin, 
-  Building, 
   ExternalLink, 
   Bookmark, 
   BookmarkCheck, 
   Zap, 
   CheckCircle2, 
-  SlidersHorizontal,
-  Terminal,
-  Verified,
-  ChevronDown,
-  ArrowUpDown
+  Search,
 } from "lucide-react";
 import { jobsService } from "../../features/jobs/services/jobs.service";
 import { useJobsStore, DiscoveredJob, SavedJob } from "../../features/jobs/stores/jobs.store";
 import EasyApplyModal from "../../features/jobs/components/EasyApplyModal";
+import { Card, Button, Tabs, ProgressRing } from "../../components/ui";
 
-// Sample curated roles matching Stitch Design Spec when API has few or empty entries
 const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
   {
     external_id: "ZEP-ENG-8492",
@@ -29,9 +24,9 @@ const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
     currency: "INR",
     is_remote: false,
     match_score: 92,
-    matched_skills: ["Python", "FastAPI", "Redis Cluster", "PostgreSQL", "Docker"],
+    matched_skills: ["Python", "FastAPI", "Redis", "PostgreSQL", "Docker"],
     missing_skills: ["Apache Flink"],
-    source: "ACTIVE PIPELINE CANDIDATE",
+    source: "High Priority Match",
     url: "https://www.zepto.com/careers",
     description: "Build high-throughput order dispatch services",
     posted_at: "6 hours ago"
@@ -48,7 +43,7 @@ const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
     match_score: 88,
     matched_skills: ["Go", "Kafka", "High Throughput RPC", "Kubernetes"],
     missing_skills: ["CockroachDB"],
-    source: "VERIFIED DIRECT SOURCE",
+    source: "Verified Partner",
     url: "https://razorpay.com/jobs",
     description: "Core payments ledger reliability and idempotency",
     posted_at: "1 day ago"
@@ -64,8 +59,8 @@ const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
     is_remote: false,
     match_score: 84,
     matched_skills: ["TypeScript", "Python", "CI/CD Pipelines", "AWS"],
-    missing_skills: ["Terraform Enterprise"],
-    source: "MUMBAI ONSITE/HYBRID",
+    missing_skills: ["Terraform"],
+    source: "Mumbai Tech",
     url: "https://www.browserstack.com/careers",
     description: "Virtualization device cloud scaling",
     posted_at: "2 days ago"
@@ -81,8 +76,8 @@ const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
     is_remote: true,
     match_score: 79,
     matched_skills: ["React", "Node.js", "Microservices"],
-    missing_skills: ["Kotlin backend"],
-    source: "HIGH VELOCITY TEAM",
+    missing_skills: ["Kotlin"],
+    source: "Fintech Leader",
     url: "https://cred.club/careers",
     description: "Member experience and transaction pipeline",
     posted_at: "3 days ago"
@@ -106,8 +101,8 @@ export default function Jobs() {
 
   const [activeTab, setActiveTab] = useState<"feed" | "saved">("feed");
   const [errorMessage, setErrorMessage] = useState("");
-  const [experienceFilter, setExperienceFilter] = useState("2-5 Yrs");
-  const [minSalaryFilter, setMinSalaryFilter] = useState("24");
+  const [experienceFilter, setExperienceFilter] = useState("all");
+  const [minSalaryFilter, setMinSalaryFilter] = useState("all");
 
   // Easy Apply State
   const [selectedJobForApply, setSelectedJobForApply] = useState<DiscoveredJob | null>(null);
@@ -183,199 +178,131 @@ export default function Jobs() {
   return (
     <div className="space-y-6 animate-fade-in font-sans select-none">
       {/* ========================================================================= */}
-      {/* TOP HEADER / STREAM CONTEXT                                               */}
+      {/* HEADER & VIEW SWITCHER                                                    */}
       {/* ========================================================================= */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 text-xs text-zinc-400">
-            <span>Pipeline</span>
-            <span className="text-zinc-600">/</span>
-            <span className="text-zinc-100 font-semibold">Job Board & Scoring Engine</span>
-          </div>
-          <span className="inline-flex items-center px-2 py-0.5 rounded border border-white/[0.08] bg-[#0f0f12] text-[11px] font-mono text-zinc-300">
-            {currentDisplayJobs.length} Active Tech Roles
-          </span>
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-white/[0.06]">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+            <span>Job Discovery Radar</span>
+            <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              {currentDisplayJobs.length} Matched Roles
+            </span>
+          </h1>
+          <p className="text-xs text-zinc-400 mt-0.5">Algorithmic role scoring against your active resume competencies.</p>
         </div>
 
-        {/* Right utility cluster */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center bg-[#0f0f12] border border-white/[0.08] rounded-lg p-0.5">
-            <button
-              onClick={() => setActiveTab("feed")}
-              className={`px-2.5 py-1 text-xs font-medium rounded-md transition-all ${
-                activeTab === "feed" ? "bg-white/[0.08] text-emerald-400 font-semibold shadow-sm" : "text-zinc-400 hover:text-white"
-              }`}
-            >
-              Feed
-            </button>
-            <button
-              onClick={() => setActiveTab("saved")}
-              className={`px-2.5 py-1 text-xs font-medium rounded-md transition-all ${
-                activeTab === "saved" ? "bg-white/[0.08] text-emerald-400 font-semibold shadow-sm" : "text-zinc-400 hover:text-white"
-              }`}
-            >
-              Saved ({savedJobs.length})
-            </button>
-          </div>
-
-          <div className="h-4 w-px bg-white/[0.08] mx-1" />
-
-          <button
-            type="button"
-            className="w-7 h-7 rounded border border-white/[0.08] bg-[#0f0f12] flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
-            title="Configure Weights"
-          >
-            <SlidersHorizontal size={13} />
-          </button>
-        </div>
+        <Tabs
+          size="sm"
+          tabs={[
+            { id: "feed", label: "Discovered Feed", badge: currentDisplayJobs.length },
+            { id: "saved", label: "Saved Roles", badge: savedJobs.length },
+          ]}
+          activeTab={activeTab}
+          onChange={(tab) => setActiveTab(tab as "feed" | "saved")}
+        />
       </div>
 
       {/* ========================================================================= */}
-      {/* SEARCH & FILTER HEURISTIC ENGINE CARD                                     */}
+      {/* SEARCH & FILTERS CARD                                                     */}
       {/* ========================================================================= */}
-      <section className="bg-[#0f0f12] border border-white/[0.08] rounded-xl p-4 sm:p-5 flex flex-col gap-3.5 shadow-sm">
+      <Card className="p-4 sm:p-5 space-y-4">
         <form onSubmit={handleSearch} className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
-          {/* Input 1: Job Title / Tech Stack */}
           <div className="flex-1 relative">
-            <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500">
-              <Terminal size={15} />
-            </span>
+            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Query tech stack, target title, or keywords..."
-              className="w-full h-9 pl-9 pr-12 bg-[#09090b] border border-white/[0.08] focus:border-emerald-500 rounded-lg font-sans text-xs text-white placeholder-zinc-500 transition-colors outline-none"
+              placeholder="Search target title, technologies, or keywords..."
+              className="w-full h-9.5 pl-10 pr-3 bg-white/[0.03] border border-white/[0.08] focus:border-emerald-500/50 rounded-xl text-xs text-white placeholder-zinc-500 outline-none transition-colors"
             />
-            <span className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
-              <kbd className="px-1.5 py-0.5 rounded bg-[#18181b] text-[10px] font-mono text-zinc-400 border border-white/[0.08]">
-                ⌘/
-              </kbd>
-            </span>
           </div>
 
-          {/* Input 2: City / Region */}
-          <div className="w-full md:w-[260px] relative">
-            <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500">
-              <MapPin size={15} />
-            </span>
+          <div className="w-full md:w-60 relative">
+            <MapPin size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
             <input
               type="text"
               value={searchLocation}
               onChange={(e) => setSearchLocation(e.target.value)}
-              placeholder="Location or timezone..."
-              className="w-full h-9 pl-9 pr-3 bg-[#09090b] border border-white/[0.08] focus:border-emerald-500 rounded-lg font-sans text-xs text-white placeholder-zinc-500 transition-colors outline-none"
+              placeholder="City (e.g. Mumbai, Bengaluru)..."
+              className="w-full h-9.5 pl-10 pr-3 bg-white/[0.03] border border-white/[0.08] focus:border-emerald-500/50 rounded-xl text-xs text-white placeholder-zinc-500 outline-none transition-colors"
             />
           </div>
 
-          {/* Run Button */}
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            size="md"
             disabled={isSearching}
-            className="h-9 px-4 bg-emerald-500 hover:bg-emerald-400 active:scale-[0.98] text-zinc-950 font-semibold text-xs rounded-lg flex items-center justify-center gap-1.5 transition-all whitespace-nowrap shadow-sm"
+            className="gap-2 shrink-0"
           >
-            <Zap size={14} className="fill-black" />
-            <span>{isSearching ? "Matching..." : "Run Heuristic Match"}</span>
-          </button>
+            <Zap size={14} />
+            <span>{isSearching ? "Matching..." : "Find Matches"}</span>
+          </Button>
         </form>
+        {errorMessage && (
+          <div className="mt-2.5 px-3 py-1.5 rounded-lg border border-amber-500/20 bg-amber-500/10 text-xs text-amber-300 font-mono">
+            {errorMessage}
+          </div>
+        )}
 
-        {/* Filter Row & Toggles */}
-        <div className="flex flex-wrap items-center justify-between pt-3 border-t border-white/[0.06] gap-3 text-xs">
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Checkbox: Remote Only */}
-            <label className="flex items-center gap-2 px-2.5 py-1 rounded bg-[#09090b] border border-white/[0.08] hover:border-white/[0.16] cursor-pointer transition-colors select-none">
+        {/* Quick Filter Chips */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/[0.06] text-xs">
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="flex items-center gap-2 px-3 py-1 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.14] cursor-pointer transition-colors select-none text-zinc-300">
               <input
                 type="checkbox"
                 checked={remoteOnly}
                 onChange={(e) => setRemoteOnly(e.target.checked)}
                 className="w-3.5 h-3.5 rounded bg-zinc-900 border-zinc-700 text-emerald-500 focus:ring-0 cursor-pointer"
               />
-              <span className="text-zinc-200 text-[11px] font-medium">Remote Only</span>
+              <span className="text-xs">Remote Only</span>
             </label>
 
-            {/* Dropdown: Experience */}
-            <div className="relative">
-              <select
-                value={experienceFilter}
-                onChange={(e) => setExperienceFilter(e.target.value)}
-                className="h-7 pl-2.5 pr-6 bg-[#09090b] border border-white/[0.08] hover:border-white/[0.16] text-zinc-200 text-[11px] rounded appearance-none cursor-pointer focus:border-emerald-500 outline-none"
-              >
-                <option value="0-2 Yrs">Experience (0-2 Yrs)</option>
-                <option value="2-5 Yrs">Experience (2-5 Yrs)</option>
-                <option value="5-8 Yrs">Senior (5-8 Yrs)</option>
-                <option value="8+ Yrs">Staff / Principal (8+ Yrs)</option>
-              </select>
-              <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500" />
-            </div>
-
-            {/* Dropdown: Compensation */}
-            <div className="relative">
-              <select
-                value={minSalaryFilter}
-                onChange={(e) => setMinSalaryFilter(e.target.value)}
-                className="h-7 pl-2.5 pr-6 bg-[#09090b] border border-white/[0.08] hover:border-white/[0.16] text-zinc-200 text-[11px] rounded appearance-none cursor-pointer focus:border-emerald-500 outline-none"
-              >
-                <option value="24">Min ₹24L PA</option>
-                <option value="30">Min ₹30L PA</option>
-                <option value="40">Min ₹40L PA</option>
-                <option value="50">Min ₹50L PA</option>
-              </select>
-              <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500" />
-            </div>
-
-            <button
-              onClick={() => {
-                setSearchQuery("");
-                setSearchLocation("Mumbai");
-                setRemoteOnly(false);
-              }}
-              className="text-zinc-500 hover:text-zinc-300 font-mono text-[10px] underline underline-offset-4"
+            <select
+              value={experienceFilter}
+              onChange={(e) => setExperienceFilter(e.target.value)}
+              className="h-8 px-2.5 bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.14] text-zinc-300 text-xs rounded-lg outline-none cursor-pointer"
             >
-              Clear filters
-            </button>
+              <option value="all" className="bg-zinc-900 text-white">All Experience</option>
+              <option value="junior" className="bg-zinc-900 text-white">Entry / Junior (0-2 Yrs)</option>
+              <option value="mid" className="bg-zinc-900 text-white">Mid-Level (2-5 Yrs)</option>
+              <option value="senior" className="bg-zinc-900 text-white">Senior (5-8 Yrs)</option>
+              <option value="staff" className="bg-zinc-900 text-white">Staff+ (8+ Yrs)</option>
+            </select>
+
+            <select
+              value={minSalaryFilter}
+              onChange={(e) => setMinSalaryFilter(e.target.value)}
+              className="h-8 px-2.5 bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.14] text-zinc-300 text-xs rounded-lg outline-none cursor-pointer"
+            >
+              <option value="all" className="bg-zinc-900 text-white">Any Compensation</option>
+              <option value="25" className="bg-zinc-900 text-white">₹25L+ PA</option>
+              <option value="35" className="bg-zinc-900 text-white">₹35L+ PA</option>
+              <option value="45" className="bg-zinc-900 text-white">₹45L+ PA</option>
+            </select>
           </div>
 
-          {/* Real-Time Heuristic Feedback Pill */}
-          <div className="hidden lg:flex items-center gap-2 text-[10px] font-mono text-zinc-400">
-            <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
-            <span>Vector weights: Python 35%, Distributed 30%, Low-Latency 20%, Compensation 15%</span>
-          </div>
+          <span className="text-[11px] font-mono text-zinc-500">
+            Ranked by match compatibility
+          </span>
         </div>
-
-        {errorMessage && (
-          <p className="text-[11px] text-amber-400 font-mono pt-1">{errorMessage}</p>
-        )}
-      </section>
+      </Card>
 
       {/* ========================================================================= */}
-      {/* STREAM STATS & SORTING UTILITY BAR                                        */}
-      {/* ========================================================================= */}
-      <div className="flex items-center justify-between px-1 text-xs text-zinc-400">
-        <div className="flex items-center gap-2">
-          <span className="text-zinc-200 font-medium">{currentDisplayJobs.length} Roles Evaluated</span>
-          <span>•</span>
-          <span>Ranked strictly by Heuristic Compatibility Index</span>
-        </div>
-        <div className="flex items-center gap-1.5 text-emerald-400 font-medium text-xs">
-          <span>Sort: Match Compatibility (High → Low)</span>
-          <ArrowUpDown size={12} />
-        </div>
-      </div>
-
-      {/* ========================================================================= */}
-      {/* JOB CARDS STACK                                                           */}
+      {/* JOB ROLES LIST                                                            */}
       {/* ========================================================================= */}
       {activeTab === "feed" && (
         <div className="space-y-3.5">
           {isSearching ? (
-            <div className="space-y-3.5">
+            <div className="space-y-3">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-44 rounded-xl border border-white/[0.08] bg-[#0f0f12] animate-pulse opacity-40" />
+                <div key={i} className="h-40 rounded-2xl border border-white/[0.06] bg-white/[0.02] animate-pulse" />
               ))}
             </div>
           ) : (
             currentDisplayJobs.map((job, idx) => (
-              <StitchJobCard
+              <JobCardItem
                 key={job.external_id || idx}
                 job={job}
                 onSave={() => handleSaveJob(job)}
@@ -394,45 +321,16 @@ export default function Jobs() {
       {activeTab === "saved" && (
         <div className="space-y-3.5">
           {savedJobs.length === 0 ? (
-            <div className="rounded-xl border border-white/[0.08] bg-[#0f0f12] py-16 text-center text-xs text-zinc-500">
-              No saved opportunities in your queue. Click "Bookmark / Save" on any role in the Feed tab.
+            <div className="rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.02] py-16 text-center text-xs text-zinc-500">
+              No saved opportunities yet. Click bookmark on any role in the feed to save it for later review.
             </div>
           ) : (
-            savedJobs.map((job, idx) => (
-              <StitchSavedJobCard key={job.id || idx} job={job} />
+            savedJobs.map((job) => (
+              <SavedJobCardItem key={job.id} job={job} />
             ))
           )}
         </div>
       )}
-
-      {/* ========================================================================= */}
-      {/* PAGINATION & STREAM DENSITY FOOTER                                        */}
-      {/* ========================================================================= */}
-      <div className="p-3.5 bg-[#0f0f12] border border-white/[0.08] rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-zinc-400">
-        <div className="flex items-center gap-2">
-          <span>SHOWING 1 - {currentDisplayJobs.length} OF 148 FILTERED MATCHES</span>
-          <span className="hidden md:inline">•</span>
-          <span className="hidden md:inline text-zinc-500">CALCULATED IN 42ms VIA RESUME EMBEDDINGS</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <button className="px-2.5 py-1 rounded bg-[#09090b] border border-white/[0.06] text-zinc-600 cursor-not-allowed" disabled>
-            PREV
-          </button>
-          <button className="px-2.5 py-1 rounded bg-white/[0.06] border border-emerald-500/30 text-emerald-400 font-semibold">
-            1
-          </button>
-          <button className="px-2.5 py-1 rounded bg-[#09090b] border border-white/[0.06] text-zinc-400 hover:text-white transition-colors">
-            2
-          </button>
-          <button className="px-2.5 py-1 rounded bg-[#09090b] border border-white/[0.06] text-zinc-400 hover:text-white transition-colors">
-            3
-          </button>
-          <span className="px-1 text-zinc-600">...</span>
-          <button className="px-2.5 py-1 rounded bg-[#09090b] border border-white/[0.06] text-zinc-400 hover:text-white transition-colors">
-            NEXT
-          </button>
-        </div>
-      </div>
 
       <EasyApplyModal
         job={selectedJobForApply}
@@ -447,9 +345,9 @@ export default function Jobs() {
 }
 
 // -------------------------------------------------------------------------
-// STITCH REDESIGNED JOB CARD COMPONENT
+// REFINED JOB CARD COMPONENT
 // -------------------------------------------------------------------------
-function StitchJobCard({
+function JobCardItem({
   job,
   onSave,
   isSaved,
@@ -463,200 +361,156 @@ function StitchJobCard({
   onEasyApply: () => void;
 }) {
   const matchScore = job.match_score ?? 88;
-  const isHighMatch = matchScore >= 80;
 
   const formatSalary = () => {
     if (job.salary_min && job.salary_max) {
-      const minLakhs = (job.salary_min / 100000).toFixed(1);
-      const maxLakhs = (job.salary_max / 100000).toFixed(1);
-      return `₹${minLakhs}L - ₹${maxLakhs}L / year`;
+      const minLakhs = (job.salary_min / 100000).toFixed(0);
+      const maxLakhs = (job.salary_max / 100000).toFixed(0);
+      return `₹${minLakhs}L - ₹${maxLakhs}L`;
     }
-    return "₹32.0L - ₹45.0L / year";
+    return "₹32L - ₹45L";
   };
 
   const matchedSkills = job.matched_skills && job.matched_skills.length > 0 
     ? job.matched_skills 
-    : ["Python", "FastAPI", "Redis Cluster", "PostgreSQL", "Docker"];
+    : ["Python", "FastAPI", "PostgreSQL", "Docker"];
 
   const missingSkills = job.missing_skills && job.missing_skills.length > 0
     ? job.missing_skills
     : ["Apache Flink"];
 
+  const monogram = job.company_name.slice(0, 2).toUpperCase();
+
   return (
-    <article className="bg-[#0f0f12] border border-white/[0.08] hover:border-white/[0.16] transition-all duration-150 rounded-xl p-5 flex flex-col md:flex-row md:items-stretch gap-5 group relative shadow-sm">
-      {/* Left Main Spec */}
-      <div className="flex-1 flex flex-col justify-between gap-3.5">
-        <div>
-          {/* Tag and Ref Bar */}
-          <div className="flex flex-wrap items-center gap-2 mb-1.5">
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase">
-              {job.source || "ACTIVE PIPELINE CANDIDATE"}
-            </span>
-            <span className="text-[10px] font-mono text-zinc-500">Posted 6 hours ago</span>
-            <span className="text-zinc-600">•</span>
-            <span className="text-[10px] font-mono text-zinc-500">Ref: {job.external_id || "ZEP-ENG-8492"}</span>
+    <Card hover className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-5 group">
+      {/* Left: Info & Skills */}
+      <div className="flex-1 space-y-3 min-w-0">
+        <div className="flex items-start gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-white/[0.08] to-white/[0.02] border border-white/[0.08] flex items-center justify-center font-bold text-zinc-200 text-sm font-mono shrink-0">
+            {monogram}
           </div>
 
-          {/* Heading and Compensation Row */}
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2 className="text-base sm:text-lg font-semibold text-zinc-100 group-hover:text-emerald-400 transition-colors tracking-tight">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2 mb-0.5">
+              <h2 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors truncate">
                 {job.title}
               </h2>
-              <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-zinc-400">
-                <span className="text-zinc-200 font-medium">{job.company_name}</span>
-                <span className="text-zinc-600">•</span>
-                <span className="flex items-center gap-1 text-zinc-400">
-                  <Building size={12} className="text-zinc-500" />
-                  {job.location || "Mumbai - Powai / Hybrid"}
+              {job.is_remote && (
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                  Remote
                 </span>
-                <span className="text-zinc-600">•</span>
-                <span className="text-zinc-500">{job.is_remote ? "Remote Friendly" : "Engineering"}</span>
-              </div>
+              )}
             </div>
 
-            {/* Compensation Anchor */}
-            <div className="text-right shrink-0">
-              <div className="text-base sm:text-lg font-mono font-bold text-emerald-400">
-                {formatSalary()}
-              </div>
-              <div className="text-[10px] font-mono text-zinc-500">
-                Base + Stock Options
-              </div>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-400">
+              <span className="text-zinc-200 font-medium">{job.company_name}</span>
+              <span className="text-zinc-600">•</span>
+              <span className="flex items-center gap-1">
+                <MapPin size={12} className="text-zinc-500" />
+                <span>{job.location || "Mumbai, India"}</span>
+              </span>
+              <span className="text-zinc-600">•</span>
+              <span className="font-mono text-emerald-400 font-medium">{formatSalary()}</span>
             </div>
           </div>
         </div>
 
-        {/* Match Score Gauge Container */}
-        <div className="p-2.5 rounded-lg bg-[#09090b] border border-white/[0.06] flex flex-col gap-1.5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <Verified size={15} className="text-emerald-400" />
-              <span className="font-mono text-xs font-semibold text-emerald-400">
-                {matchScore}% Match Score
-              </span>
-              <span className="text-[10px] font-mono text-zinc-500">
-                {isHighMatch ? "(Optimal algorithmic overlap)" : "(Moderate parity)"}
-              </span>
-            </div>
-            <span className="text-[10px] font-mono text-zinc-400">Rank #1 in Session</span>
-          </div>
-          <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-            <div 
-              className={`h-full rounded-full transition-all duration-300 ${isHighMatch ? "bg-emerald-400" : "bg-amber-400"}`}
-              style={{ width: `${matchScore}%` }} 
-            />
-          </div>
-        </div>
+        {/* Skill Match Tags */}
+        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+          {matchedSkills.slice(0, 5).map((skill) => (
+            <span
+              key={skill}
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono"
+            >
+              <CheckCircle2 size={10} />
+              <span>{skill}</span>
+            </span>
+          ))}
 
-        {/* Skills Telemetry Matrix */}
-        <div className="flex flex-col gap-1.5 pt-0.5">
-          {/* Matched Skills */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[10px] font-mono text-zinc-500 w-20">MATCHED:</span>
-            {matchedSkills.slice(0, 6).map((skill) => (
-              <span 
-                key={skill}
-                className="px-2 py-0.5 rounded bg-white/[0.03] border border-emerald-500/20 text-emerald-400 font-mono text-[10px]"
-              >
-                ✓ {skill}
-              </span>
-            ))}
-          </div>
-
-          {/* Missing Skills */}
-          {missingSkills.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[10px] font-mono text-zinc-500 w-20">GAP VECTOR:</span>
-              {missingSkills.slice(0, 3).map((skill) => (
-                <span 
-                  key={skill}
-                  className="px-2 py-0.5 rounded bg-white/[0.03] border border-rose-500/30 text-rose-400 font-mono text-[10px]"
-                >
-                  ✗ {skill}
-                </span>
-              ))}
-              <span className="text-[10px] font-mono text-zinc-500 italic ml-1">
-                Offset by core backend experience
-              </span>
-            </div>
-          )}
+          {missingSkills.slice(0, 2).map((skill) => (
+            <span
+              key={skill}
+              className="inline-flex items-center px-2 py-0.5 rounded-md bg-white/[0.03] text-zinc-400 border border-white/[0.06] text-[10px] font-mono"
+            >
+              <span>Missing: {skill}</span>
+            </span>
+          ))}
         </div>
       </div>
 
-      {/* Divider */}
-      <div className="hidden md:block w-px bg-white/[0.08]" />
-
-      {/* Right Action Column */}
-      <div className="w-full md:w-48 flex flex-col justify-center gap-2 select-none shrink-0">
-        {isApplied ? (
-          <div className="w-full h-9 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5">
-            <CheckCircle2 size={14} />
-            <span>Applied</span>
+      {/* Right: Score Gauge & Action Cluster */}
+      <div className="flex items-center md:flex-col md:items-end justify-between md:justify-center gap-4 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-white/[0.06]">
+        <div className="flex items-center gap-3">
+          <div className="text-right hidden sm:block">
+            <div className="text-xs font-semibold text-zinc-200">Algorithmic Match</div>
+            <div className="text-[10px] font-mono text-zinc-500">Resume parity</div>
           </div>
-        ) : (
+          <ProgressRing value={matchScore} size={48} strokeWidth={4} color="emerald" />
+        </div>
+
+        <div className="flex items-center gap-2">
           <button
-            onClick={onEasyApply}
-            className="w-full h-9 bg-emerald-500 hover:bg-emerald-400 active:scale-[0.98] text-zinc-950 font-semibold text-xs rounded-lg flex items-center justify-center gap-1.5 transition-all shadow-sm"
+            type="button"
+            onClick={onSave}
+            className={`p-2 rounded-xl border transition-all cursor-pointer ${
+              isSaved
+                ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-400"
+                : "bg-white/[0.03] border-white/[0.08] text-zinc-400 hover:text-white hover:bg-white/[0.06]"
+            }`}
+            title={isSaved ? "Saved to Bookmarks" : "Save Job"}
           >
-            <Zap size={13} className="fill-black" />
-            <span>⚡ Easy Apply</span>
+            {isSaved ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
           </button>
-        )}
 
-        <button
-          onClick={onSave}
-          className="w-full h-8 bg-[#09090b] hover:bg-white/[0.04] active:scale-[0.98] border border-white/[0.08] hover:border-white/[0.16] text-zinc-200 text-xs rounded-lg flex items-center justify-center gap-1.5 transition-all"
-        >
-          {isSaved ? (
-            <BookmarkCheck size={13} className="text-emerald-400" />
-          ) : (
-            <Bookmark size={13} className="text-zinc-500" />
+          {job.url && (
+            <a
+              href={job.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-xl border border-white/[0.08] bg-white/[0.03] text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-all cursor-pointer"
+              title="Open Official Job Posting"
+            >
+              <ExternalLink size={15} />
+            </a>
           )}
-          <span>{isSaved ? "Saved" : "Bookmark / Save"}</span>
-        </button>
 
-        {job.url && (
-          <a
-            href={job.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full h-8 hover:bg-white/[0.03] text-zinc-400 hover:text-white text-xs rounded-lg flex items-center justify-center gap-1.5 transition-colors border border-transparent hover:border-white/[0.08]"
+          <Button
+            size="sm"
+            variant={isApplied ? "secondary" : "primary"}
+            disabled={isApplied}
+            onClick={onEasyApply}
+            className="gap-1.5"
           >
-            <ExternalLink size={12} className="text-zinc-500" />
-            <span>View on Portal</span>
-          </a>
-        )}
+            <Zap size={13} />
+            <span>{isApplied ? "Applied ✓" : "1-Click Apply"}</span>
+          </Button>
+        </div>
       </div>
-    </article>
+    </Card>
   );
 }
 
 // -------------------------------------------------------------------------
 // SAVED JOB CARD COMPONENT
 // -------------------------------------------------------------------------
-function StitchSavedJobCard({ job }: { job: SavedJob }) {
+function SavedJobCardItem({ job }: { job: SavedJob }) {
   return (
-    <article className="bg-[#0f0f12] border border-white/[0.08] rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div className="space-y-1">
+    <Card hover className="p-4 flex items-center justify-between gap-4">
+      <div>
         <h3 className="text-sm font-semibold text-white">{job.title}</h3>
-        <div className="flex items-center gap-2 text-xs text-zinc-400">
-          <span className="text-zinc-200 font-medium">{job.company_name}</span>
-          <span>•</span>
-          <span>{job.location || "Mumbai, India"}</span>
-        </div>
+        <p className="text-xs text-zinc-400">{job.company_name} • {job.location || "Remote"}</p>
       </div>
       {job.url && (
         <a
           href={job.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="h-8 px-3 rounded bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-zinc-200 hover:text-white text-xs flex items-center gap-1.5 transition-colors"
+          className="h-8 px-3 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-medium text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors"
         >
-          <span>Open Link</span>
+          <span>Apply Directly</span>
           <ExternalLink size={12} />
         </a>
       )}
-    </article>
+    </Card>
   );
 }

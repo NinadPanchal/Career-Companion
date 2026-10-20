@@ -2,21 +2,17 @@ import { useState, useRef } from "react";
 import { 
   FileText, 
   Upload, 
-  Radar, 
   CheckCircle2, 
-  AlertCircle, 
-  SlidersHorizontal, 
-  Download, 
   Copy, 
   Check, 
   Wand2, 
-  RotateCw, 
-  Layers,
-  Zap
+  Sparkles,
+  Target
 } from "lucide-react";
 import { useResumeStore, ResumeAnalysisResult } from "../../features/resume/stores/resume.store";
 import { resumeService } from "../../features/resume/services/resume.service";
 import { aiService } from "../../features/ai/services/ai.service";
+import { Card, Button, Badge, Tabs, ProgressRing } from "../../components/ui";
 
 interface Variation {
   title: string;
@@ -35,8 +31,8 @@ const DEFAULT_VARIATIONS: Variation[] = [
     score: "98/100 ATS",
     text: "Engineered asynchronous FastAPI ingestion pipeline, slashing p95 API latency by 38% and scaling database query throughput to 14,200 req/sec via Redis caching.",
     x: "FastAPI pipeline",
-    y: "-38% p95 & 14.2k req/s",
-    z: "Redis caching"
+    y: "Redis caching",
+    z: "-38% p95 & 14.2k req/s"
   },
   {
     title: "Variation 2 • System Architecture",
@@ -44,23 +40,25 @@ const DEFAULT_VARIATIONS: Variation[] = [
     score: "94/100 ATS",
     text: "Re-architected payment webhook ingestion using Apache Kafka and PostgreSQL read replicas, achieving 99.98% delivery reliability across ₹40M+ monthly transaction volume.",
     x: "Payment webhook reliability",
-    y: "99.98% uptime / ₹40M+",
-    z: "Kafka & Postgres replicas"
+    y: "Kafka & Postgres replicas",
+    z: "99.98% uptime / ₹40M+"
   },
   {
-    title: "Variation 3 • Cost & Efficiency",
+    title: "Variation 3 • Cost & Optimization",
     badgeType: "amber",
     score: "92/100 ATS",
     text: "Optimized SQL relational indices and connection pooling across 8 microservices, reducing AWS RDS compute spend by $2,400/month while cutting median response time by 42ms.",
     x: "SQL query & infra optimization",
-    y: "-$2,400/mo & -42ms response",
-    z: "Indices & connection pooling"
+    y: "Indices & connection pooling",
+    z: "-$2,400/mo & -42ms response"
   }
 ];
 
 export default function Resume() {
   const { file, analysis, setFile, setAnalysis } = useResumeStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [activeTab, setActiveTab] = useState<"ats" | "rewriter">("ats");
 
   // Upload state
   const [isUploading, setIsUploading] = useState(false);
@@ -70,12 +68,9 @@ export default function Resume() {
   const [bulletInput, setBulletInput] = useState(
     "Worked on backend APIs to make database queries run faster and handled payment notifications."
   );
-  const [impactTone, setImpactTone] = useState(3);
-  const [metricFocus, setMetricFocus] = useState(1);
   const [isSynthesizing, setIsSynthesizing] = useState(false);
   const [variations, setVariations] = useState<Variation[]>(DEFAULT_VARIATIONS);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
-  const [appliedIdx, setAppliedIdx] = useState<number | null>(null);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
@@ -108,9 +103,9 @@ export default function Resume() {
           badgeType: i === 0 ? "emerald" : i === 1 ? "sky" : "amber",
           score: `${Math.min(99, 90 + i * 3)}/100 ATS`,
           text: ver.text,
-          x: ver.text.split(",")[0] || "Engineered service",
-          y: ver.metrics || "Measured by 35% improvement",
-          z: ver.tone || "Applied production framework"
+          x: ver.text.split(",")[0] || "Engineered core feature",
+          y: ver.tone || "Applied production framework",
+          z: ver.metrics || "Measured by 35% improvement"
         }));
         setVariations(mapped);
       } else {
@@ -130,482 +125,297 @@ export default function Resume() {
     setTimeout(() => setCopiedIdx(null), 2000);
   };
 
-  const handleApply = (idx: number) => {
-    setAppliedIdx(idx);
-    setTimeout(() => setAppliedIdx(null), 2500);
-  };
-
-  const handleInsertMissingKeyword = (keyword: string) => {
-    setBulletInput(prev => `${prev.trim()} utilizing ${keyword}`);
-  };
+  const detectedSkills = analysis?.skills?.length
+    ? analysis.skills
+    : ["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Docker", "Redis", "Kafka", "GraphQL", "Kubernetes"];
 
   return (
     <div className="space-y-6 animate-fade-in font-sans select-none">
       {/* ========================================================================= */}
-      {/* TOP HEADER / WORKBENCH CONTEXT                                            */}
+      {/* TOP HEADER & TAB SWITCHER                                                 */}
       {/* ========================================================================= */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
-        {/* Left: Breadcrumbs & Target Badge */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 text-xs text-zinc-400">
-            <span>Preparation</span>
-            <span className="text-zinc-600">/</span>
-            <span className="text-zinc-100 font-semibold">Resume & ATS Bullet Optimizer</span>
-          </div>
-          <div className="h-4 w-px bg-white/[0.08]" />
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-mono text-emerald-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>ATS Target: 92+ Score</span>
-          </div>
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-white/[0.06]">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+            <span>Resume & ATS Suite</span>
+            <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              98% Parse Quality
+            </span>
+          </h1>
+          <p className="text-xs text-zinc-400 mt-0.5">Automated ATS compliance auditing and Google XYZ accomplishment rewriting.</p>
         </div>
 
-        {/* Right: Actions */}
-        <div className="flex items-center gap-2">
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileSelect}
-            accept=".pdf,.docx,.txt"
-            className="hidden"
-          />
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="h-8 px-3 rounded bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-zinc-200 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-colors"
-          >
-            <Upload size={13} className="text-zinc-400" />
-            <span>Import New Master Resume</span>
-            <kbd className="text-[10px] font-mono text-zinc-500 bg-black/40 px-1 rounded border border-white/[0.08]">
-              ⌘U
-            </kbd>
-          </button>
-
-          <button
-            onClick={() => alert("Master resume exported as ATS-compliant clean text.")}
-            className="h-8 px-3 rounded bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
-          >
-            <Download size={13} />
-            <span>Export Clean PDF</span>
-            <kbd className="text-[10px] font-mono text-black/60 bg-white/20 px-1 rounded">
-              ⌘E
-            </kbd>
-          </button>
-
-          <div className="h-4 w-px bg-white/[0.08] mx-1" />
-
-          <button
-            type="button"
-            className="w-7 h-7 rounded border border-white/[0.08] bg-[#0f0f12] flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
-            title="Configure Parser Weights"
-          >
-            <SlidersHorizontal size={13} />
-          </button>
-        </div>
+        <Tabs
+          size="sm"
+          tabs={[
+            { id: "ats", label: "ATS Health Check", icon: <FileText size={13} /> },
+            { id: "rewriter", label: "Google XYZ Rewriter", icon: <Wand2 size={13} /> },
+          ]}
+          activeTab={activeTab}
+          onChange={(tab) => setActiveTab(tab as "ats" | "rewriter")}
+        />
       </div>
 
       {/* ========================================================================= */}
-      {/* MAIN DUAL-PANE WORKBENCH CANVAS (5 cols Left, 7 cols Right)               */}
+      {/* TAB 1: ATS HEALTH CHECK & SKILL AUDITOR                                   */}
       {/* ========================================================================= */}
-      <div className="grid grid-cols-12 gap-5 items-start">
-        {/* ======================================================================= */}
-        {/* LEFT PANE: Resume Ingestion & Parsing Workbench (5 Columns)             */}
-        {/* ======================================================================= */}
-        <div className="col-span-12 xl:col-span-5 flex flex-col gap-4">
-          {/* Panel 1: Master Resume Dropzone & Active Ingestion State */}
-          <section className="bg-[#0f0f12] border border-white/[0.08] rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FileText size={16} className="text-emerald-400" />
-                <h2 className="text-xs font-semibold text-zinc-100">Resume Parsing Stream</h2>
-              </div>
-              <span className="text-[10px] font-mono text-zinc-400 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>OCR PARSER: ACTIVE</span>
-              </span>
-            </div>
-
-            {/* Drag & Drop Tile */}
-            <div
-              onClick={() => fileInputRef.current?.click()}
-              className="border border-dashed border-white/[0.1] hover:border-emerald-500/50 bg-[#09090b]/80 rounded-lg p-5 transition-colors flex flex-col items-center justify-center text-center cursor-pointer group"
-            >
-              <div className="w-8 h-8 rounded-full bg-white/[0.04] group-hover:bg-emerald-500/10 flex items-center justify-center mb-1 text-zinc-400 group-hover:text-emerald-400 transition-colors">
-                <Upload size={16} />
-              </div>
-              <p className="text-xs text-zinc-200 font-medium">
-                Drag and drop <span className="font-mono text-emerald-400">{file?.name || "v4_master_resume.pdf"}</span> or click to upload
-              </p>
-              <p className="text-[11px] text-zinc-500 mt-0.5">
-                Supports ATS-validated PDF, DOCX, and Plain LaTeX text exports
-              </p>
-            </div>
-
-            {/* Active Parsed Status Pill */}
-            <div className="bg-[#18181b]/60 border border-white/[0.06] rounded-lg p-2.5 flex items-center justify-between">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-7 h-7 rounded bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 shrink-0">
-                  <FileText size={14} />
-                </div>
-                <div className="truncate">
-                  <div className="text-xs font-semibold text-zinc-200 truncate">
-                    {file?.name || "resume_v4_staff_infra.pdf"}
-                  </div>
-                  <div className="text-[10px] font-mono text-zinc-400">
-                    {uploadMessage || (analysis?.word_count ? `Parsed • ${analysis.word_count} Words • ${analysis.skills?.length || 12} Skills Identified` : "Parsed • 682 Words • 4 Pages • Last Sync Today")}
-                  </div>
-                </div>
-              </div>
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="text-zinc-400 hover:text-white p-1 hover:bg-white/[0.04] rounded transition-colors shrink-0"
-                title="Re-parse file"
-              >
-                <RotateCw size={13} className={isUploading ? "animate-spin" : ""} />
-              </button>
-            </div>
-          </section>
-
-          {/* Panel 2: ATS Keyword Benchmark Radar & Compatibility */}
-          <section className="bg-[#0f0f12] border border-white/[0.08] rounded-xl p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
-            <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
-              <div className="flex items-center gap-2">
-                <Radar size={16} className="text-emerald-400" />
-                <h3 className="text-xs font-semibold text-zinc-100">ATS Keyword Benchmark Radar</h3>
-              </div>
-              <span className="text-[10px] font-mono text-zinc-400 bg-white/[0.04] px-1.5 py-0.5 rounded border border-white/[0.08]">
-                ROLE: L6 BACKEND
-              </span>
-            </div>
-
-            {/* Match Score Gauge */}
-            <div className="bg-[#09090b] border border-white/[0.06] rounded-lg p-3 flex items-center justify-between">
+      {activeTab === "ats" && (
+        <div className="space-y-6">
+          {/* Top Row: File Upload Dropzone + Score Card */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+            {/* Upload & Active File Info (7 cols) */}
+            <Card className="lg:col-span-7 p-6 flex flex-col justify-between">
               <div>
-                <span className="text-[11px] text-zinc-400 block">Match Score against target role:</span>
-                <span className="text-sm font-bold font-mono text-emerald-400 flex items-center gap-1.5 mt-0.5">
-                  89% High ATS Compatibility
-                </span>
-              </div>
-              <div className="flex flex-col items-end">
-                <div className="text-xs font-mono text-zinc-200">89 / 100</div>
-                <div className="w-24 h-1.5 bg-zinc-800 rounded-full mt-1.5 overflow-hidden">
-                  <div className="h-full bg-emerald-400 rounded-full" style={{ width: "89%" }} />
-                </div>
-              </div>
-            </div>
-
-            {/* High Frequency Keywords Detected */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between text-xs text-zinc-400">
-                <span className="text-zinc-300 flex items-center gap-1 font-medium">
-                  <CheckCircle2 size={13} className="text-emerald-400" />
-                  <span>High Frequency Keywords Detected</span>
-                </span>
-                <span className="text-[10px] font-mono text-zinc-500">5 Tokens Pinned</span>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  { name: "FastAPI", count: "4x" },
-                  { name: "Distributed Systems", count: "7x" },
-                  { name: "Kafka", count: "3x" },
-                  { name: "PostgreSQL", count: "5x" },
-                  { name: "Docker/K8s", count: "6x" },
-                ].map((kw) => (
-                  <span
-                    key={kw.name}
-                    className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#18181b] border border-white/[0.06] text-zinc-200 text-xs font-mono"
-                  >
-                    <span>{kw.name}</span>
-                    <span className="text-[10px] text-emerald-400 bg-black/40 px-1 rounded font-bold">
-                      {kw.count}
-                    </span>
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Missing Crucial Keywords */}
-            <div className="flex flex-col gap-2 pt-2 border-t border-white/[0.06]">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-rose-400 flex items-center gap-1 font-medium">
-                  <AlertCircle size={13} />
-                  <span>Missing Crucial Keywords (Role Threshold Gap)</span>
-                </span>
-                <span className="text-[10px] font-mono text-zinc-500">-11% penalty</span>
-              </div>
-              <div className="space-y-1.5">
-                {[
-                  "Event-driven architecture",
-                  "p99 SLA",
-                  "Circuit breaker pattern",
-                ].map((token) => (
-                  <div
-                    key={token}
-                    className="flex items-center justify-between p-2 rounded-lg bg-[#09090b] border border-white/[0.06] hover:border-white/[0.14] transition-colors"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
-                      <span className="text-xs font-mono text-zinc-200">{token}</span>
+                <div className="flex items-center justify-between pb-4 border-b border-white/[0.06]">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                      <FileText size={16} />
                     </div>
-                    <button
-                      onClick={() => handleInsertMissingKeyword(token)}
-                      className="h-6 px-2 rounded bg-white/[0.04] hover:bg-emerald-500 hover:text-zinc-950 border border-white/[0.08] text-zinc-300 text-[10px] font-mono flex items-center gap-1 transition-colors"
-                    >
-                      <span>+ Insert</span>
-                    </button>
+                    <div>
+                      <h3 className="text-sm font-semibold text-white">Active Document</h3>
+                      <p className="text-xs text-zinc-400">
+                        {file?.name || "resume_v4_software_engineer.pdf"}
+                      </p>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          </section>
 
-          {/* Panel 3: Extracted Technical Taxonomy & Proficiency Ratings */}
-          <section className="bg-[#0f0f12] border border-white/[0.08] rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xs font-semibold text-zinc-100 flex items-center gap-2">
-                <Layers size={15} className="text-emerald-400" />
-                <span>Extracted Technical Taxonomy</span>
-              </h3>
-              <span className="text-[10px] font-mono text-zinc-500">4 Core Domains</span>
-            </div>
-
-            <div className="space-y-2 text-xs">
-              <div className="flex items-center justify-between p-2 rounded-lg bg-[#09090b] border border-white/[0.06]">
-                <span className="text-zinc-300">Distributed Systems & Concurrency</span>
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1">
-                    {[1, 2, 3, 4].map(i => <span key={i} className="w-2 h-2 rounded-sm bg-emerald-400" />)}
-                    <span className="w-2 h-2 rounded-sm bg-zinc-800" />
-                  </div>
-                  <span className="text-[10px] font-mono text-emerald-400">L5 Senior</span>
+                  <span className="text-xs font-mono text-zinc-500">
+                    {analysis?.word_count || 682} words
+                  </span>
                 </div>
-              </div>
 
-              <div className="flex items-center justify-between p-2 rounded-lg bg-[#09090b] border border-white/[0.06]">
-                <span className="text-zinc-300">Storage Engines (Postgres / Redis)</span>
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1">
-                    {[1, 2, 3, 4, 5].map(i => <span key={i} className="w-2 h-2 rounded-sm bg-emerald-400" />)}
+                {/* Dropzone Area */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf,.docx,.txt"
+                  className="hidden"
+                  onChange={handleFileSelect}
+                />
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="mt-5 p-8 rounded-xl border border-dashed border-white/[0.12] hover:border-emerald-500/40 bg-white/[0.02] hover:bg-emerald-500/[0.02] transition-all cursor-pointer flex flex-col items-center justify-center text-center group"
+                >
+                  <div className="w-10 h-10 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-zinc-400 group-hover:text-emerald-400 group-hover:scale-105 transition-all mb-3">
+                    <Upload size={18} />
                   </div>
-                  <span className="text-[10px] font-mono text-emerald-400">Staff Eng</span>
+                  <h4 className="text-xs font-semibold text-zinc-200 group-hover:text-white transition-colors">
+                    {isUploading ? "Parsing resume vectors..." : "Click or drag to upload new PDF / DOCX"}
+                  </h4>
+                  <p className="text-[11px] text-zinc-500 mt-1">
+                    Direct local parsing. No third-party data retention.
+                  </p>
                 </div>
-              </div>
 
-              <div className="flex items-center justify-between p-2 rounded-lg bg-[#09090b] border border-white/[0.06]">
-                <span className="text-zinc-300">Infrastructure & Observability</span>
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1">
-                    {[1, 2, 3].map(i => <span key={i} className="w-2 h-2 rounded-sm bg-amber-400" />)}
-                    {[4, 5].map(i => <span key={i} className="w-2 h-2 rounded-sm bg-zinc-800" />)}
-                  </div>
-                  <span className="text-[10px] font-mono text-amber-400">Mid-Senior</span>
-                </div>
+                {uploadMessage && (
+                  <p className="text-xs font-mono text-emerald-400 mt-3 flex items-center gap-1.5">
+                    <CheckCircle2 size={13} />
+                    <span>{uploadMessage}</span>
+                  </p>
+                )}
               </div>
-            </div>
-          </section>
-        </div>
+            </Card>
 
-        {/* ======================================================================= */}
-        {/* RIGHT PANE: Google XYZ Accomplishment Rewriter (7 Columns)               */}
-        {/* ======================================================================= */}
-        <div className="col-span-12 xl:col-span-7 flex flex-col gap-4">
-          {/* Main Executive Rewriter Header Block */}
-          <section className="bg-[#0f0f12] border border-white/[0.08] rounded-xl p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
-            <div className="flex items-start justify-between">
+            {/* ATS Score Meter & Pillars (5 cols) */}
+            <Card ambient className="lg:col-span-5 p-6 flex flex-col justify-between">
               <div>
-                <div className="flex items-center gap-2">
-                  <Wand2 size={18} className="text-emerald-400" />
-                  <h2 className="text-sm font-semibold text-zinc-100">Google XYZ Accomplishment Rewriter</h2>
+                <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+                  <h3 className="text-sm font-semibold text-white">ATS Readiness Index</h3>
+                  <Badge variant="emerald" size="sm">Optimal Signal</Badge>
                 </div>
-                <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
-                  <span className="text-emerald-400 font-medium">"Accomplished [X], as measured by [Y], by doing [Z]"</span> — transforms passive descriptions into high-impact engineering accomplishments.
-                </p>
+
+                <div className="mt-5 flex items-center gap-6">
+                  <ProgressRing value={94} size={84} strokeWidth={6} color="emerald" label="94%" />
+                  <div className="space-y-1">
+                    <h4 className="text-base font-bold text-white">Top 5% Candidate</h4>
+                    <p className="text-xs text-zinc-400">
+                      Standard section taxonomy, zero parsing errors, high action verb density.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Sub-scores */}
+                <div className="mt-6 space-y-2.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-zinc-400">Section Hierarchy & Formatting</span>
+                    <span className="font-mono text-emerald-400 font-semibold">98%</span>
+                  </div>
+                  <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-emerald-400 h-full rounded-full" style={{ width: "98%" }} />
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs pt-1">
+                    <span className="text-zinc-400">Action Verb & Metric Density</span>
+                    <span className="font-mono text-emerald-400 font-semibold">91%</span>
+                  </div>
+                  <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-emerald-400 h-full rounded-full" style={{ width: "91%" }} />
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs pt-1">
+                    <span className="text-zinc-400">Keyword Parity (Tech Roles)</span>
+                    <span className="font-mono text-sky-400 font-semibold">93%</span>
+                  </div>
+                  <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-sky-400 h-full rounded-full" style={{ width: "93%" }} />
+                  </div>
+                </div>
               </div>
-              <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-[10px] font-mono text-zinc-400 shrink-0">
-                MODEL: LLM-XYZ-PRO
-              </span>
+            </Card>
+          </div>
+
+          {/* Detected Skills Cloud Card */}
+          <Card className="p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+              <div className="flex items-center gap-2">
+                <Target size={16} className="text-emerald-400" />
+                <h3 className="text-sm font-semibold text-white">Verified Competencies Cloud</h3>
+              </div>
+              <span className="text-xs font-mono text-zinc-400">{detectedSkills.length} Identified Skills</span>
             </div>
 
-            {/* Weak Input Bullet Container */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between text-xs text-zinc-400">
-                <label className="text-zinc-300 font-medium flex items-center gap-1" htmlFor="weak-bullet-input">
-                  <span>Raw Input Bullet (Engineering Journal / Resume Draft):</span>
-                </label>
-                <button
-                  onClick={() => setBulletInput("Worked on backend APIs to make database queries run faster and handled payment notifications.")}
-                  className="text-[10px] font-mono text-emerald-400 hover:underline"
+            <div className="flex flex-wrap gap-2 pt-1">
+              {detectedSkills.map((skill) => (
+                <div
+                  key={skill}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.07] hover:border-white/[0.14] text-xs text-zinc-200 transition-colors"
                 >
-                  Reset sample
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span className="font-medium">{skill}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB 2: GOOGLE XYZ ACCOMPLISHMENT REWRITER                                  */}
+      {/* ========================================================================= */}
+      {activeTab === "rewriter" && (
+        <div className="space-y-6">
+          {/* Formula Guide Card */}
+          <Card ambient className="p-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                  <Wand2 size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">Google XYZ Accomplishment Formula</h3>
+                  <p className="text-xs text-zinc-400 mt-0.5">
+                    "Accomplished <span className="text-emerald-400 font-semibold">[X]</span>, as measured by{" "}
+                    <span className="text-sky-400 font-semibold">[Y]</span>, by doing{" "}
+                    <span className="text-amber-400 font-semibold">[Z]</span>."
+                  </p>
+                </div>
+              </div>
+
+              <span className="px-2.5 py-1 rounded-full text-[11px] font-mono bg-white/[0.04] text-zinc-300 border border-white/[0.08] shrink-0">
+                FAANG Approved Format
+              </span>
+            </div>
+          </Card>
+
+          {/* Input & Generator Card */}
+          <Card className="p-6 space-y-4">
+            <label className="block text-xs font-semibold text-zinc-300">
+              Input Your Current Responsibility Bullet Point:
+            </label>
+            <textarea
+              rows={3}
+              value={bulletInput}
+              onChange={(e) => setBulletInput(e.target.value)}
+              placeholder="e.g. Worked on database queries to make API requests faster..."
+              className="w-full rounded-xl border border-white/[0.08] bg-[#07080a] p-3.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-emerald-500/50 resize-none transition-colors"
+            />
+
+            <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setBulletInput("Built Redis caching layer for GraphQL microservices to cut server costs.")
+                  }
+                  className="text-[11px] text-zinc-400 hover:text-emerald-400 transition-colors underline cursor-pointer"
+                >
+                  Load Redis example
+                </button>
+                <span className="text-zinc-700">•</span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setBulletInput("Migrated manual testing pipeline to automated CI/CD GitHub Actions.")
+                  }
+                  className="text-[11px] text-zinc-400 hover:text-emerald-400 transition-colors underline cursor-pointer"
+                >
+                  Load CI/CD example
                 </button>
               </div>
 
-              <div className="relative">
-                <textarea
-                  id="weak-bullet-input"
-                  rows={2}
-                  value={bulletInput}
-                  onChange={(e) => setBulletInput(e.target.value)}
-                  placeholder="Type or paste a passive bullet point..."
-                  className="w-full bg-[#09090b] border border-white/[0.08] rounded-lg p-3 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500 transition-colors resize-none leading-relaxed"
-                />
-                <button
-                  onClick={handleSynthesize}
-                  disabled={isSynthesizing}
-                  className="absolute bottom-2.5 right-2.5 h-6 px-2.5 rounded bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-zinc-950 font-semibold text-[10px] font-mono flex items-center gap-1 transition-all"
-                >
-                  <Zap size={11} className="fill-black" />
-                  <span>{isSynthesizing ? "Synthesizing..." : "Synthesize (Enter)"}</span>
-                </button>
-              </div>
-
-              {/* Detected Weaknesses Badge */}
-              <div className="flex items-center gap-2 p-2 rounded-lg bg-rose-500/10 border border-rose-500/20">
-                <AlertCircle size={14} className="text-rose-400 shrink-0" />
-                <span className="text-[10px] font-mono text-rose-400 font-semibold shrink-0">Detected weaknesses:</span>
-                <span className="text-xs text-zinc-300">
-                  Lacks quantifiable metric • Weak action verb • Vague scope
-                </span>
-              </div>
-            </div>
-
-            {/* Interactive Bullet Customizer Sliders */}
-            <div className="bg-[#09090b] border border-white/[0.06] rounded-lg p-3 grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Impact Tone */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-zinc-400 text-[11px]">Impact Tone</span>
-                  <span className="text-[10px] font-mono text-emerald-400">
-                    {impactTone === 1 ? "Technical" : impactTone === 2 ? "Executive" : "High-Scale Utilitarian"}
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="1"
-                  max="3"
-                  value={impactTone}
-                  onChange={(e) => setImpactTone(Number(e.target.value))}
-                  className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                />
-                <div className="flex justify-between text-[9px] font-mono text-zinc-500">
-                  <span>Technical</span>
-                  <span>Executive</span>
-                  <span>High-Scale</span>
-                </div>
-              </div>
-
-              {/* Metric Focus */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-zinc-400 text-[11px]">Metric Focus Axis</span>
-                  <span className="text-[10px] font-mono text-emerald-400">
-                    {metricFocus === 1 ? "Latency & Throughput" : metricFocus === 2 ? "Scale & Volume" : metricFocus === 3 ? "Revenue & Cost" : "Reliability SLA"}
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="1"
-                  max="4"
-                  value={metricFocus}
-                  onChange={(e) => setMetricFocus(Number(e.target.value))}
-                  className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                />
-                <div className="flex justify-between text-[9px] font-mono text-zinc-500">
-                  <span>Latency</span>
-                  <span>Scale</span>
-                  <span>Revenue</span>
-                  <span>Reliability</span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* AI-Rewritten Variations Output Stream */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between px-1 text-xs">
-              <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">
-                Optimal XYZ Formulations (3 Deterministic Variants Generated)
-              </span>
-              <button
+              <Button
+                variant="primary"
+                size="sm"
                 onClick={handleSynthesize}
-                className="text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1"
+                disabled={isSynthesizing || !bulletInput.trim()}
+                className="gap-1.5"
               >
-                <RotateCw size={11} className={isSynthesizing ? "animate-spin" : ""} />
-                <span>Regenerate with new seed</span>
-              </button>
+                <Sparkles size={14} />
+                <span>{isSynthesizing ? "Rewriting with AI..." : "Synthesize Variations"}</span>
+              </Button>
             </div>
+          </Card>
 
-            {variations.map((v, idx) => (
-              <div
-                key={v.title}
-                className="bg-[#0f0f12] border border-white/[0.08] hover:border-white/[0.16] rounded-xl p-4 sm:p-5 transition-all duration-150 flex flex-col gap-3 shadow-sm group"
-              >
+          {/* Variations Stack */}
+          <div className="space-y-3.5">
+            <h3 className="text-xs font-mono text-zinc-400 uppercase tracking-wider px-1">
+              Optimized Output Variations
+            </h3>
+
+            {variations.map((ver, idx) => (
+              <Card key={idx} hover className="p-5 space-y-3 group">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
-                      v.badgeType === "emerald" 
-                        ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400" 
-                        : v.badgeType === "sky"
-                        ? "bg-sky-500/10 border border-sky-500/20 text-sky-400"
-                        : "bg-amber-500/10 border border-amber-500/20 text-amber-400"
-                    }`}>
-                      {v.title}
-                    </span>
-                    <span className="text-[10px] font-mono text-zinc-500">Score: {v.score}</span>
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-xs font-bold text-white">{ver.title}</span>
+                    <Badge variant={ver.badgeType} size="sm">
+                      {ver.score}
+                    </Badge>
                   </div>
 
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={() => handleCopy(v.text, idx)}
-                      className="h-6 px-2 rounded bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-zinc-300 hover:text-white text-[10px] font-mono flex items-center gap-1 transition-colors"
-                    >
-                      {copiedIdx === idx ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
-                      <span>{copiedIdx === idx ? "Copied!" : "Copy to Clipboard"}</span>
-                    </button>
-
-                    <button
-                      onClick={() => handleApply(idx)}
-                      className="h-6 px-2.5 rounded bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold text-[10px] font-mono flex items-center gap-1 transition-colors"
-                    >
-                      {appliedIdx === idx ? <Check size={11} /> : <Zap size={11} className="fill-black" />}
-                      <span>{appliedIdx === idx ? "Applied!" : "Apply to Resume"}</span>
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy(ver.text, idx)}
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.16] text-xs text-zinc-300 hover:text-white transition-all cursor-pointer"
+                  >
+                    {copiedIdx === idx ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                    <span>{copiedIdx === idx ? "Copied!" : "Copy Bullet"}</span>
+                  </button>
                 </div>
 
-                {/* Structured XYZ Render Box */}
-                <p className="text-xs text-zinc-200 leading-relaxed bg-[#09090b] p-3 rounded-lg border border-white/[0.06]">
-                  {v.text}
+                <p className="text-xs sm:text-sm text-zinc-200 leading-relaxed font-mono">
+                  "{ver.text}"
                 </p>
 
-                {/* XYZ Dimensional Breakdown Pills */}
-                <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-white/[0.04] text-[10px] font-mono text-zinc-400">
-                  <span><strong className="text-emerald-400">[X] Accomplished:</strong> {v.x}</span>
-                  <span className="text-zinc-600">•</span>
-                  <span><strong className="text-sky-400">[Y] Measured:</strong> {v.y}</span>
-                  <span className="text-zinc-600">•</span>
-                  <span><strong className="text-amber-400">[Z] Action:</strong> {v.z}</span>
+                {/* XYZ breakdown chips */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-white/[0.05] text-[11px] font-mono">
+                  <div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.05]">
+                    <span className="text-zinc-500 block text-[10px]">X (Accomplished):</span>
+                    <span className="text-emerald-400 font-medium truncate block">{ver.x}</span>
+                  </div>
+                  <div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.05]">
+                    <span className="text-zinc-500 block text-[10px]">Y (Methodology):</span>
+                    <span className="text-sky-400 font-medium truncate block">{ver.y}</span>
+                  </div>
+                  <div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.05]">
+                    <span className="text-zinc-500 block text-[10px]">Z (Metric Measure):</span>
+                    <span className="text-amber-400 font-medium truncate block">{ver.z}</span>
+                  </div>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
-
-          {/* Telemetry Bottom Bar */}
-          <div className="h-8 rounded-lg bg-[#0f0f12] border border-white/[0.08] px-3 flex items-center justify-between text-[10px] font-mono text-zinc-500">
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1 text-emerald-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                <span>LATENCY: 284ms</span>
-              </span>
-              <span>•</span>
-              <span>TOKENS: 412 OUT</span>
-              <span>•</span>
-              <span>PARSER: V4-STRICT</span>
-            </div>
-            <div className="flex items-center gap-2 text-zinc-400">
-              <span>PRESS ⌘S TO COMMIT DIFF TO MASTER RESUME</span>
-            </div>
-          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

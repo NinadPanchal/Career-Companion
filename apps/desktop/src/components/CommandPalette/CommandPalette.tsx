@@ -160,16 +160,16 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
           onClick={onClose}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
+            initial={{ opacity: 0, scale: 0.96, y: -16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            transition={{ duration: 0.15 }}
+            exit={{ opacity: 0, scale: 0.96, y: -16 }}
+            transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-xl overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 shadow-2xl shadow-black/80"
+            className="w-full max-w-xl overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0c0d12]/95 backdrop-blur-2xl shadow-2xl shadow-black/90 text-white"
           >
             {/* Search Input */}
-            <div className="flex items-center border-b border-zinc-800 px-4 py-3.5">
-              <Search size={18} className="mr-3 text-zinc-400" />
+            <div className="flex items-center border-b border-white/[0.08] px-4.5 py-3.5">
+              <Search size={16} className="mr-3 text-zinc-400 shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
@@ -179,45 +179,45 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
                   setSelectedIndex(0);
                 }}
                 onKeyDown={handleKeyDown}
-                placeholder="Type a command or search (e.g. 'Interview', 'Resume', 'Apply')..."
-                className="w-full bg-transparent text-sm text-white placeholder-zinc-500 outline-none"
+                placeholder="Search commands, tools, pages..."
+                className="w-full bg-transparent text-sm text-zinc-100 placeholder-zinc-500 outline-none"
               />
-              <span className="rounded-md border border-zinc-700 bg-zinc-800 px-2 py-0.5 text-[10px] font-bold text-zinc-400">
+              <span className="rounded-md border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-mono text-zinc-400">
                 ESC
               </span>
             </div>
 
             {/* Results List */}
-            <div className="max-h-80 overflow-y-auto p-2">
+            <div className="max-h-80 overflow-y-auto p-2 space-y-0.5">
               {filteredItems.length > 0 ? (
-                <div className="space-y-1">
-                  {filteredItems.map((item, idx) => {
-                    const isSelected = idx === selectedIndex;
-                    const Icon = item.icon;
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={item.action}
-                        onMouseEnter={() => setSelectedIndex(idx)}
-                        className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm transition ${
-                          isSelected
-                            ? "bg-emerald-500 text-zinc-950 shadow-sm"
-                            : "text-zinc-300 hover:bg-zinc-800/60"
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <Icon size={16} className={isSelected ? "text-white" : "text-zinc-400"} />
-                          <span className="font-medium">{item.title}</span>
+                filteredItems.map((item, idx) => {
+                  const isSelected = idx === selectedIndex;
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={item.action}
+                      onMouseEnter={() => setSelectedIndex(idx)}
+                      className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition-all cursor-pointer ${
+                        isSelected
+                          ? "bg-white/[0.08] text-white border border-white/[0.08]"
+                          : "text-zinc-300 hover:bg-white/[0.04] border border-transparent"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`p-1.5 rounded-lg ${isSelected ? "bg-emerald-500/15 text-emerald-400" : "bg-white/[0.03] text-zinc-400"}`}>
+                          <Icon size={14} />
                         </div>
-                        <span className={`text-[10px] font-semibold uppercase tracking-wider ${
-                          isSelected ? "text-emerald-950" : "text-zinc-500"
-                        }`}>
-                          {item.category}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+                        <span className="font-medium">{item.title}</span>
+                      </div>
+                      <span className={`text-[10px] font-mono tracking-wider ${
+                        isSelected ? "text-emerald-400" : "text-zinc-500"
+                      }`}>
+                        {item.category}
+                      </span>
+                    </button>
+                  );
+                })
               ) : (
                 <div className="py-8 text-center text-xs text-zinc-500">
                   No commands found matching "{query}"
@@ -226,12 +226,13 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between border-t border-zinc-800/80 bg-zinc-950/60 px-4 py-2 text-[11px] text-zinc-500">
+            <div className="flex items-center justify-between border-t border-white/[0.06] bg-black/40 px-4 py-2.5 text-[11px] text-zinc-500">
               <div className="flex items-center gap-2">
-                <span>Navigate <kbd className="rounded border border-zinc-700 bg-zinc-800 px-1">↑</kbd><kbd className="rounded border border-zinc-700 bg-zinc-800 px-1">↓</kbd></span>
-                <span>Select <kbd className="rounded border border-zinc-700 bg-zinc-800 px-1">↵</kbd></span>
+                <span>Navigate <kbd className="rounded border border-white/[0.08] bg-white/[0.05] px-1 py-0.2 font-mono">↑</kbd><kbd className="rounded border border-white/[0.08] bg-white/[0.05] px-1 py-0.2 font-mono">↓</kbd></span>
+                <span className="text-zinc-700">•</span>
+                <span>Select <kbd className="rounded border border-white/[0.08] bg-white/[0.05] px-1 py-0.2 font-mono">↵</kbd></span>
               </div>
-              <span className="text-zinc-400">Career Companion Palette</span>
+              <span className="text-zinc-400 font-mono text-[10px]">Career Companion</span>
             </div>
           </motion.div>
         </div>

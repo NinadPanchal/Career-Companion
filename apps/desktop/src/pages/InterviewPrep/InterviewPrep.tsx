@@ -1,22 +1,18 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { 
   Sparkles, 
   Play, 
   Pause, 
   RotateCcw, 
   CheckCircle2, 
-  BookOpen, 
   Award, 
   Clock, 
   Bot, 
   ChevronDown, 
   ChevronUp, 
   Check, 
-  AlertCircle 
 } from "lucide-react";
-import { Card } from "../../components/ui/Cards";
-import { Button } from "../../components/ui/Button";
+import { Card, Button, Badge } from "../../components/ui";
 import { aiService, InterviewQuestionItem, EvaluateAnswerResult } from "../../features/ai/services/ai.service";
 
 export default function InterviewPrep() {
@@ -96,55 +92,62 @@ export default function InterviewPrep() {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-6 animate-fade-in font-sans select-none">
       {/* Header */}
-      <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-white/[0.06]">
         <div>
-          <div className="mb-2 flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-              <Sparkles size={14} /> AI Interview Coach
+          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+            <span>STAR Interview Simulator</span>
+            <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              Interactive Drill
             </span>
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-100">Mock Interview Simulator</h1>
-          <p className="mt-1 text-zinc-400">
-            Practice behavioral and technical questions with live STAR-framework scoring and coaching feedback.
+          </h1>
+          <p className="text-xs text-zinc-400 mt-0.5">
+            Timed behavioral & architecture drills with automated rubric scoring and coaching.
           </p>
         </div>
 
-        {/* Role configuration pill */}
+        {/* Target role & company configuration */}
         <div className="flex flex-wrap items-center gap-2">
           <input
             type="text"
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
             placeholder="Target Role"
-            className="w-48 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs font-semibold text-white outline-none focus:border-emerald-500"
+            className="w-40 sm:w-44 rounded-xl border border-white/[0.08] bg-[#07080a] px-3 py-1.5 text-xs text-white outline-none focus:border-emerald-500/50 transition-colors"
           />
           <input
             type="text"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
             placeholder="Target Company"
-            className="w-36 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs font-semibold text-white outline-none focus:border-emerald-500"
+            className="w-32 rounded-xl border border-white/[0.08] bg-[#07080a] px-3 py-1.5 text-xs text-white outline-none focus:border-emerald-500/50 transition-colors"
           />
-          <Button onClick={loadQuestions} className="py-2 text-xs">
-            Generate Questions
+          <Button
+            size="sm"
+            variant="primary"
+            onClick={loadQuestions}
+            disabled={isLoadingQuestions}
+            className="gap-1.5"
+          >
+            <Sparkles size={13} />
+            <span>Generate</span>
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-12">
-        {/* Left Side: Question List Navigation */}
-        <div className="space-y-4 lg:col-span-4">
-          <Card className="border-zinc-800 bg-zinc-900/60 p-4 backdrop-blur-xl">
-            <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-400">
-              Interview Questions ({questions.length})
+      <div className="grid gap-6 lg:grid-cols-12 items-start">
+        {/* Left Side: Question List Navigation (4 cols) */}
+        <div className="lg:col-span-4 space-y-4">
+          <Card className="p-4 space-y-3">
+            <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400">
+              Questions ({questions.length})
             </h2>
 
             {isLoadingQuestions ? (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-16 animate-pulse rounded-xl bg-zinc-800/40" />
+                  <div key={i} className="h-16 animate-pulse rounded-xl bg-white/[0.03]" />
                 ))}
               </div>
             ) : (
@@ -162,22 +165,22 @@ export default function InterviewPrep() {
                         setTimerSeconds(120);
                         setIsTimerRunning(false);
                       }}
-                      className={`flex w-full items-start gap-3 rounded-xl border p-3 text-left transition ${
+                      className={`flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-all cursor-pointer ${
                         isActive
-                          ? "border-emerald-500/40 bg-emerald-500/10 text-white shadow-lg shadow-emerald-500/5"
-                          : "border-zinc-800 bg-zinc-950/40 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
+                          ? "border-emerald-500/30 bg-emerald-500/10 text-white shadow-sm"
+                          : "border-white/[0.06] bg-white/[0.02] text-zinc-400 hover:border-white/[0.12] hover:text-zinc-200"
                       }`}
                     >
-                      <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                        isActive ? "bg-emerald-500 text-zinc-950" : "bg-zinc-800 text-zinc-400"
+                      <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-lg text-xs font-mono font-bold ${
+                        isActive ? "bg-emerald-500 text-zinc-950" : "bg-white/[0.06] text-zinc-400"
                       }`}>
                         {idx + 1}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <span className="rounded bg-zinc-800 px-1.5 py-0.5 text-[10px] font-semibold text-zinc-400">
+                        <span className="text-[10px] font-mono text-emerald-400">
                           {q.category}
                         </span>
-                        <p className="mt-1 text-xs font-medium line-clamp-2">{q.question}</p>
+                        <p className="mt-0.5 text-xs font-medium line-clamp-2 text-zinc-200">{q.question}</p>
                       </div>
                     </button>
                   );
@@ -186,39 +189,39 @@ export default function InterviewPrep() {
             )}
           </Card>
 
-          {/* Quick STAR Framework Cheat-sheet Card */}
-          <Card className="border-zinc-800 bg-zinc-900/40 p-4">
-            <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-              <Award size={14} /> The STAR Method Rule
+          {/* STAR Framework Rule Card */}
+          <Card className="p-4 space-y-2.5">
+            <h3 className="text-xs font-mono uppercase tracking-wider text-emerald-400 flex items-center gap-1.5 font-semibold">
+              <Award size={14} /> The STAR Structure
             </h3>
-            <ul className="space-y-2 text-xs text-zinc-400">
-              <li><strong className="text-white">Situation:</strong> Set the scene & context in 1-2 sentences.</li>
-              <li><strong className="text-white">Task:</strong> Define the goal or technical challenge.</li>
-              <li><strong className="text-white">Action:</strong> Explain the specific steps <em className="text-emerald-400">you</em> implemented.</li>
-              <li><strong className="text-white">Result:</strong> Quantify the outcome (e.g., % faster, $ saved, launched on time).</li>
+            <ul className="space-y-1.5 text-xs text-zinc-400">
+              <li><strong className="text-zinc-200 font-medium">S:</strong> Situation (context in 1-2 lines)</li>
+              <li><strong className="text-zinc-200 font-medium">T:</strong> Task (the technical goal or blocker)</li>
+              <li><strong className="text-zinc-200 font-medium">A:</strong> Action (<em className="text-emerald-400 not-italic">you</em> engineered)</li>
+              <li><strong className="text-zinc-200 font-medium">R:</strong> Result (measurable metric outcome)</li>
             </ul>
           </Card>
         </div>
 
-        {/* Right Side: Active Practice Simulator */}
-        <div className="space-y-6 lg:col-span-8">
+        {/* Right Side: Active Practice Simulator (8 cols) */}
+        <div className="lg:col-span-8 space-y-5">
           {activeQuestion ? (
-            <Card className="border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur-xl">
+            <Card ambient className="p-6 space-y-5">
               {/* Question Banner */}
-              <div className="mb-6 rounded-2xl border border-zinc-800 bg-zinc-950/80 p-5">
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-bold text-emerald-400">
+              <div className="rounded-xl border border-white/[0.08] bg-[#07080a] p-5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <Badge variant="emerald" size="sm">
                     {activeQuestion.category} Question
-                  </span>
+                  </Badge>
 
                   {/* Timer UI */}
-                  <div className="flex items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-1 text-xs font-mono text-zinc-300">
+                  <div className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-mono text-zinc-300">
                     <Clock size={13} className="text-emerald-400" />
                     <span>{formatTimer(timerSeconds)}</span>
                     <button
                       type="button"
                       onClick={() => setIsTimerRunning(!isTimerRunning)}
-                      className="ml-1 text-zinc-400 hover:text-white"
+                      className="ml-1 text-zinc-400 hover:text-white cursor-pointer"
                       title={isTimerRunning ? "Pause" : "Start"}
                     >
                       {isTimerRunning ? <Pause size={12} /> : <Play size={12} />}
@@ -229,7 +232,7 @@ export default function InterviewPrep() {
                         setIsTimerRunning(false);
                         setTimerSeconds(120);
                       }}
-                      className="text-zinc-500 hover:text-white"
+                      className="text-zinc-500 hover:text-white cursor-pointer"
                       title="Reset timer"
                     >
                       <RotateCcw size={12} />
@@ -237,155 +240,110 @@ export default function InterviewPrep() {
                   </div>
                 </div>
 
-                <h2 className="text-xl font-bold text-white leading-snug">{activeQuestion.question}</h2>
-                <p className="mt-2 text-xs text-zinc-400 italic">
+                <h2 className="text-lg font-bold text-white leading-snug">{activeQuestion.question}</h2>
+                <p className="text-xs text-zinc-400 italic">
                   💡 <strong>Interviewer intent:</strong> {activeQuestion.why_they_ask}
                 </p>
               </div>
 
               {/* Answer Input Area */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs font-semibold text-zinc-300">
-                  <span>Your Answer Draft (Practice Speaking or Typing)</span>
-                  <span className="text-zinc-500">{candidateAnswer.split(/\s+/).filter(Boolean).length} words</span>
+                  <span>Your Structured Answer Draft</span>
+                  <span className="text-zinc-500 font-mono text-[11px]">
+                    {candidateAnswer.split(/\s+/).filter(Boolean).length} words
+                  </span>
                 </div>
-
                 <textarea
                   rows={6}
                   value={candidateAnswer}
                   onChange={(e) => setCandidateAnswer(e.target.value)}
-                  placeholder="Structure your answer using Situation -> Task -> Action -> Result..."
-                  className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 p-4 text-sm text-white placeholder-zinc-500 outline-none focus:border-emerald-500 leading-relaxed resize-none"
+                  placeholder="Draft your STAR response... (Situation: At my last team..., Task: We needed to scale..., Action: I migrated the Kafka consumer..., Result: Reduced p99 by 40%.)"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#07080a] p-3 text-xs sm:text-sm text-white placeholder-zinc-500 outline-none focus:border-emerald-500/50 resize-none transition-colors"
                 />
-
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowSampleAnswer(!showSampleAnswer)}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition"
-                  >
-                    <BookOpen size={14} />
-                    {showSampleAnswer ? "Hide Model Answer" : "View Top-Tier Model Answer"}
-                    {showSampleAnswer ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                  </button>
-
-                  <Button
-                    onClick={handleEvaluate}
-                    disabled={isEvaluating || !candidateAnswer.trim()}
-                    className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-none"
-                  >
-                    <Bot size={16} />
-                    {isEvaluating ? "Evaluating STAR Structure..." : "Evaluate My Answer"}
-                  </Button>
-                </div>
               </div>
 
-              {/* Model Answer Drawer */}
-              <AnimatePresence>
-                {showSampleAnswer && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="mt-6 overflow-hidden rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5 text-sm text-zinc-300"
-                  >
-                    <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-400">
-                      <Sparkles size={14} /> Model Answer & Talking Points
-                    </div>
-                    <p className="italic leading-relaxed text-zinc-200">"{activeQuestion.sample_answer}"</p>
+              {/* Evaluation Action */}
+              <div className="flex items-center justify-between pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowSampleAnswer(!showSampleAnswer)}
+                  className="text-xs text-zinc-400 hover:text-emerald-400 transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  <span>{showSampleAnswer ? "Hide Sample STAR Answer" : "View Ideal STAR Model"}</span>
+                  {showSampleAnswer ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </button>
 
-                    <div className="mt-4 border-t border-emerald-500/20 pt-3">
-                      <p className="mb-1.5 text-xs font-semibold text-emerald-300">STAR Checklist for this question:</p>
-                      <ul className="space-y-1 text-xs text-zinc-400">
-                        {activeQuestion.star_tips.map((tip, i) => (
-                          <li key={i} className="flex items-start gap-1.5">
-                            <span className="text-emerald-400">•</span> {tip}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={handleEvaluate}
+                  disabled={isEvaluating || !candidateAnswer.trim()}
+                  className="gap-1.5"
+                >
+                  <Bot size={14} />
+                  <span>{isEvaluating ? "Scoring Response..." : "Evaluate Answer (AI)"}</span>
+                </Button>
+              </div>
 
-              {/* AI Evaluation Report */}
-              <AnimatePresence>
-                {evaluation && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 rounded-2xl border border-zinc-800 bg-zinc-950 p-6 shadow-xl"
-                  >
-                    <div className="mb-4 flex items-center justify-between border-b border-zinc-800 pb-4">
-                      <div>
-                        <h3 className="text-base font-bold text-white flex items-center gap-2">
-                          <Bot size={18} className="text-emerald-400" /> AI Coach Assessment
-                        </h3>
-                        <p className="text-xs text-zinc-400">{evaluation.coaching_summary}</p>
+              {/* Sample Answer Accordion */}
+              {showSampleAnswer && (
+                <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-4 text-xs text-zinc-300 space-y-2">
+                  <span className="font-mono text-emerald-400 font-semibold text-[11px] uppercase tracking-wider block">
+                    Model Exemplary STAR Answer:
+                  </span>
+                  <p className="leading-relaxed">{activeQuestion.sample_answer}</p>
+                </div>
+              )}
+
+              {/* Evaluation Output Section */}
+              {evaluation && (
+                <div className="rounded-xl border border-white/[0.08] bg-[#07080a] p-5 space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 size={16} className="text-emerald-400" />
+                      <h3 className="text-sm font-semibold text-white">Automated Rubric Evaluation</h3>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-zinc-400 font-mono">Score:</span>
+                      <span className="text-sm font-bold font-mono text-emerald-400">{evaluation.score}/100</span>
+                    </div>
+                  </div>
+
+                  {/* STAR Checklist */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {[
+                      { label: "Situation", pass: evaluation.star_breakdown.situation },
+                      { label: "Task", pass: evaluation.star_breakdown.task },
+                      { label: "Action", pass: evaluation.star_breakdown.action },
+                      { label: "Result", pass: evaluation.star_breakdown.result },
+                    ].map((step) => (
+                      <div
+                        key={step.label}
+                        className={`p-2 rounded-lg border flex items-center justify-between text-xs font-mono ${
+                          step.pass
+                            ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                            : "bg-white/[0.02] border-white/[0.06] text-zinc-500"
+                        }`}
+                      >
+                        <span>{step.label}</span>
+                        {step.pass ? <Check size={13} /> : <span className="text-[10px]">Missing</span>}
                       </div>
+                    ))}
+                  </div>
 
-                      <div className="text-right">
-                        <div className="text-3xl font-black text-emerald-400">{evaluation.score}</div>
-                        <div className="text-[10px] uppercase font-bold text-zinc-500">Readiness Score</div>
-                      </div>
-                    </div>
-
-                    {/* STAR Pillars */}
-                    <div className="mb-4 grid grid-cols-4 gap-2 text-center">
-                      {[
-                        { label: "Situation", passed: evaluation.star_breakdown.situation },
-                        { label: "Task", passed: evaluation.star_breakdown.task },
-                        { label: "Action", passed: evaluation.star_breakdown.action },
-                        { label: "Result", passed: evaluation.star_breakdown.result },
-                      ].map((pillar) => (
-                        <div
-                          key={pillar.label}
-                          className={`rounded-xl border p-2 ${
-                            pillar.passed
-                              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
-                              : "border-zinc-800 bg-zinc-900/60 text-zinc-500"
-                          }`}
-                        >
-                          <div className="text-xs font-bold">{pillar.label}</div>
-                          <div className="mt-1 flex justify-center">
-                            {pillar.passed ? <Check size={14} /> : <span className="text-[10px]">Missed</span>}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Strengths & Improvements */}
-                    <div className="grid gap-4 sm:grid-cols-2 pt-2">
-                      <div className="rounded-xl border border-emerald-500/10 bg-emerald-500/5 p-3">
-                        <p className="mb-1 text-xs font-bold text-emerald-400 flex items-center gap-1">
-                          <CheckCircle2 size={13} /> Key Strengths
-                        </p>
-                        <ul className="space-y-1 text-xs text-zinc-300">
-                          {evaluation.strengths.map((s, i) => (
-                            <li key={i}>• {s}</li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className="rounded-xl border border-amber-500/10 bg-amber-500/5 p-3">
-                        <p className="mb-1 text-xs font-bold text-amber-400 flex items-center gap-1">
-                          <AlertCircle size={13} /> Next Level Polish
-                        </p>
-                        <ul className="space-y-1 text-xs text-zinc-300">
-                          {evaluation.improvements.map((imp, i) => (
-                            <li key={i}>• {imp}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                  {/* Coaching Summary */}
+                  <p className="text-xs text-zinc-300 leading-relaxed bg-white/[0.02] p-3 rounded-lg border border-white/[0.04]">
+                    {evaluation.coaching_summary}
+                  </p>
+                </div>
+              )}
             </Card>
           ) : (
-            <Card className="flex h-64 items-center justify-center p-8 text-center text-zinc-500">
-              Select or generate a question from the left sidebar to start practicing.
-            </Card>
+            <div className="py-24 text-center text-zinc-500">
+              <Bot size={36} className="mx-auto mb-2 opacity-30" />
+              <p className="text-xs">No questions loaded. Enter a target role and click "Generate".</p>
+            </div>
           )}
         </div>
       </div>

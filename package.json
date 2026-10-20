@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "./start.sh",
+    "start:desktop": "./start.sh desktop",
     "build": "pnpm --filter desktop run build",
     "dev": "pnpm --filter desktop run dev",
+    "dev:api": "cd apps/api && .venv/bin/uvicorn main:app --reload --port 8000",
+    "dev:desktop": "pnpm --filter desktop run tauri dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "packageManager": "pnpm@11.15.1",

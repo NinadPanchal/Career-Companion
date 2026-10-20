@@ -10,3 +10,8 @@ html, body, #root {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Improve spacing and readability */
+* {
+  box-sizing: border-box;
+}

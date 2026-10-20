@@ -9,7 +9,6 @@ import {
   Bot,
   Search,
   User,
-  ArrowLeft,
 } from "lucide-react";
 import { GithubIcon } from "../ui/Icons";
 import "./Sidebar.css";
@@ -28,18 +27,17 @@ function Sidebar({ onOpenCommandPalette, isOpen = false, onNavigate }: SidebarPr
           <NavLink
             to="/"
             onClick={onNavigate}
-            className="group flex flex-col transition-opacity hover:opacity-90"
-            title="Return to Project Overview"
+            className="group flex items-center justify-between transition-all"
+            title="Return to Career Companion Overview"
           >
-            <div className="flex items-center gap-2">
-              <span className="flex h-5 w-5 items-center justify-center rounded bg-emerald-500 text-[10px] font-bold text-black">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-400 text-[10px] font-bold text-zinc-950 shadow-sm shadow-emerald-500/20">
                 CC
               </span>
-              <h2 className="sidebar-title">Career Companion</h2>
+              <span className="sidebar-title">Career Companion</span>
             </div>
-            <span className="mt-1 flex items-center gap-1 text-[11px] text-zinc-500 group-hover:text-emerald-400">
-              <ArrowLeft size={10} />
-              <span>Project Overview</span>
+            <span className="text-[10px] font-mono text-zinc-500 group-hover:text-emerald-400 transition-colors">
+              v1.0
             </span>
           </NavLink>
         </div>
@@ -48,14 +46,14 @@ function Sidebar({ onOpenCommandPalette, isOpen = false, onNavigate }: SidebarPr
         <button
           type="button"
           onClick={onOpenCommandPalette}
-          className="mb-4 flex w-full items-center justify-between rounded-lg border border-white/[0.08] bg-white/[0.03] px-2.5 py-1.5 text-xs text-zinc-400 transition-colors hover:border-white/[0.14] hover:text-white"
+          className="mb-4 flex w-full items-center justify-between rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.14] px-3 py-2 text-xs text-zinc-400 hover:text-zinc-200 transition-all cursor-pointer group"
           aria-label="Open command palette (Command + K)"
         >
           <div className="flex items-center gap-2">
-            <Search size={13} className="text-zinc-500" />
-            <span>Search & actions</span>
+            <Search size={13} className="text-zinc-500 group-hover:text-zinc-400 transition-colors" />
+            <span>Quick search...</span>
           </div>
-          <kbd aria-hidden="true">⌘K</kbd>
+          <kbd aria-hidden="true" className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-zinc-400">⌘K</kbd>
         </button>
 
         <nav aria-label="Sidebar main navigation">

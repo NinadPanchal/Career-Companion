@@ -1,22 +1,65 @@
-/* Shared surface treatments */
+/* Shared surface & glass treatments */
 .surface-card {
-  background: var(--surface-1);
+  background: var(--surface-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.surface-card-hover {
-  transition: border-color 0.2s ease;
-}
 .surface-card-hover:hover {
   border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+}
+
+.glass-panel-hover {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .surface-elevated {
   background: var(--surface-2);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+}
+
+/* Glowing accents */
+.glow-emerald {
+  box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.25);
+}
+
+.glow-subtle {
+  box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.12);
+}
+
+/* Ambient gradient top border highlight */
+.ambient-border {
+  position: relative;
+}
+.ambient-border::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.4), transparent);
+  pointer-events: none;
 }
 
 /* Focus ring */
@@ -30,8 +73,21 @@
   font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-quaternary);
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+}
+
+/* Text Gradients */
+.text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-emerald {
+  background: linear-gradient(135deg, #6ee7b7 0%, #10b981 60%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Stitch surface & border utilities */
@@ -48,14 +104,16 @@
 .text-status-interview { color: var(--status-interview); }
 .text-status-offer { color: var(--status-offer); }
 .text-status-rejected { color: var(--status-rejected); }
+.text-status-discovered { color: var(--status-discovered); }
 
 .bg-status-applied { background-color: var(--status-applied); }
 .bg-status-interview { background-color: var(--status-interview); }
 .bg-status-offer { background-color: var(--status-offer); }
 .bg-status-rejected { background-color: var(--status-rejected); }
+.bg-status-discovered { background-color: var(--status-discovered); }
 
 .font-mono-metric {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
   font-feature-settings: 'tnum';
 }
 

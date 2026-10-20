@@ -1,19 +1,15 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { 
   Sparkles, 
   Copy, 
   Check, 
   Download, 
-  RefreshCw, 
   FileText, 
   Share2, 
   Mail, 
-  Tag, 
   SlidersHorizontal 
 } from "lucide-react";
-import { Card } from "../../components/ui/Cards";
-import { Button } from "../../components/ui/Button";
+import { Card, Button, Tabs } from "../../components/ui";
 import { aiService, CoverLetterResult } from "../../features/ai/services/ai.service";
 import { useResumeStore } from "../../features/resume/stores/resume.store";
 
@@ -70,98 +66,64 @@ export default function CoverLetter() {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-6 animate-fade-in font-sans select-none">
       {/* Header */}
-      <div className="mb-8">
-        <div className="mb-2 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-            <Sparkles size={14} /> AI Outreach Suite
-          </span>
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-white/[0.06]">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+            <span>Outreach & Cover Letter Studio</span>
+            <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              Role Tailored
+            </span>
+          </h1>
+          <p className="text-xs text-zinc-400 mt-0.5">Generate high-impact cover letters, referral pitches, and hiring manager cold emails.</p>
         </div>
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-100">Cover Letter & Outreach</h1>
-        <p className="mt-1 text-zinc-400">
-          Generate tailored cover letters, LinkedIn referral messages, and cold pitch emails matching your resume to any job description.
-        </p>
+
+        <Tabs
+          size="sm"
+          tabs={[
+            { id: "cover_letter", label: "Cover Letter", icon: <FileText size={13} /> },
+            { id: "linkedin_outreach", label: "LinkedIn Pitch", icon: <Share2 size={13} /> },
+            { id: "cold_email", label: "Cold Email", icon: <Mail size={13} /> },
+          ]}
+          activeTab={formatType}
+          onChange={(tab) => setFormatType(tab as "cover_letter" | "linkedin_outreach" | "cold_email")}
+        />
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-12">
-        {/* Left Column: Configuration Form */}
-        <div className="space-y-6 lg:col-span-5">
-          <Card className="border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur-xl">
-            <h2 className="mb-4 text-lg font-bold flex items-center gap-2">
-              <SlidersHorizontal size={18} className="text-emerald-400" /> Target Role Configuration
-            </h2>
-
-            {/* Format Type Selector */}
-            <div className="mb-5">
-              <label className="mb-2 block text-xs font-semibold text-zinc-300">Outreach Format</label>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setFormatType("cover_letter")}
-                  className={`flex flex-col items-center justify-center rounded-xl border p-3 text-center transition ${
-                    formatType === "cover_letter"
-                      ? "border-emerald-500/50 bg-emerald-500/10 text-white"
-                      : "border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700"
-                  }`}
-                >
-                  <FileText size={18} className="mb-1 text-emerald-400" />
-                  <span className="text-xs font-semibold">Cover Letter</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setFormatType("linkedin_outreach")}
-                  className={`flex flex-col items-center justify-center rounded-xl border p-3 text-center transition ${
-                    formatType === "linkedin_outreach"
-                      ? "border-emerald-500/50 bg-emerald-500/10 text-white"
-                      : "border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700"
-                  }`}
-                >
-                  <Share2 size={18} className="mb-1 text-blue-400" />
-                  <span className="text-xs font-semibold">LinkedIn Pitch</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setFormatType("cold_email")}
-                  className={`flex flex-col items-center justify-center rounded-xl border p-3 text-center transition ${
-                    formatType === "cold_email"
-                      ? "border-emerald-500/50 bg-emerald-500/10 text-white"
-                      : "border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700"
-                  }`}
-                >
-                  <Mail size={18} className="mb-1 text-emerald-400" />
-                  <span className="text-xs font-semibold">Cold Email</span>
-                </button>
-              </div>
+      <div className="grid gap-6 lg:grid-cols-12 items-start">
+        {/* Left Column: Configuration Form (5 cols) */}
+        <div className="lg:col-span-5 space-y-4">
+          <Card className="p-5 space-y-4">
+            <div className="flex items-center gap-2 pb-3 border-b border-white/[0.06]">
+              <SlidersHorizontal size={15} className="text-emerald-400" />
+              <h2 className="text-sm font-semibold text-white">Target Position Spec</h2>
             </div>
 
-            {/* Role & Company Inputs */}
-            <div className="space-y-4">
+            <div className="space-y-3.5">
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-zinc-300">Target Role Title *</label>
+                <label className="mb-1 block text-xs font-semibold text-zinc-300">Target Role Title *</label>
                 <input
                   type="text"
                   value={jobTitle}
                   onChange={(e) => setJobTitle(e.target.value)}
                   placeholder="e.g. Lead Platform Engineer"
-                  className="w-full rounded-lg border border-white/[0.08] bg-[#09090b] p-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-emerald-500"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#07080a] p-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-emerald-500/50 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-zinc-300">Company Name *</label>
+                <label className="mb-1 block text-xs font-semibold text-zinc-300">Company Name *</label>
                 <input
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  placeholder="e.g. Stripe / Flipkart"
-                  className="w-full rounded-lg border border-white/[0.08] bg-[#09090b] p-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-emerald-500"
+                  placeholder="e.g. Razorpay, Zepto, Stripe"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#07080a] p-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-emerald-500/50 transition-colors"
                 />
               </div>
 
-              {/* Tone selection */}
+              {/* Tone Selection */}
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-zinc-300">Voice & Tone</label>
                 <div className="grid grid-cols-2 gap-2">
@@ -170,10 +132,10 @@ export default function CoverLetter() {
                       key={t}
                       type="button"
                       onClick={() => setTone(t)}
-                      className={`rounded-lg border px-3 py-2 text-xs font-medium capitalize transition ${
+                      className={`rounded-xl border px-3 py-2 text-xs font-medium capitalize transition-all cursor-pointer ${
                         tone === t
-                          ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-300"
-                          : "border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-zinc-700"
+                          ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-semibold"
+                          : "border-white/[0.07] bg-white/[0.02] text-zinc-400 hover:text-zinc-200 hover:border-white/[0.12]"
                       }`}
                     >
                       {t}
@@ -182,119 +144,97 @@ export default function CoverLetter() {
                 </div>
               </div>
 
-              {/* Job description paste */}
+              {/* Job Description */}
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-zinc-300">
-                  Job Description / Requirements (Optional)
-                </label>
+                <label className="mb-1 block text-xs font-semibold text-zinc-300">Target Job Requirements</label>
                 <textarea
                   rows={4}
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
-                  placeholder="Paste JD requirements to extract ATS matching keywords automatically..."
-                  className="w-full rounded-lg border border-white/[0.08] bg-[#09090b] p-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-emerald-500 resize-none"
+                  placeholder="Paste snippet or role requirements..."
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#07080a] p-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-emerald-500/50 resize-none transition-colors"
                 />
               </div>
 
               <Button
+                variant="primary"
+                size="md"
                 onClick={handleGenerate}
                 disabled={isLoading || !jobTitle.trim() || !companyName.trim()}
-                className="w-full justify-center gap-2 py-3 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-none"
+                className="w-full gap-2"
               >
-                {isLoading ? (
-                  <>
-                    <RefreshCw size={16} className="animate-spin" /> Crafting Pitch...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles size={16} /> Generate Tailored Outreach
-                  </>
-                )}
+                <Sparkles size={14} />
+                <span>{isLoading ? "Generating Tailored Draft..." : "Generate Outreach"}</span>
               </Button>
             </div>
           </Card>
         </div>
 
-        {/* Right Column: Live Output & Export */}
-        <div className="space-y-6 lg:col-span-7">
-          <Card className="flex h-full min-h-[550px] flex-col border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur-xl">
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800/80 pb-4">
-              <div>
-                <h3 className="text-base font-bold text-white">Generated Pitch Document</h3>
-                <p className="text-xs text-zinc-400">
-                  {result?.estimated_read_time_secs ? `~${result.estimated_read_time_secs} sec read time` : "Ready to generate"}
-                </p>
+        {/* Right Column: Live Document Preview (7 cols) */}
+        <div className="lg:col-span-7 space-y-4">
+          <Card ambient className="p-6 min-h-[500px] flex flex-col justify-between">
+            <div>
+              {/* Document Header Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  <span className="text-xs font-semibold text-white uppercase tracking-wider font-mono">
+                    {formatType.replace("_", " ")}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    disabled={!result?.content}
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-all disabled:opacity-30 cursor-pointer"
+                  >
+                    {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                    <span>{copied ? "Copied" : "Copy"}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleDownload}
+                    disabled={!result?.content}
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-all disabled:opacity-30 cursor-pointer"
+                  >
+                    <Download size={13} />
+                    <span>Export .md</span>
+                  </button>
+                </div>
               </div>
 
-              {result && (
-                <div className="flex items-center gap-2">
-                  <Button variant="secondary" onClick={handleCopy} className="flex items-center gap-1.5 text-xs py-1.5">
-                    {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                    {copied ? "Copied!" : "Copy Text"}
-                  </Button>
-                  <Button variant="secondary" onClick={handleDownload} className="flex items-center gap-1.5 text-xs py-1.5">
-                    <Download size={14} /> Download .md
-                  </Button>
+              {/* Subject Line if email */}
+              {result?.subject_line && (
+                <div className="my-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs font-mono">
+                  <span className="text-zinc-500">Subject: </span>
+                  <span className="text-emerald-400 font-semibold">{result.subject_line}</span>
                 </div>
               )}
+
+              {/* Document Text Body */}
+              <div className="mt-4 text-xs sm:text-sm text-zinc-200 leading-relaxed font-sans whitespace-pre-wrap select-text">
+                {result?.content ? (
+                  result.content
+                ) : (
+                  <div className="py-24 text-center text-zinc-500">
+                    <FileText size={32} className="mx-auto mb-2 opacity-30" />
+                    <p className="text-xs">Configure position on the left and click "Generate Outreach"</p>
+                    <p className="text-[11px] text-zinc-600 mt-1">Our generative model pairs your verified accomplishments with target requirements.</p>
+                  </div>
+                )}
+              </div>
             </div>
 
-            {/* Output Box */}
-            <div className="flex-1">
-              {isLoading ? (
-                <div className="flex h-64 flex-col items-center justify-center space-y-3 text-center">
-                  <div className="rounded-xl bg-emerald-500/10 p-4 text-emerald-400 animate-pulse">
-                    <Sparkles size={32} />
-                  </div>
-                  <p className="text-sm font-semibold text-white">Analyzing role requirements & matching resume skills...</p>
-                  <p className="text-xs text-zinc-500">Formatting tone for high recruiter reply rate</p>
-                </div>
-              ) : result ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="space-y-4"
-                >
-                  {result.subject_line && (
-                    <div className="rounded-xl border border-zinc-800 bg-zinc-950/80 p-3">
-                      <span className="text-xs font-semibold text-zinc-500">Subject: </span>
-                      <span className="text-xs font-bold text-emerald-300">{result.subject_line}</span>
-                    </div>
-                  )}
-
-                  <div className="rounded-xl border border-white/[0.08] bg-[#09090b] p-5 font-mono text-sm leading-relaxed text-zinc-200 whitespace-pre-wrap selection:bg-emerald-500/30">
-                    {result.content}
-                  </div>
-
-                  {/* Matched Keywords */}
-                  {result.target_keywords?.length > 0 && (
-                    <div className="pt-2">
-                      <p className="mb-2 text-xs font-semibold text-zinc-400 flex items-center gap-1.5">
-                        <Tag size={12} className="text-emerald-400" /> Target Keywords Included:
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {result.target_keywords.map((kw) => (
-                          <span
-                            key={kw}
-                            className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-300"
-                          >
-                            {kw}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </motion.div>
-              ) : (
-                <div className="flex h-64 flex-col items-center justify-center text-center p-8 text-zinc-500">
-                  <FileText size={40} className="mb-3 text-zinc-700" />
-                  <p className="text-sm font-medium text-zinc-400">Configure your target role on the left and click generate</p>
-                  <p className="mt-1 text-xs text-zinc-600">
-                    Personalized based on active resume skills and target company
-                  </p>
-                </div>
-              )}
-            </div>
+            {/* Document Telemetry Footer */}
+            {result?.content && (
+              <div className="mt-6 pt-3 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-zinc-500">
+                <span>{result.content.split(/\s+/).length} Words</span>
+                <span>Est. read time: ~{result.estimated_read_time_secs || 45}s</span>
+              </div>
+            )}
           </Card>
         </div>
       </div>
