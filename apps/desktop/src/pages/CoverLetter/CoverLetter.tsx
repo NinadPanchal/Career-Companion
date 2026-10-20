@@ -9,7 +9,7 @@ import {
   Mail, 
   SlidersHorizontal 
 } from "lucide-react";
-import { Card, Button, Tabs } from "../../components/ui";
+import { Card, Button, Tabs, Badge } from "../../components/ui";
 import { aiService, CoverLetterResult } from "../../features/ai/services/ai.service";
 import { useResumeStore } from "../../features/resume/stores/resume.store";
 
@@ -66,76 +66,74 @@ export default function CoverLetter() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in font-sans select-none">
+    <div className="space-y-5 animate-fade-in font-sans select-none">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-white/[0.06]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-white/[0.08]">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-            <span>Outreach & Cover Letter Studio</span>
-            <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              Role Tailored
-            </span>
-          </h1>
-          <p className="text-xs text-zinc-400 mt-0.5">Generate high-impact cover letters, referral pitches, and hiring manager cold emails.</p>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-semibold text-[#f4f4f5] tracking-tight">Outreach Studio</h1>
+            <Badge variant="emerald" size="sm">Tailored draft</Badge>
+          </div>
+          <p className="text-xs text-[#71717a] mt-0.5">Generate tailored cover letters, referral pitches, and hiring manager cold emails.</p>
         </div>
 
         <Tabs
           size="sm"
           tabs={[
-            { id: "cover_letter", label: "Cover Letter", icon: <FileText size={13} /> },
-            { id: "linkedin_outreach", label: "LinkedIn Pitch", icon: <Share2 size={13} /> },
-            { id: "cold_email", label: "Cold Email", icon: <Mail size={13} /> },
+            { id: "cover_letter", label: "Cover letter", icon: <FileText size={13} /> },
+            { id: "linkedin_outreach", label: "LinkedIn pitch", icon: <Share2 size={13} /> },
+            { id: "cold_email", label: "Cold email", icon: <Mail size={13} /> },
           ]}
           activeTab={formatType}
           onChange={(tab) => setFormatType(tab as "cover_letter" | "linkedin_outreach" | "cold_email")}
         />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-12 items-start">
+      <div className="grid gap-4 lg:grid-cols-12 items-start">
         {/* Left Column: Configuration Form (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
-          <Card className="p-5 space-y-4">
-            <div className="flex items-center gap-2 pb-3 border-b border-white/[0.06]">
-              <SlidersHorizontal size={15} className="text-emerald-400" />
-              <h2 className="text-sm font-semibold text-white">Target Position Spec</h2>
+          <Card className="p-4 sm:p-5 space-y-3.5">
+            <div className="flex items-center gap-2 pb-2.5 border-b border-white/[0.08]">
+              <SlidersHorizontal size={14} className="text-[#10b981]" />
+              <h2 className="text-xs font-semibold text-[#f4f4f5]">Role details</h2>
             </div>
 
-            <div className="space-y-3.5">
+            <div className="space-y-3">
               <div>
-                <label className="mb-1 block text-xs font-semibold text-zinc-300">Target Role Title *</label>
+                <label className="mb-1 block text-xs text-[#a1a1aa]">Target role title *</label>
                 <input
                   type="text"
                   value={jobTitle}
                   onChange={(e) => setJobTitle(e.target.value)}
                   placeholder="e.g. Lead Platform Engineer"
-                  className="w-full rounded-xl border border-white/[0.08] bg-[#07080a] p-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-emerald-500/50 transition-colors"
+                  className="w-full h-8 px-2.5 rounded-[8px] border border-white/[0.08] bg-[#09090b] text-xs text-[#f4f4f5] placeholder-[#71717a] outline-none focus:border-[#10b981] transition-colors"
                 />
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-semibold text-zinc-300">Company Name *</label>
+                <label className="mb-1 block text-xs text-[#a1a1aa]">Company name *</label>
                 <input
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   placeholder="e.g. Razorpay, Zepto, Stripe"
-                  className="w-full rounded-xl border border-white/[0.08] bg-[#07080a] p-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-emerald-500/50 transition-colors"
+                  className="w-full h-8 px-2.5 rounded-[8px] border border-white/[0.08] bg-[#09090b] text-xs text-[#f4f4f5] placeholder-[#71717a] outline-none focus:border-[#10b981] transition-colors"
                 />
               </div>
 
               {/* Tone Selection */}
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-zinc-300">Voice & Tone</label>
+                <label className="mb-1.5 block text-xs text-[#a1a1aa]">Voice & tone</label>
                 <div className="grid grid-cols-2 gap-2">
                   {(["professional", "enthusiastic", "technical", "direct"] as const).map((t) => (
                     <button
                       key={t}
                       type="button"
                       onClick={() => setTone(t)}
-                      className={`rounded-xl border px-3 py-2 text-xs font-medium capitalize transition-all cursor-pointer ${
+                      className={`rounded-[6px] border px-2.5 py-1.5 text-xs capitalize transition-colors cursor-pointer ${
                         tone === t
-                          ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-semibold"
-                          : "border-white/[0.07] bg-white/[0.02] text-zinc-400 hover:text-zinc-200 hover:border-white/[0.12]"
+                          ? "border-[#10b981]/40 bg-[#10b981]/10 text-[#10b981] font-semibold"
+                          : "border-white/[0.08] bg-[#18181b] text-[#71717a] hover:text-[#d4d4d8] hover:border-white/[0.16]"
                       }`}
                     >
                       {t}
@@ -146,25 +144,25 @@ export default function CoverLetter() {
 
               {/* Job Description */}
               <div>
-                <label className="mb-1 block text-xs font-semibold text-zinc-300">Target Job Requirements</label>
+                <label className="mb-1 block text-xs text-[#a1a1aa]">Role requirements or description snippet</label>
                 <textarea
                   rows={4}
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste snippet or role requirements..."
-                  className="w-full rounded-xl border border-white/[0.08] bg-[#07080a] p-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-emerald-500/50 resize-none transition-colors"
+                  className="w-full rounded-[8px] border border-white/[0.08] bg-[#09090b] p-2.5 text-xs text-[#f4f4f5] placeholder-[#71717a] outline-none focus:border-[#10b981] resize-none transition-colors"
                 />
               </div>
 
               <Button
                 variant="primary"
-                size="md"
+                size="sm"
                 onClick={handleGenerate}
                 disabled={isLoading || !jobTitle.trim() || !companyName.trim()}
-                className="w-full gap-2"
+                className="w-full gap-2 mt-1"
               >
-                <Sparkles size={14} />
-                <span>{isLoading ? "Generating Tailored Draft..." : "Generate Outreach"}</span>
+                <Sparkles size={13} />
+                <span>{isLoading ? "Generating draft..." : "Generate draft"}</span>
               </Button>
             </div>
           </Card>
@@ -172,13 +170,13 @@ export default function CoverLetter() {
 
         {/* Right Column: Live Document Preview (7 cols) */}
         <div className="lg:col-span-7 space-y-4">
-          <Card ambient className="p-6 min-h-[500px] flex flex-col justify-between">
+          <Card className="p-5 min-h-[480px] flex flex-col justify-between">
             <div>
               {/* Document Header Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  <span className="text-xs font-semibold text-white uppercase tracking-wider font-mono">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]" />
+                  <span className="text-xs font-semibold text-[#f4f4f5] capitalize">
                     {formatType.replace("_", " ")}
                   </span>
                 </div>
@@ -188,9 +186,10 @@ export default function CoverLetter() {
                     type="button"
                     onClick={handleCopy}
                     disabled={!result?.content}
-                    className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-all disabled:opacity-30 cursor-pointer"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs text-[#d4d4d8] hover:text-white transition-all disabled:opacity-30 cursor-pointer"
+                    aria-label="Copy draft"
                   >
-                    {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                    {copied ? <Check size={12} className="text-[#10b981]" /> : <Copy size={12} />}
                     <span>{copied ? "Copied" : "Copy"}</span>
                   </button>
 
@@ -198,9 +197,10 @@ export default function CoverLetter() {
                     type="button"
                     onClick={handleDownload}
                     disabled={!result?.content}
-                    className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition-all disabled:opacity-30 cursor-pointer"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs text-[#d4d4d8] hover:text-white transition-all disabled:opacity-30 cursor-pointer"
+                    aria-label="Export Markdown file"
                   >
-                    <Download size={13} />
+                    <Download size={12} />
                     <span>Export .md</span>
                   </button>
                 </div>
@@ -208,21 +208,23 @@ export default function CoverLetter() {
 
               {/* Subject Line if email */}
               {result?.subject_line && (
-                <div className="my-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs font-mono">
-                  <span className="text-zinc-500">Subject: </span>
-                  <span className="text-emerald-400 font-semibold">{result.subject_line}</span>
+                <div className="my-3 p-2.5 rounded-[6px] bg-[#18181b] border border-white/[0.08] text-xs">
+                  <span className="text-[#71717a]">Subject: </span>
+                  <span className="text-[#10b981] font-medium">{result.subject_line}</span>
                 </div>
               )}
 
               {/* Document Text Body */}
-              <div className="mt-4 text-xs sm:text-sm text-zinc-200 leading-relaxed font-sans whitespace-pre-wrap select-text">
+              <div className="mt-4 text-xs sm:text-sm text-[#d4d4d8] leading-relaxed font-sans whitespace-pre-wrap select-text">
                 {result?.content ? (
                   result.content
                 ) : (
-                  <div className="py-24 text-center text-zinc-500">
-                    <FileText size={32} className="mx-auto mb-2 opacity-30" />
-                    <p className="text-xs">Configure position on the left and click "Generate Outreach"</p>
-                    <p className="text-[11px] text-zinc-600 mt-1">Our generative model pairs your verified accomplishments with target requirements.</p>
+                  <div className="py-20 text-center text-[#71717a]">
+                    <FileText size={28} className="mx-auto mb-2 opacity-30 text-[#71717a]" />
+                    <p className="text-xs text-[#a1a1aa] font-medium">No draft generated yet</p>
+                    <p className="text-xs text-[#71717a] mt-1 max-w-sm mx-auto">
+                      Fill in the target role and company details on the left, then click "Generate draft" to create a personalized pitch.
+                    </p>
                   </div>
                 )}
               </div>
@@ -230,8 +232,8 @@ export default function CoverLetter() {
 
             {/* Document Telemetry Footer */}
             {result?.content && (
-              <div className="mt-6 pt-3 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-zinc-500">
-                <span>{result.content.split(/\s+/).length} Words</span>
+              <div className="mt-5 pt-2.5 border-t border-white/[0.08] flex items-center justify-between text-xs text-[#71717a]">
+                <span>{result.content.split(/\s+/).length} words</span>
                 <span>Est. read time: ~{result.estimated_read_time_secs || 45}s</span>
               </div>
             )}

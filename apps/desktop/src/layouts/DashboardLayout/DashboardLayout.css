@@ -1,8 +1,8 @@
 .app-shell {
   display: flex;
   min-height: 100vh;
-  background: var(--surface-0);
-  color: var(--text-primary);
+  background: var(--surface-base, #09090b);
+  color: var(--text-primary, #f4f4f5);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -11,7 +11,7 @@
   min-width: 0;
   flex: 1;
   flex-direction: column;
-  background: var(--surface-0);
+  background: var(--surface-base, #09090b);
   position: relative;
 }
 
@@ -20,71 +20,57 @@
   top: 0;
   z-index: 30;
   display: flex;
-  height: 56px;
+  height: 48px;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2.5rem;
-  border-bottom: 1px solid var(--border-subtle);
-  background: rgba(7, 8, 10, 0.78);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  background: rgba(9, 9, 11, 0.95);
 }
 
 .workspace-content {
   flex: 1;
   overflow-y: auto;
-  padding: 2.25rem 2.5rem 4rem;
+  padding: 1.5rem 1.5rem 3rem;
+}
+
+@media (min-width: 1024px) {
+  .workspace-content {
+    padding: 1.5rem 2rem 3rem;
+  }
 }
 
 .mobile-menu-trigger {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.03);
+  width: 30px;
+  height: 30px;
+  color: var(--text-secondary, #a1a1aa);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-sm, 6px);
+  background: transparent;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.12s ease;
 }
 
 .mobile-menu-trigger:hover {
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--border-hover);
+  color: var(--text-primary, #f4f4f5);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border-hover, rgba(255, 255, 255, 0.16));
 }
 
 .sidebar-scrim {
   display: none;
-}
-
-@media (max-width: 1024px) {
-  .workspace-header,
-  .workspace-content {
-    padding-left: 1.75rem;
-    padding-right: 1.75rem;
-  }
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background: rgba(0, 0, 0, 0.7);
 }
 
 @media (max-width: 900px) {
-  .mobile-menu-trigger {
-    display: inline-flex;
-  }
-  .workspace-header {
-    padding: 0 1.25rem;
-  }
-  .workspace-content {
-    padding: 1.5rem 1.25rem 3rem;
-  }
-  .sidebar-scrim--visible {
-    position: fixed;
-    z-index: 40;
-    display: block;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-  }
+  .mobile-menu-trigger { display: flex; }
+  .sidebar-scrim--visible { display: block; }
+  .workspace-header { padding: 0 1rem; }
+  .workspace-content { padding: 1rem 1rem 2.5rem; }
 }
-

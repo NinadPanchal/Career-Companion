@@ -11,23 +11,20 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 export default function Card({
   children,
   hover = false,
-  ambient = false,
-  variant = "glass",
+  variant = "default",
   className,
   ...props
 }: CardProps) {
   return (
     <div
       className={clsx(
-        "relative rounded-2xl transition-all duration-200",
+        "relative rounded-[10px] transition-colors duration-150",
         {
-          "glass-panel shadow-sm": variant === "glass",
-          "bg-[#0d0e12] border border-white/[0.08] shadow-sm": variant === "default",
-          "bg-[#14151b] border border-white/[0.1] shadow-md": variant === "elevated",
-          "bg-white/[0.02] border border-white/[0.05]": variant === "subtle",
+          "bg-[#0f0f12] border border-white/[0.08]": variant === "default" || variant === "glass",
+          "bg-[#18181b] border border-white/[0.12] shadow-[0_8px_24px_-4px_rgba(0,0,0,0.6)]": variant === "elevated",
+          "bg-[#09090b] border border-white/[0.06]": variant === "subtle",
         },
-        ambient && "ambient-border",
-        hover && "glass-panel-hover",
+        hover && "hover:border-white/[0.16]",
         className
       )}
       {...props}

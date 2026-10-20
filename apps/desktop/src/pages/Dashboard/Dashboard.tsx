@@ -13,16 +13,15 @@ import {
   Zap,
   Briefcase,
   ChevronRight,
-  Sparkles,
 } from "lucide-react";
 import { jobsService, ApplicationStats } from "../../features/jobs/services/jobs.service";
 import { useResumeStore } from "../../features/resume/stores/resume.store";
 import { useApplicationsStore } from "../../features/applications/stores/applications.store";
-import { Card, Badge, ProgressRing } from "../../components/ui";
+import { Card, Button, Badge, MatchGauge } from "../../components/ui";
 
 export default function Dashboard() {
   const [stats, setStats] = useState<ApplicationStats | null>(null);
-  const { file, analysis } = useResumeStore();
+  const { analysis } = useResumeStore();
   const { setIsAddModalOpen } = useApplicationsStore();
   const navigate = useNavigate();
 
@@ -63,129 +62,130 @@ export default function Dashboard() {
   };
 
   const activeSkills = analysis?.skills?.length
-    ? analysis.skills.slice(0, 8)
-    : ["React 19", "TypeScript", "Python", "FastAPI", "PostgreSQL", "Docker", "TailwindCSS", "Distributed Systems"];
+    ? analysis.skills.slice(0, 6)
+    : ["React 19", "TypeScript", "Python", "FastAPI", "PostgreSQL", "Docker"];
 
   return (
-    <div className="space-y-8 animate-fade-in font-sans">
+    <div className="space-y-6 font-sans">
       {/* ========================================================================= */}
-      {/* CLEAN HEADER WITH GREETING & PRIMARY ACTIONS                              */}
+      {/* WELCOME HEADER & PRIMARY ACTIONS                                          */}
       {/* ========================================================================= */}
-      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-white/[0.05]">
+      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-mono text-emerald-400 font-medium">● ACTIVE SEARCH PIPELINE</span>
-            <span className="text-zinc-700">•</span>
-            <span className="text-xs text-zinc-500 font-mono">Q4 2026</span>
+            <span className="w-2 h-2 rounded-full bg-[#10b981]" />
+            <span className="text-xs text-[#a1a1aa] font-medium">Search active</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-            {getGreeting()}, <span className="text-gradient">Ninad</span>
+          <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#f4f4f5]">
+            {getGreeting()}, <span className="text-white">Ninad</span>
           </h1>
-          <p className="mt-1 text-xs sm:text-sm text-zinc-400">
-            You have <span className="text-white font-medium">{inInterview} active interview rounds</span> and{" "}
-            <span className="text-emerald-400 font-medium">{appliedThisWeek} applications submitted</span> this week.
+          <p className="mt-1 text-xs sm:text-sm text-[#a1a1aa]">
+            You have <span className="text-[#f4f4f5] font-medium">{inInterview} active interview rounds</span> in flight and{" "}
+            <span className="text-[#10b981] font-medium">{appliedThisWeek} applications submitted</span> this week.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 shrink-0">
           <Link
             to="/resume"
-            className="h-9 px-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-white/[0.16] text-zinc-300 hover:text-white text-xs font-medium flex items-center gap-2 transition-all cursor-pointer"
+            className="h-8 px-3 rounded-[8px] bg-[#09090b] hover:bg-[#18181b] border border-white/[0.08] hover:border-white/[0.16] text-[#f4f4f5] text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <Upload size={13} className="text-zinc-400" />
-            <span>Update Resume</span>
+            <Upload size={13} className="text-[#71717a]" />
+            <span>Update resume</span>
           </Link>
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="sm"
             onClick={() => {
               navigate("/applications");
               setIsAddModalOpen(true);
             }}
-            className="h-9 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold text-xs flex items-center gap-1.5 shadow-[0_2px_12px_rgba(16,185,129,0.25)] hover:shadow-[0_4px_16px_rgba(16,185,129,0.35)] transition-all cursor-pointer"
+            className="gap-1.5"
           >
-            <Plus size={14} />
-            <span>New Application</span>
-          </button>
+            <Plus size={13} />
+            <span>New application</span>
+          </Button>
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* 4 CORE KPI METRICS                                                        */}
+      {/* BALANCED METRIC CARDS                                                     */}
       {/* ========================================================================= */}
-      <section aria-label="Key Performance Indicators" className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        {/* KPI 1: Active Applications */}
-        <Card ambient hover className="p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-400">
-            <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider font-mono">Total Tracked</span>
-            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+      <section aria-label="Key metrics" className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
+        {/* Metric 1: Total Tracked */}
+        <Card hover className="p-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[#71717a]">
+            <span className="text-xs font-medium text-[#a1a1aa]">Total applications</span>
+            <div className="w-7 h-7 rounded-[6px] bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#10b981]">
               <FolderOpen size={14} />
             </div>
           </div>
           <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-3xl font-bold font-mono tracking-tight text-white">{totalApps}</span>
-            <span className="inline-flex items-center gap-1 text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-              <TrendingUp size={12} />
-              +4 wk
+            <span className="text-2xl font-bold font-mono tracking-tight text-[#f4f4f5] tabular-nums">{totalApps}</span>
+            <span className="inline-flex items-center gap-1 text-[11px] text-[#10b981] bg-[#10b981]/10 px-1.5 py-0.5 rounded-[4px] border border-[#10b981]/20 font-medium">
+              <TrendingUp size={11} />
+              +4 this week
             </span>
           </div>
-          <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-zinc-400">
-            <span>In flight pipeline</span>
-            <span className="text-zinc-200 font-mono font-medium">{inApplied + inInterview} active</span>
+          <div className="mt-3 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-xs text-[#71717a]">
+            <span>Active in pipeline</span>
+            <span className="text-[#f4f4f5] font-medium">{inApplied + inInterview} active</span>
           </div>
         </Card>
 
-        {/* KPI 2: Interviews Scheduled */}
-        <Card ambient hover className="p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-400">
-            <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider font-mono">Active Interviews</span>
-            <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+        {/* Metric 2: Active Interviews */}
+        <Card hover className="p-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[#71717a]">
+            <span className="text-xs font-medium text-[#a1a1aa]">Active interviews</span>
+            <div className="w-7 h-7 rounded-[6px] bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-[#f59e0b]">
               <Clock size={14} />
             </div>
           </div>
           <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-3xl font-bold font-mono tracking-tight text-white">{inInterview}</span>
+            <span className="text-2xl font-bold font-mono tracking-tight text-[#f4f4f5] tabular-nums">{inInterview}</span>
             <Badge variant="interview" size="sm">Next: Tomorrow</Badge>
           </div>
-          <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-zinc-400">
+          <div className="mt-3 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-xs text-[#71717a]">
             <span className="truncate">Razorpay (System Arch)</span>
-            <span className="text-amber-400 font-mono">2:30 PM</span>
+            <span className="text-[#f59e0b] font-medium">2:30 PM</span>
           </div>
         </Card>
 
-        {/* KPI 3: Match Compatibility Score */}
-        <Card ambient hover className="p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-400">
-            <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider font-mono">Avg Skill Match</span>
-            <div className="w-7 h-7 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
+        {/* Metric 3: Profile Match */}
+        <Card hover className="p-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[#71717a]">
+            <span className="text-xs font-medium text-[#a1a1aa]">Average match rate</span>
+            <div className="w-7 h-7 rounded-[6px] bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-[#38bdf8]">
               <Zap size={14} />
             </div>
           </div>
-          <div className="mt-2 flex items-center justify-between">
-            <span className="text-3xl font-bold font-mono tracking-tight text-white">{avgMatch}%</span>
-            <ProgressRing value={avgMatch} size={42} strokeWidth={3.5} color="emerald" />
+          <div className="mt-2.5">
+            <MatchGauge score={avgMatch} />
           </div>
-          <div className="mt-2 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-zinc-400">
-            <span>Top Compatibility</span>
-            <span className="text-emerald-400 font-medium">Backend & Cloud</span>
+          <div className="mt-2.5 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-xs text-[#71717a]">
+            <span>Core alignment</span>
+            <span className="text-[#10b981] font-medium">Backend & Cloud</span>
           </div>
         </Card>
 
-        {/* KPI 4: Weekly Application Goal */}
-        <Card ambient hover className="p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-400">
-            <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider font-mono">Weekly Velocity</span>
-            <div className="w-7 h-7 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+        {/* Metric 4: Weekly Goal */}
+        <Card hover className="p-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[#71717a]">
+            <span className="text-xs font-medium text-[#a1a1aa]">Weekly target</span>
+            <div className="w-7 h-7 rounded-[6px] bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#f4f4f5]">
               <Briefcase size={14} />
             </div>
           </div>
           <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-3xl font-bold font-mono tracking-tight text-white">{appliedThisWeek} <span className="text-sm font-normal text-zinc-500">/ 10</span></span>
-            <span className="text-xs font-mono text-zinc-300">{Math.round((appliedThisWeek / 10) * 100)}% met</span>
+            <span className="text-2xl font-bold font-mono tracking-tight text-[#f4f4f5] tabular-nums">
+              {appliedThisWeek} <span className="text-xs font-normal text-[#71717a]">/ 10 target</span>
+            </span>
+            <span className="text-xs text-[#a1a1aa] font-medium">{Math.round((appliedThisWeek / 10) * 100)}% met</span>
           </div>
-          <div className="mt-3 pt-3 border-t border-white/[0.06]">
-            <div className="w-full bg-zinc-800/80 h-1.5 rounded-full overflow-hidden">
+          <div className="mt-3 pt-2.5 border-t border-white/[0.06]">
+            <div className="w-full bg-[#18181b] h-[3px] rounded-full overflow-hidden">
               <div
-                className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500"
+                className="bg-[#10b981] h-full rounded-full transition-all duration-300"
                 style={{ width: `${Math.min(100, (appliedThisWeek / 10) * 100)}%` }}
               />
             </div>
@@ -194,258 +194,340 @@ export default function Dashboard() {
       </section>
 
       {/* ========================================================================= */}
-      {/* PIPELINE PROGRESSION STRIP                                                */}
+      {/* APPLICATION STAGE PROGRESSION SUMMARY                                     */}
       {/* ========================================================================= */}
-      <section aria-label="Pipeline overview">
-        <Card className="p-5">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-white">Application Pipeline Velocity</h2>
-              <span className="text-xs text-zinc-500 font-mono">• 4 Stage Progression</span>
+      <section aria-label="Application stages">
+        <Card className="p-4 sm:p-5">
+          <div className="flex items-center justify-between mb-3.5">
+            <div>
+              <h2 className="text-sm font-semibold text-[#f4f4f5]">
+                Application stages
+              </h2>
+              <p className="text-xs text-[#71717a] mt-0.5">Overview of active opportunities by status</p>
             </div>
             <Link
               to="/applications"
-              className="text-xs text-emerald-400 hover:text-emerald-300 font-medium flex items-center gap-1 group transition-colors"
+              className="text-xs text-[#10b981] hover:text-[#34d399] font-medium flex items-center gap-1 group transition-colors"
             >
-              <span>View Full Kanban</span>
-              <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+              <span>View kanban board</span>
+              <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
 
-          {/* Interactive Stage Blocks */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {/* Stage 1: Wishlist */}
             <div
               onClick={() => navigate("/applications")}
-              className="p-3.5 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/[0.12] transition-all cursor-pointer group"
+              className="p-3.5 rounded-[8px] bg-[#09090b] hover:bg-[#18181b] border border-white/[0.08] hover:border-white/[0.14] transition-colors cursor-pointer"
             >
-              <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
+              <div className="flex items-center justify-between text-xs text-[#a1a1aa] mb-1.5 font-medium">
                 <span>Wishlist</span>
                 <span className="w-2 h-2 rounded-full bg-zinc-500" />
               </div>
-              <div className="text-2xl font-bold font-mono text-white">{inWishlist}</div>
-              <p className="mt-1 text-[11px] text-zinc-500">Bookmarked targets</p>
+              <div className="text-xl font-bold font-mono text-[#f4f4f5] tabular-nums">{inWishlist}</div>
+              <p className="mt-1 text-[11px] text-[#71717a]">Bookmarked roles</p>
             </div>
 
             {/* Stage 2: Applied */}
             <div
               onClick={() => navigate("/applications")}
-              className="p-3.5 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/[0.12] transition-all cursor-pointer group"
+              className="p-3.5 rounded-[8px] bg-[#09090b] hover:bg-[#18181b] border border-white/[0.08] hover:border-white/[0.14] transition-colors cursor-pointer"
             >
-              <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
+              <div className="flex items-center justify-between text-xs text-[#a1a1aa] mb-1.5 font-medium">
                 <span>Applied</span>
-                <span className="w-2 h-2 rounded-full bg-sky-400" />
+                <span className="w-2 h-2 rounded-full bg-[#38bdf8]" />
               </div>
-              <div className="text-2xl font-bold font-mono text-sky-400">{inApplied}</div>
-              <p className="mt-1 text-[11px] text-zinc-500">Awaiting review</p>
+              <div className="text-xl font-bold font-mono text-[#38bdf8] tabular-nums">{inApplied}</div>
+              <p className="mt-1 text-[11px] text-[#71717a]">Awaiting recruiter response</p>
             </div>
 
             {/* Stage 3: Interviewing */}
             <div
               onClick={() => navigate("/applications")}
-              className="p-3.5 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/[0.12] transition-all cursor-pointer group"
+              className="p-3.5 rounded-[8px] bg-[#09090b] hover:bg-[#18181b] border border-white/[0.08] hover:border-white/[0.14] transition-colors cursor-pointer"
             >
-              <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
+              <div className="flex items-center justify-between text-xs text-[#a1a1aa] mb-1.5 font-medium">
                 <span>Interviewing</span>
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-[#f59e0b]" />
               </div>
-              <div className="text-2xl font-bold font-mono text-amber-400">{inInterview}</div>
-              <p className="mt-1 text-[11px] text-zinc-500">Active dialogue</p>
+              <div className="text-xl font-bold font-mono text-[#f59e0b] tabular-nums">{inInterview}</div>
+              <p className="mt-1 text-[11px] text-[#71717a]">Active interview rounds</p>
             </div>
 
             {/* Stage 4: Offers */}
             <div
               onClick={() => navigate("/applications")}
-              className="p-3.5 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/[0.12] transition-all cursor-pointer group"
+              className="p-3.5 rounded-[8px] bg-[#09090b] hover:bg-[#18181b] border border-white/[0.08] hover:border-white/[0.14] transition-colors cursor-pointer"
             >
-              <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
+              <div className="flex items-center justify-between text-xs text-[#a1a1aa] mb-1.5 font-medium">
                 <span>Offers</span>
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                <span className="w-2 h-2 rounded-full bg-[#10b981]" />
               </div>
-              <div className="text-2xl font-bold font-mono text-emerald-400">{inOffer}</div>
-              <p className="mt-1 text-[11px] text-zinc-500">In negotiation</p>
+              <div className="text-xl font-bold font-mono text-[#10b981] tabular-nums">{inOffer}</div>
+              <p className="mt-1 text-[11px] text-[#71717a]">Offers received</p>
             </div>
           </div>
         </Card>
       </section>
 
       {/* ========================================================================= */}
-      {/* 2-COLUMN FOCUSED WORKSPACE (7 : 5 Layout)                                 */}
+      {/* 2-COLUMN MAIN: UPCOMING INTERVIEWS & NEXT ACTIONS / RECENT ACTIVITY       */}
       {/* ========================================================================= */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* LEFT COLUMN (7 cols): Active Focus & Resume Competency Summary */}
-        <div className="lg:col-span-7 space-y-5">
-          {/* Spotlight Card: Next Priority Interview */}
-          <Card ambient className="p-5">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        {/* Left Column (7 cols): Upcoming Interview & Next Actions */}
+        <div className="lg:col-span-7 space-y-4">
+          {/* Upcoming Interview Spotlight Card */}
+          <Card className="p-4 sm:p-5 space-y-3.5">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                <h3 className="text-sm font-semibold text-white">Priority Focus • Upcoming Interview</h3>
+                <Badge variant="interview" size="sm">
+                  Upcoming interview
+                </Badge>
+                <span className="text-xs text-[#a1a1aa]">Round 2: Technical Architecture</span>
               </div>
-              <Badge variant="interview" size="sm">Round 3 • System Design</Badge>
+              <Link
+                to="/interview-prep"
+                className="text-xs text-[#10b981] hover:underline font-medium"
+              >
+                Prepare answers →
+              </Link>
             </div>
 
-            <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="p-3.5 rounded-[8px] bg-[#09090b] border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h4 className="text-base font-bold text-white">Razorpay</h4>
-                <p className="text-xs text-zinc-400 mt-0.5">Staff Backend & Distributed Payments Architect</p>
-                <div className="mt-2.5 flex items-center gap-3 text-xs text-zinc-400 font-mono">
-                  <span>📅 Tomorrow, 2:30 PM IST</span>
-                  <span>•</span>
-                  <span>📍 Google Meet (60 min)</span>
-                </div>
-              </div>
-
-              <div className="flex sm:flex-col gap-2 shrink-0">
-                <Link
-                  to="/interview-prep"
-                  className="h-8.5 px-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
-                >
-                  <Bot size={13} />
-                  <span>Launch STAR Drill</span>
-                </Link>
-                <Link
-                  to="/cover-letter"
-                  className="h-8.5 px-3.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-zinc-300 text-xs font-medium flex items-center justify-center gap-1.5 transition-all"
-                >
-                  <span>Review Notes</span>
-                </Link>
-              </div>
-            </div>
-          </Card>
-
-          {/* Clean Competency Profile */}
-          <Card className="p-5">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
-              <div>
-                <h3 className="text-sm font-semibold text-white">Active Profile Competencies</h3>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  Extracted from <code className="text-zinc-300 font-mono text-[11px]">{file?.name || "resume_engineering.pdf"}</code>
+                <h3 className="text-sm font-semibold text-[#f4f4f5]">Razorpay • Distributed Systems Engineer</h3>
+                <p className="text-xs text-[#a1a1aa] mt-1">
+                  Focus: High-throughput idempotent ledger, Kafka partitioning, and database concurrency.
                 </p>
               </div>
-              <Link
-                to="/resume"
-                className="text-xs text-emerald-400 hover:text-emerald-300 font-medium flex items-center gap-1 transition-colors"
-              >
-                <span>Edit Profile</span>
-                <ChevronRight size={13} />
-              </Link>
+              <div className="text-left sm:text-right shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/[0.06]">
+                <span className="text-xs font-semibold text-[#f59e0b] block">Tomorrow, 2:30 PM</span>
+                <span className="text-[11px] text-[#71717a]">Google Meet (45 mins)</span>
+              </div>
             </div>
 
-            <div className="mt-4">
-              <p className="text-xs text-zinc-500 mb-2 font-mono uppercase tracking-wider">Verified Competencies</p>
-              <div className="flex flex-wrap gap-2">
-                {activeSkills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.06] text-xs text-zinc-200 hover:border-white/[0.14] transition-colors"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    <span>{skill}</span>
-                  </span>
-                ))}
+            <div className="flex items-center justify-between pt-1">
+              <span className="text-xs text-[#71717a]">Practice answering with the STAR method</span>
+              <Button
+                variant="secondary"
+                size="xs"
+                onClick={() => navigate("/interview-prep")}
+                className="gap-1.5"
+              >
+                <Bot size={13} className="text-[#10b981]" />
+                <span>Open STAR simulator</span>
+              </Button>
+            </div>
+          </Card>
+
+          {/* Next Actions & Priorities */}
+          <Card className="p-4 sm:p-5 space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold text-[#f4f4f5]">
+                Recommended next actions
+              </h2>
+              <span className="text-xs text-[#71717a]">Based on pipeline status</span>
+            </div>
+
+            <div className="space-y-2">
+              <div className="p-3 rounded-[8px] bg-[#09090b] border border-white/[0.08] flex items-center justify-between gap-3 hover:border-white/[0.14] transition-colors">
+                <div className="min-w-0">
+                  <p className="text-xs font-medium text-[#f4f4f5]">Prepare for Razorpay architecture drill</p>
+                  <p className="text-[11px] text-[#71717a]">Practice STAR answers for system design & reliability questions.</p>
+                </div>
+                <Button
+                  variant="secondary"
+                  size="xs"
+                  onClick={() => navigate("/interview-prep")}
+                  className="shrink-0"
+                >
+                  Start drill
+                </Button>
+              </div>
+
+              <div className="p-3 rounded-[8px] bg-[#09090b] border border-white/[0.08] flex items-center justify-between gap-3 hover:border-white/[0.14] transition-colors">
+                <div className="min-w-0">
+                  <p className="text-xs font-medium text-[#f4f4f5]">Review 4 new high-match positions</p>
+                  <p className="text-[11px] text-[#71717a]">Matching backend & distributed systems skills at 85%+ parity.</p>
+                </div>
+                <Button
+                  variant="secondary"
+                  size="xs"
+                  onClick={() => navigate("/jobs")}
+                  className="shrink-0"
+                >
+                  Browse roles
+                </Button>
+              </div>
+
+              <div className="p-3 rounded-[8px] bg-[#09090b] border border-white/[0.08] flex items-center justify-between gap-3 hover:border-white/[0.14] transition-colors">
+                <div className="min-w-0">
+                  <p className="text-xs font-medium text-[#f4f4f5]">Send outreach pitch for Zepto referral</p>
+                  <p className="text-[11px] text-[#71717a]">Generate a personalized LinkedIn note using Outreach Studio.</p>
+                </div>
+                <Button
+                  variant="secondary"
+                  size="xs"
+                  onClick={() => navigate("/cover-letter")}
+                  className="shrink-0"
+                >
+                  Draft message
+                </Button>
               </div>
             </div>
           </Card>
         </div>
 
-        {/* RIGHT COLUMN (5 cols): Quick Studio Launchpad */}
+        {/* Right Column (5 cols): Recent Activity & Tools Launchpad */}
         <div className="lg:col-span-5 space-y-4">
-          <Card className="p-5">
-            <div className="pb-3 border-b border-white/[0.06] flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Sparkles size={15} className="text-emerald-400" />
-                <h3 className="text-sm font-semibold text-white">Career Studio Launchpad</h3>
-              </div>
-              <span className="text-[10px] font-mono text-zinc-500">INTELLIGENT SUITE</span>
+          {/* Recent Activity Feed */}
+          <Card className="p-4 sm:p-5 space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold text-[#f4f4f5]">
+                Recent activity
+              </h2>
+              <span className="text-xs text-[#71717a]">Timeline</span>
             </div>
 
-            <div className="mt-3.5 space-y-2.5">
-              {/* Tool 1: Job Discovery */}
+            <div className="space-y-3">
+              <div className="flex items-start gap-2.5 text-xs">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#f59e0b] mt-1.5 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[#f4f4f5] font-medium truncate">Razorpay scheduled Round 2 Interview</p>
+                  <p className="text-[#71717a] text-[11px]">Technical Architecture on Google Meet • 2 hours ago</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2.5 text-xs">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[#f4f4f5] font-medium truncate">Applied to Zepto</p>
+                  <p className="text-[#71717a] text-[11px]">Senior Backend Engineer • Yesterday</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2.5 text-xs">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#10b981] mt-1.5 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[#f4f4f5] font-medium truncate">Offer letter received from Postman</p>
+                  <p className="text-[#71717a] text-[11px]">Frontend Architect • 3 days ago</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2.5 text-xs">
+                <div className="w-1.5 h-1.5 rounded-full bg-zinc-400 mt-1.5 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[#f4f4f5] font-medium truncate">Resume parsed & competencies verified</p>
+                  <p className="text-[#71717a] text-[11px]">10 core skills indexed • 4 days ago</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Quick Tools Launchpad */}
+          <Card className="p-4 sm:p-5 space-y-2.5">
+            <h2 className="text-sm font-semibold text-[#f4f4f5]">
+              Quick tools
+            </h2>
+
+            <div className="space-y-1.5">
+              <Link
+                to="/resume"
+                className="p-2.5 rounded-[8px] bg-[#09090b] hover:bg-[#18181b] border border-white/[0.08] hover:border-white/[0.14] flex items-center justify-between group transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-[6px] bg-white/[0.04] text-[#10b981] flex items-center justify-center">
+                    <FileText size={14} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-[#f4f4f5] group-hover:text-[#10b981] transition-colors">
+                      Resume & ATS audit
+                    </p>
+                    <p className="text-[11px] text-[#71717a]">Rewrite accomplishment bullets with Google XYZ</p>
+                  </div>
+                </div>
+                <ChevronRight size={13} className="text-[#71717a] group-hover:text-[#f4f4f5]" />
+              </Link>
+
               <Link
                 to="/jobs"
-                className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.06] hover:border-white/[0.14] flex items-center justify-between transition-all group"
+                className="p-2.5 rounded-[8px] bg-[#09090b] hover:bg-[#18181b] border border-white/[0.08] hover:border-white/[0.14] flex items-center justify-between group transition-colors"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 group-hover:scale-105 transition-transform">
-                    <Briefcase size={15} />
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-[6px] bg-white/[0.04] text-[#38bdf8] flex items-center justify-center">
+                    <Zap size={14} />
                   </div>
                   <div>
-                    <h4 className="text-xs font-semibold text-white group-hover:text-sky-300 transition-colors">
-                      Job Discovery Board
-                    </h4>
-                    <p className="text-[11px] text-zinc-400">Match active roles across India & remote</p>
+                    <p className="text-xs font-semibold text-[#f4f4f5] group-hover:text-[#38bdf8] transition-colors">
+                      Job discovery & matching
+                    </p>
+                    <p className="text-[11px] text-[#71717a]">Browse curated roles with live profile compatibility</p>
                   </div>
                 </div>
-                <ChevronRight size={14} className="text-zinc-600 group-hover:text-white transition-colors" />
+                <ChevronRight size={13} className="text-[#71717a] group-hover:text-[#f4f4f5]" />
               </Link>
 
-              {/* Tool 2: Resume ATS Check */}
-              <Link
-                to="/resume"
-                className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.06] hover:border-white/[0.14] flex items-center justify-between transition-all group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
-                    <FileText size={15} />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-semibold text-white group-hover:text-emerald-300 transition-colors">
-                      ATS Resume Auditor
-                    </h4>
-                    <p className="text-[11px] text-zinc-400">Check keyword score & formatting flags</p>
-                  </div>
-                </div>
-                <ChevronRight size={14} className="text-zinc-600 group-hover:text-white transition-colors" />
-              </Link>
-
-              {/* Tool 3: Google XYZ Bullet Rewriter */}
-              <Link
-                to="/resume"
-                className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.06] hover:border-white/[0.14] flex items-center justify-between transition-all group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:scale-105 transition-transform">
-                    <Wand2 size={15} />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-semibold text-white group-hover:text-purple-300 transition-colors">
-                      Google XYZ Rewriter
-                    </h4>
-                    <p className="text-[11px] text-zinc-400">Transform bullets into metric accomplishments</p>
-                  </div>
-                </div>
-                <ChevronRight size={14} className="text-zinc-600 group-hover:text-white transition-colors" />
-              </Link>
-
-              {/* Tool 4: AI Outreach & Cover Letter */}
               <Link
                 to="/cover-letter"
-                className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.06] hover:border-white/[0.14] flex items-center justify-between transition-all group"
+                className="p-2.5 rounded-[8px] bg-[#09090b] hover:bg-[#18181b] border border-white/[0.08] hover:border-white/[0.14] flex items-center justify-between group transition-colors"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-105 transition-transform">
-                    <Bot size={15} />
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-[6px] bg-white/[0.04] text-[#f59e0b] flex items-center justify-center">
+                    <Wand2 size={14} />
                   </div>
                   <div>
-                    <h4 className="text-xs font-semibold text-white group-hover:text-amber-300 transition-colors">
-                      AI Cover Letter Studio
-                    </h4>
-                    <p className="text-[11px] text-zinc-400">Draft tailored outreach & referral notes</p>
+                    <p className="text-xs font-semibold text-[#f4f4f5] group-hover:text-[#f59e0b] transition-colors">
+                      Outreach & cover letter
+                    </p>
+                    <p className="text-[11px] text-[#71717a]">Tailored pitches and referral requests</p>
                   </div>
                 </div>
-                <ChevronRight size={14} className="text-zinc-600 group-hover:text-white transition-colors" />
+                <ChevronRight size={13} className="text-[#71717a] group-hover:text-[#f4f4f5]" />
+              </Link>
+
+              <Link
+                to="/interview-prep"
+                className="p-2.5 rounded-[8px] bg-[#09090b] hover:bg-[#18181b] border border-white/[0.08] hover:border-white/[0.14] flex items-center justify-between group transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-[6px] bg-white/[0.04] text-[#a1a1aa] flex items-center justify-center">
+                    <Bot size={14} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-[#f4f4f5] group-hover:text-white transition-colors">
+                      STAR interview simulator
+                    </p>
+                    <p className="text-[11px] text-[#71717a]">Timed practice with structured rubrics</p>
+                  </div>
+                </div>
+                <ChevronRight size={13} className="text-[#71717a] group-hover:text-[#f4f4f5]" />
               </Link>
             </div>
+          </Card>
 
-            {/* Keyboard Shortcuts Hint */}
-            <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-zinc-500">
-              <span>Command Palette:</span>
-              <kbd className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-zinc-300">⌘K</kbd>
+          {/* Active Profile Skills */}
+          <Card className="p-4 sm:p-5 space-y-2.5">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold text-[#f4f4f5]">
+                Verified profile skills
+              </h2>
+              <Link to="/resume" className="text-xs text-[#10b981] hover:underline font-medium">
+                Manage skills →
+              </Link>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {activeSkills.map((skill) => (
+                <span
+                  key={skill}
+                  className="px-2 py-0.5 rounded-[6px] bg-[#09090b] text-[#d4d4d8] border border-white/[0.08] text-xs font-mono"
+                >
+                  ✓ {skill}
+                </span>
+              ))}
             </div>
           </Card>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

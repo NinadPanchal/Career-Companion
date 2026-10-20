@@ -29,7 +29,7 @@ export default function Tabs<T extends string = string>({
   return (
     <div
       className={clsx(
-        "inline-flex items-center rounded-xl bg-[#0d0e13]/80 p-1 border border-white/[0.06] backdrop-blur-md select-none",
+        "inline-flex items-center rounded-[8px] bg-[#09090b] p-0.5 border border-white/[0.08] select-none",
         className
       )}
     >
@@ -41,19 +41,19 @@ export default function Tabs<T extends string = string>({
             type="button"
             onClick={() => onChange(tab.id)}
             className={clsx(
-              "relative z-10 flex items-center justify-center gap-2 rounded-lg font-medium transition-colors cursor-pointer",
+              "relative z-10 flex items-center justify-center gap-1.5 rounded-[6px] font-medium transition-colors cursor-pointer",
               {
-                "px-3 py-1 text-xs": size === "sm",
-                "px-4 py-1.5 text-xs sm:text-sm": size === "md",
+                "px-2.5 py-1 text-xs": size === "sm",
+                "px-3 py-1.5 text-xs": size === "md",
               },
-              isActive ? "text-zinc-100 font-semibold" : "text-zinc-400 hover:text-zinc-200"
+              isActive ? "text-[#f4f4f5] font-semibold" : "text-[#71717a] hover:text-[#a1a1aa]"
             )}
           >
             {isActive && (
               <motion.div
                 layoutId={layoutId}
                 transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                className="absolute inset-0 rounded-lg bg-white/[0.08] border border-white/[0.1] shadow-sm -z-10"
+                className="absolute inset-0 rounded-[6px] bg-[#18181b] border border-white/[0.12] -z-10"
               />
             )}
             {tab.icon && <span className="shrink-0">{tab.icon}</span>}
@@ -61,10 +61,10 @@ export default function Tabs<T extends string = string>({
             {tab.badge !== undefined && (
               <span
                 className={clsx(
-                  "rounded-full px-1.5 py-0.2 text-[10px] font-mono",
+                  "font-mono text-[10px] px-1 rounded-[4px]",
                   isActive
-                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                    : "bg-white/[0.05] text-zinc-400"
+                    ? "bg-[#10b981]/15 text-[#10b981]"
+                    : "bg-white/[0.04] text-[#71717a]"
                 )}
               >
                 {tab.badge}

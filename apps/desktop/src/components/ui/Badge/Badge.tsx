@@ -31,44 +31,44 @@ export default function Badge({
   ...props
 }: BadgeProps) {
   const dotColorMap: Record<BadgeVariant, string> = {
-    applied: "bg-sky-400",
-    screening: "bg-indigo-400",
-    interview: "bg-amber-400",
-    offer: "bg-emerald-400",
-    rejected: "bg-rose-400",
-    discovered: "bg-zinc-400",
-    archived: "bg-zinc-500",
-    emerald: "bg-emerald-400",
-    sky: "bg-sky-400",
-    amber: "bg-amber-400",
-    rose: "bg-rose-400",
-    neutral: "bg-zinc-400",
+    applied: "bg-[#38bdf8]",
+    screening: "bg-[#818cf8]",
+    interview: "bg-[#f59e0b]",
+    offer: "bg-[#10b981]",
+    rejected: "bg-[#f43f5e]",
+    discovered: "bg-[#a1a1aa]",
+    archived: "bg-[#71717a]",
+    emerald: "bg-[#10b981]",
+    sky: "bg-[#38bdf8]",
+    amber: "bg-[#f59e0b]",
+    rose: "bg-[#f43f5e]",
+    neutral: "bg-[#a1a1aa]",
   };
 
   const styleMap: Record<BadgeVariant, string> = {
-    applied: "bg-sky-500/10 text-sky-400 border-sky-500/20",
-    screening: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
-    interview: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-    offer: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    rejected: "bg-rose-500/10 text-rose-400 border-rose-500/20",
-    discovered: "bg-zinc-500/10 text-zinc-400 border-zinc-500/20",
-    archived: "bg-zinc-800/40 text-zinc-400 border-zinc-700/30",
-    emerald: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    sky: "bg-sky-500/10 text-sky-400 border-sky-500/20",
-    amber: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-    rose: "bg-rose-500/10 text-rose-400 border-rose-500/20",
-    neutral: "bg-white/[0.04] text-zinc-300 border-white/[0.08]",
+    applied: "bg-[#38bdf8]/10 text-[#38bdf8] border-[#38bdf8]/20",
+    screening: "bg-[#818cf8]/10 text-[#818cf8] border-[#818cf8]/20",
+    interview: "bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/20",
+    offer: "bg-[#10b981]/10 text-[#10b981] border-[#10b981]/20",
+    rejected: "bg-[#f43f5e]/10 text-[#f43f5e] border-[#f43f5e]/20",
+    discovered: "bg-white/[0.04] text-[#a1a1aa] border-white/[0.08]",
+    archived: "bg-white/[0.02] text-[#71717a] border-white/[0.06]",
+    emerald: "bg-[#10b981]/10 text-[#10b981] border-[#10b981]/20",
+    sky: "bg-[#38bdf8]/10 text-[#38bdf8] border-[#38bdf8]/20",
+    amber: "bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/20",
+    rose: "bg-[#f43f5e]/10 text-[#f43f5e] border-[#f43f5e]/20",
+    neutral: "bg-white/[0.04] text-[#a1a1aa] border-white/[0.08]",
   };
 
   return (
     <span
       className={clsx(
-        "inline-flex items-center gap-1.5 rounded-full font-medium border font-mono tracking-tight",
+        "inline-flex items-center gap-1.5 rounded-[6px] font-medium border select-none transition-colors",
         {
-          "px-2 py-0.5 text-[10px]": size === "sm",
-          "px-2.5 py-1 text-xs": size === "md",
+          "h-5 px-2 text-[11px] leading-none": size === "sm",
+          "h-6 px-2.5 text-xs leading-none": size === "md",
         },
-        styleMap[variant] || styleMap.neutral,
+        styleMap[variant],
         className
       )}
       {...props}
@@ -76,13 +76,13 @@ export default function Badge({
       {dot && (
         <span
           className={clsx(
-            "rounded-full shrink-0",
-            size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2",
-            dotColorMap[variant] || dotColorMap.neutral
+            "w-1.5 h-1.5 rounded-full shrink-0",
+            dotColorMap[variant]
           )}
+          aria-hidden="true"
         />
       )}
-      <span>{children}</span>
+      <span className="truncate">{children}</span>
     </span>
   );
 }

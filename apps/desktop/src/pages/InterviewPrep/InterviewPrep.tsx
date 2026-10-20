@@ -92,18 +92,16 @@ export default function InterviewPrep() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in font-sans select-none">
+    <div className="space-y-5 animate-fade-in font-sans select-none">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-white/[0.06]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-white/[0.08]">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-            <span>STAR Interview Simulator</span>
-            <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              Interactive Drill
-            </span>
-          </h1>
-          <p className="text-xs text-zinc-400 mt-0.5">
-            Timed behavioral & architecture drills with automated rubric scoring and coaching.
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-semibold text-[#f4f4f5] tracking-tight">STAR Simulator</h1>
+            <Badge variant="emerald" size="sm">Interview prep</Badge>
+          </div>
+          <p className="text-xs text-[#71717a] mt-0.5">
+            Timed behavioral and technical question practice with structured rubric scoring.
           </p>
         </div>
 
@@ -113,15 +111,15 @@ export default function InterviewPrep() {
             type="text"
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
-            placeholder="Target Role"
-            className="w-40 sm:w-44 rounded-xl border border-white/[0.08] bg-[#07080a] px-3 py-1.5 text-xs text-white outline-none focus:border-emerald-500/50 transition-colors"
+            placeholder="Target role"
+            className="w-36 sm:w-44 h-8 px-2.5 rounded-[8px] border border-white/[0.08] bg-[#09090b] text-xs text-[#f4f4f5] placeholder-[#71717a] outline-none focus:border-[#10b981] transition-colors"
           />
           <input
             type="text"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
-            placeholder="Target Company"
-            className="w-32 rounded-xl border border-white/[0.08] bg-[#07080a] px-3 py-1.5 text-xs text-white outline-none focus:border-emerald-500/50 transition-colors"
+            placeholder="Company"
+            className="w-28 sm:w-36 h-8 px-2.5 rounded-[8px] border border-white/[0.08] bg-[#09090b] text-xs text-[#f4f4f5] placeholder-[#71717a] outline-none focus:border-[#10b981] transition-colors"
           />
           <Button
             size="sm"
@@ -130,28 +128,30 @@ export default function InterviewPrep() {
             disabled={isLoadingQuestions}
             className="gap-1.5"
           >
-            <Sparkles size={13} />
+            <Sparkles size={12} />
             <span>Generate</span>
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-12 items-start">
+      <div className="grid gap-4 lg:grid-cols-12 items-start">
         {/* Left Side: Question List Navigation (4 cols) */}
-        <div className="lg:col-span-4 space-y-4">
-          <Card className="p-4 space-y-3">
-            <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400">
-              Questions ({questions.length})
-            </h2>
+        <div className="lg:col-span-4 space-y-3">
+          <Card className="p-3.5 space-y-2.5">
+            <div className="flex items-center justify-between pb-1 border-b border-white/[0.06]">
+              <h2 className="text-xs font-semibold text-[#f4f4f5]">
+                Practice questions ({questions.length})
+              </h2>
+            </div>
 
             {isLoadingQuestions ? (
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-16 animate-pulse rounded-xl bg-white/[0.03]" />
+                  <div key={i} className="h-14 animate-pulse rounded-[8px] bg-white/[0.03]" />
                 ))}
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {questions.map((q, idx) => {
                   const isActive = idx === activeQuestionIdx;
                   return (
@@ -165,22 +165,22 @@ export default function InterviewPrep() {
                         setTimerSeconds(120);
                         setIsTimerRunning(false);
                       }}
-                      className={`flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-all cursor-pointer ${
+                      className={`flex w-full items-start gap-2.5 rounded-[8px] border p-2.5 text-left transition-colors cursor-pointer ${
                         isActive
-                          ? "border-emerald-500/30 bg-emerald-500/10 text-white shadow-sm"
-                          : "border-white/[0.06] bg-white/[0.02] text-zinc-400 hover:border-white/[0.12] hover:text-zinc-200"
+                          ? "border-[#10b981]/30 bg-[#10b981]/10 text-white"
+                          : "border-white/[0.06] bg-[#09090b] text-[#a1a1aa] hover:border-white/[0.12] hover:text-[#f4f4f5]"
                       }`}
                     >
-                      <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-lg text-xs font-mono font-bold ${
-                        isActive ? "bg-emerald-500 text-zinc-950" : "bg-white/[0.06] text-zinc-400"
+                      <span className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] text-[10px] font-mono font-bold ${
+                        isActive ? "bg-[#10b981] text-[#09090b]" : "bg-white/[0.06] text-[#71717a]"
                       }`}>
                         {idx + 1}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <span className="text-[10px] font-mono text-emerald-400">
+                        <span className="text-[10px] text-[#10b981] font-medium block">
                           {q.category}
                         </span>
-                        <p className="mt-0.5 text-xs font-medium line-clamp-2 text-zinc-200">{q.question}</p>
+                        <p className="mt-0.5 text-xs font-medium line-clamp-2 text-[#d4d4d8]">{q.question}</p>
                       </div>
                     </button>
                   );
@@ -190,41 +190,42 @@ export default function InterviewPrep() {
           </Card>
 
           {/* STAR Framework Rule Card */}
-          <Card className="p-4 space-y-2.5">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-emerald-400 flex items-center gap-1.5 font-semibold">
-              <Award size={14} /> The STAR Structure
+          <Card className="p-4 space-y-2.5 bg-[#18181b]">
+            <h3 className="text-xs font-semibold text-[#10b981] flex items-center gap-1.5">
+              <Award size={13} /> The STAR method
             </h3>
-            <ul className="space-y-1.5 text-xs text-zinc-400">
-              <li><strong className="text-zinc-200 font-medium">S:</strong> Situation (context in 1-2 lines)</li>
-              <li><strong className="text-zinc-200 font-medium">T:</strong> Task (the technical goal or blocker)</li>
-              <li><strong className="text-zinc-200 font-medium">A:</strong> Action (<em className="text-emerald-400 not-italic">you</em> engineered)</li>
-              <li><strong className="text-zinc-200 font-medium">R:</strong> Result (measurable metric outcome)</li>
+            <ul className="space-y-1 text-xs text-[#a1a1aa]">
+              <li><strong className="text-[#f4f4f5] font-medium">Situation:</strong> Set the context in 1–2 sentences.</li>
+              <li><strong className="text-[#f4f4f5] font-medium">Task:</strong> Define the engineering goal or roadblock.</li>
+              <li><strong className="text-[#f4f4f5] font-medium">Action:</strong> Explain the specific solution you built.</li>
+              <li><strong className="text-[#f4f4f5] font-medium">Result:</strong> Share the measurable impact and metrics.</li>
             </ul>
           </Card>
         </div>
 
         {/* Right Side: Active Practice Simulator (8 cols) */}
-        <div className="lg:col-span-8 space-y-5">
+        <div className="lg:col-span-8 space-y-4">
           {activeQuestion ? (
-            <Card ambient className="p-6 space-y-5">
+            <Card className="p-5 space-y-4">
               {/* Question Banner */}
-              <div className="rounded-xl border border-white/[0.08] bg-[#07080a] p-5 space-y-3">
+              <div className="rounded-[8px] border border-white/[0.08] bg-[#18181b] p-4 space-y-2.5">
                 <div className="flex items-center justify-between">
                   <Badge variant="emerald" size="sm">
-                    {activeQuestion.category} Question
+                    {activeQuestion.category} question
                   </Badge>
 
                   {/* Timer UI */}
-                  <div className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-mono text-zinc-300">
-                    <Clock size={13} className="text-emerald-400" />
+                  <div className="flex items-center gap-2 rounded-[6px] border border-white/[0.08] bg-[#09090b] px-2.5 py-1 text-xs font-mono text-[#d4d4d8]">
+                    <Clock size={12} className="text-[#10b981]" />
                     <span>{formatTimer(timerSeconds)}</span>
                     <button
                       type="button"
                       onClick={() => setIsTimerRunning(!isTimerRunning)}
-                      className="ml-1 text-zinc-400 hover:text-white cursor-pointer"
-                      title={isTimerRunning ? "Pause" : "Start"}
+                      className="ml-1 text-[#71717a] hover:text-white cursor-pointer"
+                      title={isTimerRunning ? "Pause timer" : "Start timer"}
+                      aria-label={isTimerRunning ? "Pause timer" : "Start timer"}
                     >
-                      {isTimerRunning ? <Pause size={12} /> : <Play size={12} />}
+                      {isTimerRunning ? <Pause size={11} /> : <Play size={11} />}
                     </button>
                     <button
                       type="button"
@@ -232,46 +233,47 @@ export default function InterviewPrep() {
                         setIsTimerRunning(false);
                         setTimerSeconds(120);
                       }}
-                      className="text-zinc-500 hover:text-white cursor-pointer"
+                      className="text-[#52525b] hover:text-white cursor-pointer"
                       title="Reset timer"
+                      aria-label="Reset timer"
                     >
-                      <RotateCcw size={12} />
+                      <RotateCcw size={11} />
                     </button>
                   </div>
                 </div>
 
-                <h2 className="text-lg font-bold text-white leading-snug">{activeQuestion.question}</h2>
-                <p className="text-xs text-zinc-400 italic">
-                  💡 <strong>Interviewer intent:</strong> {activeQuestion.why_they_ask}
+                <h2 className="text-sm font-semibold text-[#f4f4f5] leading-snug">{activeQuestion.question}</h2>
+                <p className="text-xs text-[#a1a1aa]">
+                  💡 <strong className="text-[#f4f4f5] font-medium">Interviewer intent:</strong> {activeQuestion.why_they_ask}
                 </p>
               </div>
 
               {/* Answer Input Area */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-semibold text-zinc-300">
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between text-xs font-medium text-[#a1a1aa]">
                   <span>Your Structured Answer Draft</span>
-                  <span className="text-zinc-500 font-mono text-[11px]">
+                  <span className="text-[#71717a] font-mono text-[11px]">
                     {candidateAnswer.split(/\s+/).filter(Boolean).length} words
                   </span>
                 </div>
                 <textarea
-                  rows={6}
+                  rows={5}
                   value={candidateAnswer}
                   onChange={(e) => setCandidateAnswer(e.target.value)}
                   placeholder="Draft your STAR response... (Situation: At my last team..., Task: We needed to scale..., Action: I migrated the Kafka consumer..., Result: Reduced p99 by 40%.)"
-                  className="w-full rounded-xl border border-white/[0.08] bg-[#07080a] p-3 text-xs sm:text-sm text-white placeholder-zinc-500 outline-none focus:border-emerald-500/50 resize-none transition-colors"
+                  className="w-full rounded-[8px] border border-white/[0.08] bg-[#09090b] p-2.5 text-xs text-[#f4f4f5] placeholder-[#71717a] outline-none focus:border-[#10b981] resize-none transition-colors"
                 />
               </div>
 
               {/* Evaluation Action */}
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center justify-between pt-1">
                 <button
                   type="button"
                   onClick={() => setShowSampleAnswer(!showSampleAnswer)}
-                  className="text-xs text-zinc-400 hover:text-emerald-400 transition-colors flex items-center gap-1 cursor-pointer"
+                  className="text-xs text-[#71717a] hover:text-[#10b981] transition-colors flex items-center gap-1 cursor-pointer"
                 >
                   <span>{showSampleAnswer ? "Hide Sample STAR Answer" : "View Ideal STAR Model"}</span>
-                  {showSampleAnswer ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                  {showSampleAnswer ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
                 </button>
 
                 <Button
@@ -281,15 +283,15 @@ export default function InterviewPrep() {
                   disabled={isEvaluating || !candidateAnswer.trim()}
                   className="gap-1.5"
                 >
-                  <Bot size={14} />
+                  <Bot size={13} />
                   <span>{isEvaluating ? "Scoring Response..." : "Evaluate Answer (AI)"}</span>
                 </Button>
               </div>
 
               {/* Sample Answer Accordion */}
               {showSampleAnswer && (
-                <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-4 text-xs text-zinc-300 space-y-2">
-                  <span className="font-mono text-emerald-400 font-semibold text-[11px] uppercase tracking-wider block">
+                <div className="rounded-[8px] border border-[#10b981]/20 bg-[#10b981]/[0.03] p-3.5 text-xs text-[#d4d4d8] space-y-1.5">
+                  <span className="font-mono text-[#10b981] font-medium text-[11px] uppercase tracking-wider block">
                     Model Exemplary STAR Answer:
                   </span>
                   <p className="leading-relaxed">{activeQuestion.sample_answer}</p>
@@ -298,15 +300,15 @@ export default function InterviewPrep() {
 
               {/* Evaluation Output Section */}
               {evaluation && (
-                <div className="rounded-xl border border-white/[0.08] bg-[#07080a] p-5 space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+                <div className="rounded-[8px] border border-white/[0.08] bg-[#18181b] p-4 space-y-3">
+                  <div className="flex items-center justify-between pb-2.5 border-b border-white/[0.06]">
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 size={16} className="text-emerald-400" />
-                      <h3 className="text-sm font-semibold text-white">Automated Rubric Evaluation</h3>
+                      <CheckCircle2 size={15} className="text-[#10b981]" />
+                      <h3 className="text-xs font-semibold text-[#f4f4f5]">Automated Rubric Evaluation</h3>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-zinc-400 font-mono">Score:</span>
-                      <span className="text-sm font-bold font-mono text-emerald-400">{evaluation.score}/100</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[11px] text-[#71717a] font-mono">Score:</span>
+                      <span className="text-xs font-bold font-mono text-[#10b981]">{evaluation.score}/100</span>
                     </div>
                   </div>
 
@@ -320,29 +322,29 @@ export default function InterviewPrep() {
                     ].map((step) => (
                       <div
                         key={step.label}
-                        className={`p-2 rounded-lg border flex items-center justify-between text-xs font-mono ${
+                        className={`p-2 rounded-[6px] border flex items-center justify-between text-[11px] font-mono ${
                           step.pass
-                            ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                            : "bg-white/[0.02] border-white/[0.06] text-zinc-500"
+                            ? "bg-[#10b981]/10 border-[#10b981]/20 text-[#10b981]"
+                            : "bg-white/[0.02] border-white/[0.06] text-[#71717a]"
                         }`}
                       >
                         <span>{step.label}</span>
-                        {step.pass ? <Check size={13} /> : <span className="text-[10px]">Missing</span>}
+                        {step.pass ? <Check size={12} /> : <span className="text-[10px]">Missing</span>}
                       </div>
                     ))}
                   </div>
 
                   {/* Coaching Summary */}
-                  <p className="text-xs text-zinc-300 leading-relaxed bg-white/[0.02] p-3 rounded-lg border border-white/[0.04]">
+                  <p className="text-xs text-[#a1a1aa] leading-relaxed bg-[#09090b] p-2.5 rounded-[6px] border border-white/[0.06]">
                     {evaluation.coaching_summary}
                   </p>
                 </div>
               )}
             </Card>
           ) : (
-            <div className="py-24 text-center text-zinc-500">
-              <Bot size={36} className="mx-auto mb-2 opacity-30" />
-              <p className="text-xs">No questions loaded. Enter a target role and click "Generate".</p>
+            <div className="py-20 text-center text-[#71717a]">
+              <Bot size={32} className="mx-auto mb-2 opacity-30 text-[#71717a]" />
+              <p className="text-xs text-[#a1a1aa]">No questions loaded. Enter a target role and click "Generate".</p>
             </div>
           )}
         </div>

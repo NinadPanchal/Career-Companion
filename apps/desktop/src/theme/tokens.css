@@ -1,74 +1,64 @@
 :root {
-  /* Surfaces — Deep Obsidian Hierarchy */
-  --surface-0: #07080a;
-  --surface-1: #0d0e12;
-  --surface-2: #14151b;
-  --surface-3: #1a1c24;
-  --surface-base: #07080a;
-  --surface-card: rgba(13, 14, 18, 0.72);
-  --surface-card-solid: #0d0e12;
-  --surface-subtle: #20222a;
-  --surface-overlay: rgba(18, 20, 26, 0.88);
+  /* Surfaces — Career Operating System (design.md) */
+  --surface-base: #09090b;
+  --surface-card: #0f0f12;
+  --surface-overlay: #18181b;
+  --surface-subtle: #27272a;
+  --surface-dim: #131315;
+  --surface-bright: #39393b;
+  --surface-container-lowest: #0e0e10;
+  --surface-container-low: #1c1b1d;
+  --surface-container: #201f22;
+  --surface-container-high: #2a2a2c;
+  --surface-container-highest: #353437;
 
-  /* Glassmorphism & Ambient Glow */
-  --glass-bg: rgba(13, 14, 18, 0.65);
-  --glass-blur: blur(16px);
-  --glass-border: rgba(255, 255, 255, 0.07);
-  --glass-border-hover: rgba(255, 255, 255, 0.15);
-  --glass-glow: rgba(16, 185, 129, 0.08);
+  /* Legacy compatibility surface aliases */
+  --surface-0: #09090b;
+  --surface-1: #0f0f12;
+  --surface-2: #18181b;
+  --surface-3: #27272a;
 
-  /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.06);
+  /* Borders — Razor 1px Outlines */
+  --border-subtle: rgba(255, 255, 255, 0.08);
   --border-default: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.16);
-  --border-active: rgba(16, 185, 129, 0.4);
+  --border-active: rgba(255, 255, 255, 0.24);
 
-  /* Text — High Contrast & Refined Tiers */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-tertiary: #64748b;
-  --text-quaternary: #475569;
-  --text-muted: #64748b;
+  /* Text — Inter & JetBrains Mono Hierarchy */
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --text-tertiary: #71717a;
 
-  /* Accent & Brand — Emerald & Teal */
+  /* Primary Accent — Restrained Emerald (Never used decoratively across large fills) */
   --primary: #10b981;
   --primary-hover: #34d399;
-  --primary-subtle: rgba(16, 185, 129, 0.08);
-  --accent: #10b981;
-  --accent-hover: #34d399;
-  --accent-muted: rgba(16, 185, 129, 0.12);
-  --accent-subtle: rgba(16, 185, 129, 0.05);
+  --primary-container: #10b981;
+  --on-primary: #003824;
 
-  /* Semantic Statuses */
+  /* Semantic State Architecture */
   --status-applied: #38bdf8;
-  --status-interview: #fbbf24;
+  --status-interview: #f59e0b;
   --status-offer: #10b981;
   --status-rejected: #f43f5e;
-  --status-discovered: #94a3b8;
+  --status-discovered: #a1a1aa;
 
-  /* Spacing Scale */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-16: 64px;
+  /* Radii — Precision Tooling Rules */
+  --radius-xs: 4px;
+  --radius-sm: 6px;       /* Badges, chips, <kbd> tags */
+  --radius-md: 10px;      /* Standard buttons, inputs, table rows */
+  --radius-lg: 12px;      /* Major structural cards, kanban columns */
+  --radius-xl: 14px;
+  --radius-full: 9999px;  /* Strictly reserved for status indicator dots (6x6) */
 
-  /* Radius — Smooth Modern Curves */
-  --radius-sm: 8px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
-  --radius-2xl: 24px;
-  --radius-full: 9999px;
-
-  /* Shadows & Ambient Glows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
-  --shadow-lg: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
-  --shadow-glow: 0 0 24px -4px rgba(16, 185, 129, 0.18);
+  /* Spacing Scale (4px baseline) */
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --layout-sidebar: 250px;
+  --layout-inspector: 360px;
 }

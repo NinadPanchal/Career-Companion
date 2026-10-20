@@ -1,2 +1,2 @@
-export { default as ProgressRing } from "./Progress";
-export type { ProgressRingProps } from "./Progress";
+export { default as ProgressRing, MatchGauge } from "./Progress";
+export type { ProgressRingProps, MatchGaugeProps } from "./Progress";
