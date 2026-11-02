@@ -1,11 +1,8 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Zap, X, CheckCircle2, User, Mail, Phone, MapPin, FileText, Send } from "lucide-react";
+import { Zap, CheckCircle2, User, Mail, Phone, MapPin, FileText, Send } from "lucide-react";
 import { DiscoveredJob } from "../stores/jobs.store";
 import { useResumeStore } from "../../resume/stores/resume.store";
-import { Button } from "../../../components/ui/Button";
-import { Badge } from "../../../components/ui/Badge";
-
+import { Button, Badge, Modal, Input, Textarea } from "../../../components/ui";
 import { useApplicationsStore } from "../../applications/stores/applications.store";
 
 interface EasyApplyModalProps {
@@ -32,7 +29,7 @@ export default function EasyApplyModal({ job, isOpen, onClose, onSuccess }: Easy
     `Hi Hiring Team at ${job?.company_name || 'Company'},\n\nI am applying for the ${job?.title || 'position'} role. With strong skills in ${analysis?.skills?.slice(0, 4).join(', ') || 'software engineering, Python, and React'}, I am confident in delivering high impact.`
   );
 
-  if (!isOpen || !job) return null;
+  if (!job) return null;
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -62,221 +59,171 @@ export default function EasyApplyModal({ job, isOpen, onClose, onSuccess }: Easy
     }
   };
 
-  return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.98, y: 10 }}
-          transition={{ duration: 0.15 }}
-          className="relative w-full max-w-xl overflow-hidden rounded-[12px] border border-white/[0.16] bg-[#18181b] p-5 sm:p-6 text-[#f4f4f5] shadow-[0_16px_40px_-8px_rgba(0,0,0,0.8)] font-sans"
-        >
-          {/* Top Header */}
-          <div className="mb-4 flex items-center justify-between border-b border-white/[0.08] pb-3.5">
-            <div className="flex items-center gap-2.5">
-              <div className="rounded-[8px] bg-[#10b981]/10 border border-[#10b981]/20 p-2 text-[#10b981]">
-                <Zap size={18} />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-sm sm:text-base font-semibold text-[#f4f4f5]">Direct Application</h2>
-                  <Badge variant="offer" size="sm">
-                    Verified
-                  </Badge>
-                </div>
-                <p className="text-xs text-[#a1a1aa] mt-0.5">
-                  {job.title} • <span className="font-medium text-[#f4f4f5]">{job.company_name}</span>
-                </p>
-              </div>
-            </div>
+  const modalTitle = (
+    <div className="flex items-center gap-2.5">
+      <div className="rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] p-1.5 text-[var(--accent)]">
+        <Zap size={16} />
+      </div>
+      <div>
+        <div className="flex items-center gap-2">
+          <h2 className="text-[var(--text-md)] font-semibold text-[var(--text)]">Direct Application</h2>
+          <Badge variant="offer" size="sm">
+            Verified
+          </Badge>
+        </div>
+        <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+          {job.title} • <span className="font-medium text-[var(--text)]">{job.company_name}</span>
+        </p>
+      </div>
+    </div>
+  );
 
-            <button
-              onClick={onClose}
-              className="rounded-[6px] p-1.5 text-[#71717a] transition hover:bg-white/[0.06] hover:text-[#f4f4f5] cursor-pointer"
-            >
-              <X size={16} />
-            </button>
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title={modalTitle} size="md">
+      {submitted ? (
+        <div className="py-10 text-center">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--success)_15%,transparent)] text-[var(--success)] border border-[color-mix(in_srgb,var(--success)_30%,transparent)]">
+            <CheckCircle2 size={24} />
+          </div>
+          <h3 className="text-[var(--text-lg)] font-semibold text-[var(--text)]">Application Filed</h3>
+          <p className="mt-1.5 text-[var(--text-xs)] text-[var(--text-muted)] max-w-sm mx-auto">
+            Candidate record and parsed competencies recorded in your application pipeline for {job.company_name}.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {/* Stepper Header */}
+          <div className="flex items-center justify-between text-[var(--text-xs)] font-medium text-[var(--text-muted)] border-b border-[var(--divider)] pb-2.5">
+            <span className={step >= 1 ? "text-[var(--accent)] font-semibold" : ""}>1. Contact Info</span>
+            <span className={step >= 2 ? "text-[var(--accent)] font-semibold" : ""}>2. Resume & Skills</span>
+            <span className={step >= 3 ? "text-[var(--accent)] font-semibold" : ""}>3. Review & Send</span>
           </div>
 
-          {submitted ? (
-            <div className="py-10 text-center">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#10b981]/15 text-[#10b981] border border-[#10b981]/30">
-                <CheckCircle2 size={24} />
+          {step === 1 && (
+            <div className="space-y-3.5">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Input
+                  label="Full Name"
+                  leftIcon={<User size={14} />}
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+                <Input
+                  label="Email Address"
+                  type="email"
+                  leftIcon={<Mail size={14} />}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <Input
+                  label="Phone Number"
+                  leftIcon={<Phone size={14} />}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+                <Input
+                  label="Location"
+                  leftIcon={<MapPin size={14} />}
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
               </div>
-              <h3 className="text-base font-semibold text-[#f4f4f5]">Application Filed</h3>
-              <p className="mt-1.5 text-xs text-[#a1a1aa] max-w-sm mx-auto">
-                Candidate record and parsed competencies recorded in your application pipeline for {job.company_name}.
-              </p>
-            </div>
-          ) : (
-            <div>
-              {/* Stepper Header */}
-              <div className="mb-4 flex items-center justify-between text-xs font-medium text-[#71717a] border-b border-white/[0.06] pb-2">
-                <span className={step >= 1 ? "text-[#10b981] font-semibold" : ""}>1. Contact Info</span>
-                <span className={step >= 2 ? "text-[#10b981] font-semibold" : ""}>2. Resume & Skills</span>
-                <span className={step >= 3 ? "text-[#10b981] font-semibold" : ""}>3. Review & Send</span>
+
+              <div className="mt-4 flex justify-end">
+                <Button variant="primary" size="sm" onClick={() => setStep(2)}>
+                  Next: Resume Details
+                </Button>
               </div>
-
-              {step === 1 && (
-                <div className="space-y-3.5">
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div>
-                      <label className="mb-1 block text-xs text-[#a1a1aa]">Full Name</label>
-                      <div className="relative">
-                        <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#71717a]" />
-                        <input
-                          type="text"
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          className="w-full h-8 pl-8 pr-3 bg-[#09090b] border border-white/[0.08] focus:border-[#10b981] rounded-[8px] text-xs text-[#f4f4f5] outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="mb-1 block text-xs text-[#a1a1aa]">Email Address</label>
-                      <div className="relative">
-                        <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#71717a]" />
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="w-full h-8 pl-8 pr-3 bg-[#09090b] border border-white/[0.08] focus:border-[#10b981] rounded-[8px] text-xs text-[#f4f4f5] outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="mb-1 block text-xs text-[#a1a1aa]">Phone Number</label>
-                      <div className="relative">
-                        <Phone size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#71717a]" />
-                        <input
-                          type="text"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          className="w-full h-8 pl-8 pr-3 bg-[#09090b] border border-white/[0.08] focus:border-[#10b981] rounded-[8px] text-xs text-[#f4f4f5] outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="mb-1 block text-xs text-[#a1a1aa]">Location</label>
-                      <div className="relative">
-                        <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#71717a]" />
-                        <input
-                          type="text"
-                          value={location}
-                          onChange={(e) => setLocation(e.target.value)}
-                          className="w-full h-8 pl-8 pr-3 bg-[#09090b] border border-white/[0.08] focus:border-[#10b981] rounded-[8px] text-xs text-[#f4f4f5] outline-none"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 flex justify-end">
-                    <Button variant="primary" size="sm" onClick={() => setStep(2)}>
-                      Next: Resume Details
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {step === 2 && (
-                <div className="space-y-3.5">
-                  <div className="rounded-[8px] border border-white/[0.08] bg-[#09090b] p-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
-                        <FileText size={16} className="text-[#10b981]" />
-                        <div>
-                          <p className="text-xs font-semibold text-[#f4f4f5]">Primary Profile Resume</p>
-                          <p className="text-[11px] font-mono text-[#71717a]">parsed_resume_v2.pdf</p>
-                        </div>
-                      </div>
-                      <Badge variant="offer" size="sm">
-                        ATS Ready
-                      </Badge>
-                    </div>
-
-                    <div className="mt-2.5 pt-2 border-t border-white/[0.06] flex flex-wrap gap-1">
-                      {(analysis?.skills?.slice(0, 5) || ["Python", "FastAPI", "React", "Docker"]).map((s) => (
-                        <span
-                          key={s}
-                          className="px-1.5 py-0.5 rounded-[4px] bg-white/[0.04] text-[#10b981] border border-[#10b981]/20 text-[10px] font-mono"
-                        >
-                          ✓ {s}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="mb-1 block text-xs text-[#a1a1aa]">
-                      Custom Note / Statement of Interest
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={coverNote}
-                      onChange={(e) => setCoverNote(e.target.value)}
-                      className="w-full rounded-[8px] border border-white/[0.08] bg-[#09090b] p-2.5 text-xs text-[#f4f4f5] outline-none focus:border-[#10b981]"
-                    />
-                  </div>
-
-                  <div className="flex justify-between pt-2">
-                    <Button variant="secondary" size="sm" onClick={() => setStep(1)}>
-                      Back
-                    </Button>
-                    <Button variant="primary" size="sm" onClick={() => setStep(3)}>
-                      Next: Review
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {step === 3 && (
-                <div className="space-y-3.5">
-                  <div className="rounded-[8px] border border-white/[0.08] bg-[#09090b] p-3 text-xs space-y-2">
-                    <div className="flex justify-between text-[#71717a]">
-                      <span>Role Target:</span>
-                      <span className="text-[#f4f4f5] font-medium">{job.title} at {job.company_name}</span>
-                    </div>
-                    <div className="flex justify-between text-[#71717a]">
-                      <span>Candidate:</span>
-                      <span className="text-[#f4f4f5] font-medium">{fullName} ({email})</span>
-                    </div>
-                    <div className="flex justify-between text-[#71717a]">
-                      <span>Action:</span>
-                      <span className="text-[#10b981] font-mono">Filing to Kanban Pipeline ("applied")</span>
-                    </div>
-                  </div>
-
-                  {errorMessage && (
-                    <div className="p-2.5 rounded-[6px] border border-rose-500/20 bg-rose-500/10 text-xs text-rose-300">
-                      {errorMessage}
-                    </div>
-                  )}
-
-                  <div className="flex justify-between pt-2">
-                    <Button variant="secondary" size="sm" onClick={() => setStep(2)}>
-                      Back
-                    </Button>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      disabled={isSubmitting}
-                      onClick={handleSubmit}
-                      className="gap-1.5"
-                    >
-                      <Send size={13} />
-                      <span>{isSubmitting ? "Filing..." : "Confirm & Send"}</span>
-                    </Button>
-                  </div>
-                </div>
-              )}
             </div>
           )}
-        </motion.div>
-      </div>
-    </AnimatePresence>
+
+          {step === 2 && (
+            <div className="space-y-3.5">
+              <div className="rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <FileText size={16} className="text-[var(--success)]" />
+                    <div>
+                      <p className="text-[var(--text-xs)] font-semibold text-[var(--text)]">Primary Profile Resume</p>
+                      <p className="text-[11px] font-mono text-[var(--text-muted)]">parsed_resume_v2.pdf</p>
+                    </div>
+                  </div>
+                  <Badge variant="offer" size="sm">
+                    ATS Ready
+                  </Badge>
+                </div>
+
+                <div className="mt-2.5 pt-2 border-t border-[var(--divider)] flex flex-wrap gap-1">
+                  {(analysis?.skills?.slice(0, 5) || ["Python", "FastAPI", "React", "Docker"]).map((s) => (
+                    <span
+                      key={s}
+                      className="px-2 py-0.5 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] text-[var(--success)] border border-[color-mix(in_srgb,var(--success)_24%,transparent)] text-[10px] font-mono"
+                    >
+                      ✓ {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <Textarea
+                label="Custom Note / Statement of Interest"
+                rows={3}
+                value={coverNote}
+                onChange={(e) => setCoverNote(e.target.value)}
+              />
+
+              <div className="flex justify-between pt-2 border-t border-[var(--divider)]">
+                <Button variant="secondary" size="sm" onClick={() => setStep(1)}>
+                  Back
+                </Button>
+                <Button variant="primary" size="sm" onClick={() => setStep(3)}>
+                  Next: Review
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="space-y-3.5">
+              <div className="rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-3 text-[var(--text-xs)] space-y-2">
+                <div className="flex justify-between text-[var(--text-muted)]">
+                  <span>Role Target:</span>
+                  <span className="text-[var(--text)] font-medium">{job.title} at {job.company_name}</span>
+                </div>
+                <div className="flex justify-between text-[var(--text-muted)]">
+                  <span>Candidate:</span>
+                  <span className="text-[var(--text)] font-medium">{fullName} ({email})</span>
+                </div>
+                <div className="flex justify-between text-[var(--text-muted)]">
+                  <span>Action:</span>
+                  <span className="text-[var(--success)] font-mono">Filing to Kanban Pipeline ("applied")</span>
+                </div>
+              </div>
+
+              {errorMessage && (
+                <div className="p-2.5 rounded-[var(--radius-sm)] border border-[var(--danger)]/20 bg-[var(--danger)]/10 text-[var(--text-xs)] text-[var(--danger)]">
+                  {errorMessage}
+                </div>
+              )}
+
+              <div className="flex justify-between pt-2 border-t border-[var(--divider)]">
+                <Button variant="secondary" size="sm" onClick={() => setStep(2)}>
+                  Back
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  disabled={isSubmitting}
+                  onClick={handleSubmit}
+                  leftIcon={<Send size={13} />}
+                >
+                  {isSubmitting ? "Filing..." : "Confirm & Send"}
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </Modal>
   );
 }
