@@ -1,111 +1,57 @@
-/* Career Operating System — Applications Pipeline Styling */
-.applications-container {
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-.kanban-layout {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  padding-bottom: 12px;
-  min-height: calc(100vh - 190px);
-}
-
-.kanban-column {
-  width: 290px;
-  min-width: 280px;
-  background: var(--surface-card, #0f0f12);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  border-radius: var(--radius-lg, 12px);
+/* Applications Pipeline Styles per design.md */
+.applications-viewport {
   display: flex;
   flex-direction: column;
-  transition: border-color 0.15s ease;
+  height: calc(100vh - 100px);
+  user-select: none;
 }
 
-.kanban-column:hover {
-  border-color: var(--border-hover, rgba(255, 255, 255, 0.16));
-}
-
-.kanban-card {
-  background: var(--surface-base, #09090b);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  border-radius: var(--radius-md, 10px);
-  padding: 12px;
-  transition: border-color 0.15s ease;
-  position: relative;
-}
-
-.kanban-card:hover {
-  border-color: var(--border-hover, rgba(255, 255, 255, 0.16));
-}
-
-.kanban-card.is-dragging {
-  border-color: rgba(16, 185, 129, 0.4);
-}
-
-.card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.card-title {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--text-primary, #f4f4f5);
-  line-height: 1.25;
-  margin-bottom: 2px;
-}
-
-.card-company {
-  font-size: 0.75rem;
-  color: var(--text-secondary, #a1a1aa);
-}
-
-.card-meta {
+/* Kanban column: solid surface per Principle 2 */
+.kanban-col {
+  flex: 1;
+  min-width: 220px;
+  max-width: 280px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-size: 0.75rem;
-  color: var(--text-muted, #71717a);
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.06));
+  background: var(--surface-solid);
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-lg);
+  height: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.meta-row {
+/* Kanban item card: .glass style floating on solid surface */
+.kanban-item {
+  padding: var(--space-3);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: all var(--dur-fast) var(--ease);
 }
 
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.kanban-item:hover {
+  background: var(--glass-bg-strong);
+  border-color: var(--glass-highlight);
+  transform: translateY(-1px);
 }
 
-/* Modal styling */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  background: rgba(0, 0, 0, 0.75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.modal-content {
-  background: var(--surface-overlay, #18181b);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: var(--radius-lg, 12px);
-  width: 100%;
-  max-width: 520px;
-  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.8);
+/* Table surface per design.md Section 6 */
+.pipeline-table-container {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--divider);
+  background: var(--surface-solid);
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.pipeline-table-row {
+  height: 44px;
+  transition: background var(--dur-fast) var(--ease);
+}
+
+.pipeline-table-row:hover {
+  background: var(--glass-bg);
 }
