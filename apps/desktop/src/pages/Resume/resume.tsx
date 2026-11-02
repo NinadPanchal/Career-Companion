@@ -130,17 +130,23 @@ export default function Resume() {
     : ["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Docker", "Redis", "Kafka", "GraphQL", "Kubernetes"];
 
   return (
-    <div className="space-y-5 animate-fade-in font-sans select-none">
+    <div className="space-y-[var(--space-4)] font-sans select-none">
       {/* ========================================================================= */}
       {/* TOP HEADER & TAB SWITCHER                                                 */}
       {/* ========================================================================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[var(--divider)]">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold text-[#f4f4f5] tracking-tight">Resume & ATS</h1>
-            <Badge variant="emerald" size="sm">Resume active</Badge>
+            <h1 className="text-[var(--text-xl)] font-semibold text-[var(--text)] tracking-tight">
+              Resume & ATS
+            </h1>
+            <Badge variant="emerald" size="sm">
+              Resume active
+            </Badge>
           </div>
-          <p className="text-xs text-[#71717a] mt-0.5">Upload your resume, audit readability for applicant tracking systems, and optimize accomplishment bullets.</p>
+          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+            Upload your resume, audit readability for applicant tracking systems, and optimize accomplishment bullets.
+          </p>
         </div>
 
         <Tabs
@@ -158,26 +164,28 @@ export default function Resume() {
       {/* TAB 1: ATS READINESS AUDIT & SKILLS                                       */}
       {/* ========================================================================= */}
       {activeTab === "ats" && (
-        <div className="space-y-4">
+        <div className="space-y-[var(--space-4)]">
           {/* Top Row: File Upload Dropzone + Score Card */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-[var(--space-4)] items-stretch">
             {/* Primary Action: Resume Upload & Active Document Info (7 cols) */}
-            <Card className="lg:col-span-7 p-5 flex flex-col justify-between">
+            <Card className="lg:col-span-7 flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+                <div className="flex items-center justify-between pb-3 border-b border-[var(--divider)]">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-[6px] bg-[#10b981]/10 border border-[#10b981]/20 flex items-center justify-center text-[#10b981]">
+                    <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] border border-[color-mix(in_srgb,var(--success)_24%,transparent)] flex items-center justify-center text-[var(--success)]">
                       <FileText size={14} />
                     </div>
                     <div>
-                      <h3 className="text-xs font-semibold text-[#f4f4f5]">Active document</h3>
-                      <p className="text-[11px] text-[#71717a]">
+                      <h3 className="text-[var(--text-xs)] font-semibold text-[var(--text)]">
+                        Active document
+                      </h3>
+                      <p className="text-[11px] text-[var(--text-muted)]">
                         {file?.name || "parsed_resume_v2.pdf"}
                       </p>
                     </div>
                   </div>
 
-                  <span className="text-xs text-[#71717a]">
+                  <span className="text-[var(--text-xs)] text-[var(--text-muted)] font-mono">
                     {analysis?.word_count || 682} words extracted
                   </span>
                 </div>
@@ -192,21 +200,21 @@ export default function Resume() {
                 />
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="mt-4 p-8 rounded-[8px] border border-dashed border-white/[0.14] hover:border-[#10b981] bg-white/[0.01] hover:bg-white/[0.03] transition-all cursor-pointer flex flex-col items-center justify-center text-center group"
+                  className="mt-4 p-8 rounded-[var(--radius-md)] border border-dashed border-[var(--glass-border)] hover:border-[var(--accent)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] transition-all cursor-pointer flex flex-col items-center justify-center text-center group"
                 >
-                  <div className="w-9 h-9 rounded-[8px] bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#71717a] group-hover:text-[#10b981] transition-all mb-2.5">
-                    <Upload size={16} />
+                  <div className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--surface-solid)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--text-muted)] group-hover:text-[var(--accent)] transition-all mb-2.5 shadow-sm">
+                    <Upload size={18} />
                   </div>
-                  <h4 className="text-xs font-medium text-[#d4d4d8] group-hover:text-white transition-colors">
+                  <h4 className="text-[var(--text-sm)] font-medium text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
                     {isUploading ? "Extracting resume text..." : "Click or drag to upload updated resume (PDF or DOCX)"}
                   </h4>
-                  <p className="text-[11px] text-[#71717a] mt-1">
+                  <p className="text-[11px] text-[var(--text-muted)] mt-1">
                     Direct local parsing. Your resume data remains on your machine.
                   </p>
                 </div>
 
                 {uploadMessage && (
-                  <p className="text-xs text-[#10b981] mt-3 flex items-center gap-1.5 font-medium">
+                  <p className="text-[var(--text-xs)] text-[var(--success)] mt-3 flex items-center gap-1.5 font-medium">
                     <CheckCircle2 size={13} />
                     <span>{uploadMessage}</span>
                   </p>
@@ -215,18 +223,24 @@ export default function Resume() {
             </Card>
 
             {/* ATS Readability Analysis (5 cols) */}
-            <Card className="lg:col-span-5 p-5 flex flex-col justify-between">
+            <Card className="lg:col-span-5 flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-                  <h3 className="text-xs font-semibold text-[#f4f4f5]">ATS readability audit</h3>
-                  <Badge variant="emerald" size="sm">High signal</Badge>
+                <div className="flex items-center justify-between pb-3 border-b border-[var(--divider)]">
+                  <h3 className="text-[var(--text-xs)] font-semibold text-[var(--text)]">
+                    ATS readability audit
+                  </h3>
+                  <Badge variant="emerald" size="sm">
+                    High signal
+                  </Badge>
                 </div>
 
                 <div className="mt-4 flex items-center gap-4">
                   <ProgressRing value={94} size={72} strokeWidth={5} color="emerald" label="94%" />
                   <div className="space-y-0.5">
-                    <h4 className="text-sm font-semibold text-[#f4f4f5]">Strong ATS signal</h4>
-                    <p className="text-xs text-[#71717a]">
+                    <h4 className="text-[var(--text-md)] font-semibold text-[var(--text)]">
+                      Strong ATS signal
+                    </h4>
+                    <p className="text-[var(--text-xs)] text-[var(--text-muted)]">
                       Standard section taxonomy, clear headings, and clean text flow detected.
                     </p>
                   </div>
@@ -234,28 +248,28 @@ export default function Resume() {
 
                 {/* Sub-scores */}
                 <div className="mt-5 space-y-2.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-[#a1a1aa]">Section hierarchy & formatting</span>
-                    <span className="font-mono text-[#10b981] font-medium text-[11px]">98%</span>
+                  <div className="flex items-center justify-between text-[var(--text-xs)]">
+                    <span className="text-[var(--text-muted)]">Section hierarchy & formatting</span>
+                    <span className="font-mono text-[var(--success)] font-medium text-[11px] tabular-nums">98%</span>
                   </div>
-                  <div className="w-full bg-[#27272a] h-1 rounded-[2px] overflow-hidden">
-                    <div className="bg-[#10b981] h-full rounded-[2px]" style={{ width: "98%" }} />
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs pt-0.5">
-                    <span className="text-[#a1a1aa]">Action verb & metric density</span>
-                    <span className="font-mono text-[#10b981] font-medium text-[11px]">91%</span>
-                  </div>
-                  <div className="w-full bg-[#27272a] h-1 rounded-[2px] overflow-hidden">
-                    <div className="bg-[#10b981] h-full rounded-[2px]" style={{ width: "91%" }} />
+                  <div className="w-full bg-[var(--glass-border)] h-1 rounded-full overflow-hidden">
+                    <div className="bg-[var(--success)] h-full rounded-full" style={{ width: "98%" }} />
                   </div>
 
-                  <div className="flex items-center justify-between text-xs pt-0.5">
-                    <span className="text-[#a1a1aa]">Keyword alignment (tech roles)</span>
-                    <span className="font-mono text-[#38bdf8] font-medium text-[11px]">93%</span>
+                  <div className="flex items-center justify-between text-[var(--text-xs)] pt-0.5">
+                    <span className="text-[var(--text-muted)]">Action verb & metric density</span>
+                    <span className="font-mono text-[var(--success)] font-medium text-[11px] tabular-nums">91%</span>
                   </div>
-                  <div className="w-full bg-[#27272a] h-1 rounded-[2px] overflow-hidden">
-                    <div className="bg-[#38bdf8] h-full rounded-[2px]" style={{ width: "93%" }} />
+                  <div className="w-full bg-[var(--glass-border)] h-1 rounded-full overflow-hidden">
+                    <div className="bg-[var(--success)] h-full rounded-full" style={{ width: "91%" }} />
+                  </div>
+
+                  <div className="flex items-center justify-between text-[var(--text-xs)] pt-0.5">
+                    <span className="text-[var(--text-muted)]">Keyword alignment (tech roles)</span>
+                    <span className="font-mono text-[var(--accent)] font-medium text-[11px] tabular-nums">93%</span>
+                  </div>
+                  <div className="w-full bg-[var(--glass-border)] h-1 rounded-full overflow-hidden">
+                    <div className="bg-[var(--accent)] h-full rounded-full" style={{ width: "93%" }} />
                   </div>
                 </div>
               </div>
@@ -263,22 +277,26 @@ export default function Resume() {
           </div>
 
           {/* Detected Skills Cloud Card */}
-          <Card className="p-5 space-y-3">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+          <Card className="space-y-3">
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--divider)]">
               <div className="flex items-center gap-2">
-                <Target size={14} className="text-[#10b981]" />
-                <h3 className="text-xs font-semibold text-[#f4f4f5]">Identified skills & competencies</h3>
+                <Target size={14} className="text-[var(--accent)]" />
+                <h3 className="text-[var(--text-xs)] font-semibold text-[var(--text)]">
+                  Identified skills & competencies
+                </h3>
               </div>
-              <span className="text-xs text-[#71717a]">{detectedSkills.length} extracted skills</span>
+              <span className="text-[var(--text-xs)] text-[var(--text-muted)] font-mono">
+                {detectedSkills.length} extracted skills
+              </span>
             </div>
 
             <div className="flex flex-wrap gap-1.5 pt-1">
               {detectedSkills.map((skill) => (
                 <div
                   key={skill}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-[#18181b] hover:bg-[#27272a] border border-white/[0.08] hover:border-white/[0.16] text-xs text-[#d4d4d8] transition-colors"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] text-[var(--text-xs)] text-[var(--text)] transition-colors font-mono"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
                   <span>{skill}</span>
                 </div>
               ))}
@@ -291,33 +309,35 @@ export default function Resume() {
       {/* TAB 2: GOOGLE XYZ ACCOMPLISHMENT REWRITER                                  */}
       {/* ========================================================================= */}
       {activeTab === "rewriter" && (
-        <div className="space-y-4">
+        <div className="space-y-[var(--space-4)]">
           {/* Formula Guide Card */}
-          <Card className="p-4 bg-[#18181b]">
+          <Card className="p-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-[6px] bg-[#10b981]/10 border border-[#10b981]/20 flex items-center justify-center text-[#10b981]">
+                <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] flex items-center justify-center text-[var(--accent)]">
                   <Wand2 size={15} />
                 </div>
                 <div>
-                  <h3 className="text-xs font-semibold text-[#f4f4f5]">Google XYZ accomplishment formula</h3>
-                  <p className="text-xs text-[#a1a1aa] mt-0.5">
-                    "Accomplished <span className="text-[#10b981] font-medium">[X]</span>, as measured by{" "}
-                    <span className="text-[#38bdf8] font-medium">[Y]</span>, by doing{" "}
-                    <span className="text-[#fbbf24] font-medium">[Z]</span>."
+                  <h3 className="text-[var(--text-xs)] font-semibold text-[var(--text)]">
+                    Google XYZ accomplishment formula
+                  </h3>
+                  <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+                    "Accomplished <span className="text-[var(--success)] font-medium">[X]</span>, as measured by{" "}
+                    <span className="text-[var(--accent)] font-medium">[Y]</span>, by doing{" "}
+                    <span className="text-[var(--warning)] font-medium">[Z]</span>."
                   </p>
                 </div>
               </div>
 
-              <span className="px-2 py-0.5 rounded-[6px] text-xs bg-white/[0.04] text-[#a1a1aa] border border-white/[0.08] shrink-0 font-medium">
+              <span className="px-2 py-0.5 rounded-[var(--radius-sm)] text-[11px] bg-[var(--glass-bg)] text-[var(--text-muted)] border border-[var(--glass-border)] shrink-0 font-medium font-mono">
                 High-impact format
               </span>
             </div>
           </Card>
 
           {/* Input & Generator Card */}
-          <Card className="p-5 space-y-3.5">
-            <label className="block text-xs font-medium text-[#a1a1aa]">
+          <Card className="space-y-3.5">
+            <label className="block text-[var(--text-xs)] font-medium text-[var(--text-muted)]">
               Input responsibility or draft accomplishment:
             </label>
             <textarea
@@ -325,27 +345,27 @@ export default function Resume() {
               value={bulletInput}
               onChange={(e) => setBulletInput(e.target.value)}
               placeholder="e.g. Worked on database queries to make API requests faster..."
-              className="w-full rounded-[8px] border border-white/[0.08] bg-[#09090b] p-3 text-xs text-[#f4f4f5] placeholder-[#71717a] outline-none focus:border-[#10b981] resize-none transition-colors"
+              className="w-full rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-3 text-[var(--text-sm)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none focus:border-[var(--accent)] resize-none transition-colors"
             />
 
-            <div className="flex items-center justify-between pt-1">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+              <div className="flex items-center gap-2 text-[var(--text-xs)]">
                 <button
                   type="button"
                   onClick={() =>
                     setBulletInput("Built Redis caching layer for GraphQL microservices to cut server costs.")
                   }
-                  className="text-xs text-[#71717a] hover:text-[#10b981] transition-colors underline cursor-pointer"
+                  className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors underline cursor-pointer"
                 >
                   Load Redis example
                 </button>
-                <span className="text-[#3f3f46]">•</span>
+                <span className="text-[var(--divider)]">•</span>
                 <button
                   type="button"
                   onClick={() =>
                     setBulletInput("Migrated manual testing pipeline to automated CI/CD GitHub Actions.")
                   }
-                  className="text-xs text-[#71717a] hover:text-[#10b981] transition-colors underline cursor-pointer"
+                  className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors underline cursor-pointer"
                 >
                   Load CI/CD example
                 </button>
@@ -353,20 +373,19 @@ export default function Resume() {
 
               <Button
                 variant="primary"
-                size="sm"
+                size="md"
                 onClick={handleSynthesize}
                 disabled={isSynthesizing || !bulletInput.trim()}
-                className="gap-1.5"
+                leftIcon={<Sparkles size={14} />}
               >
-                <Sparkles size={13} />
-                <span>{isSynthesizing ? "Synthesizing with AI..." : "Synthesize variations"}</span>
+                {isSynthesizing ? "Synthesizing with AI..." : "Synthesize variations"}
               </Button>
             </div>
           </Card>
 
           {/* Variations Stack */}
           <div className="space-y-3">
-            <h3 className="text-xs font-medium text-[#a1a1aa] px-1">
+            <h3 className="text-[var(--text-xs)] font-medium text-[var(--text-muted)] px-1">
               Optimized output variations
             </h3>
 
@@ -374,7 +393,9 @@ export default function Resume() {
               <Card key={idx} hover className="p-4 space-y-3 group">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-[#f4f4f5]">{ver.title}</span>
+                    <span className="text-[var(--text-xs)] font-semibold text-[var(--text)]">
+                      {ver.title}
+                    </span>
                     <Badge variant={ver.badgeType} size="sm">
                       {ver.score}
                     </Badge>
@@ -383,30 +404,40 @@ export default function Resume() {
                   <button
                     type="button"
                     onClick={() => handleCopy(ver.text, idx)}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.16] text-xs text-[#d4d4d8] hover:text-white transition-all cursor-pointer"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] hover:border-[var(--glass-highlight)] text-[var(--text-xs)] text-[var(--text)] transition-all cursor-pointer"
                   >
-                    {copiedIdx === idx ? <Check size={12} className="text-[#10b981]" /> : <Copy size={12} />}
+                    {copiedIdx === idx ? (
+                      <Check size={12} className="text-[var(--success)]" />
+                    ) : (
+                      <Copy size={12} />
+                    )}
                     <span>{copiedIdx === idx ? "Copied" : "Copy bullet"}</span>
                   </button>
                 </div>
 
-                <p className="text-xs text-[#d4d4d8] leading-relaxed">
+                <p className="text-[var(--text-sm)] text-[var(--text)] leading-relaxed">
                   "{ver.text}"
                 </p>
 
                 {/* XYZ breakdown chips */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-white/[0.06] text-xs">
-                  <div className="p-2 rounded-[6px] bg-[#18181b] border border-white/[0.06]">
-                    <span className="text-[#71717a] block text-[11px]">Accomplished (X):</span>
-                    <span className="text-[#10b981] font-medium truncate block">{ver.x}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-[var(--divider)] text-[var(--text-xs)]">
+                  <div className="p-2 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] border border-[var(--glass-border)]">
+                    <span className="text-[var(--text-muted)] block text-[11px]">Accomplished (X):</span>
+                    <span className="text-[var(--success)] font-medium truncate block font-mono text-[11px]">
+                      {ver.x}
+                    </span>
                   </div>
-                  <div className="p-2 rounded-[6px] bg-[#18181b] border border-white/[0.06]">
-                    <span className="text-[#71717a] block text-[11px]">Methodology (Y):</span>
-                    <span className="text-[#38bdf8] font-medium truncate block">{ver.y}</span>
+                  <div className="p-2 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] border border-[var(--glass-border)]">
+                    <span className="text-[var(--text-muted)] block text-[11px]">Methodology (Y):</span>
+                    <span className="text-[var(--accent)] font-medium truncate block font-mono text-[11px]">
+                      {ver.y}
+                    </span>
                   </div>
-                  <div className="p-2 rounded-[6px] bg-[#18181b] border border-white/[0.06]">
-                    <span className="text-[#71717a] block text-[11px]">Metric measure (Z):</span>
-                    <span className="text-[#fbbf24] font-medium truncate block">{ver.z}</span>
+                  <div className="p-2 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] border border-[var(--glass-border)]">
+                    <span className="text-[var(--text-muted)] block text-[11px]">Metric measure (Z):</span>
+                    <span className="text-[var(--warning)] font-medium truncate block font-mono text-[11px]">
+                      {ver.z}
+                    </span>
                   </div>
                 </div>
               </Card>
