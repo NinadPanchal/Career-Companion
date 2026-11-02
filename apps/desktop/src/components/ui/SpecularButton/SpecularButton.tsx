@@ -43,8 +43,8 @@ void main() {
 }`;
 
 export default function SpecularButton({
-  children, size = "lg", radius = 14, tint = "#10b981", tintOpacity = 1, blur = 0,
-  textColor = "#052e24", lineColor = "#d1fae5", baseColor = "#047857", intensity = 1.25,
+  children, size = "lg", radius = 14, tint = "var(--accent)", tintOpacity = 1, blur = 0,
+  textColor = "var(--accent-contrast)", lineColor = "var(--glass-highlight)", baseColor = "var(--accent)", intensity = 1.25,
   shineSize = 10, shineFade = 40, thickness = 1, speed = 0.35, followMouse = true,
   proximity = 250, autoAnimate = false, className = "", style, ...buttonProps
 }: SpecularButtonProps) {
