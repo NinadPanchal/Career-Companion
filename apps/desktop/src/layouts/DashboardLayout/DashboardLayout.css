@@ -1,76 +1,107 @@
-.app-shell {
+.app-shell-root {
   display: flex;
   min-height: 100vh;
-  background: var(--surface-base, #09090b);
-  color: var(--text-primary, #f4f4f5);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-}
-
-.app-main {
-  display: flex;
-  min-width: 0;
-  flex: 1;
-  flex-direction: column;
-  background: var(--surface-base, #09090b);
+  max-height: 100vh;
+  overflow: hidden;
   position: relative;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font-sans);
 }
 
-.workspace-header {
-  position: sticky;
-  top: 0;
-  z-index: 30;
+.app-main-column {
   display: flex;
-  height: 48px;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  padding: var(--space-4);
+  gap: var(--space-3);
+}
+
+/* Floating Glass Top Toolbar (52px per design.md Section 4) */
+.workspace-toolbar {
+  height: 52px;
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.5rem;
-  border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  background: rgba(9, 9, 11, 0.95);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-lg);
+  flex-shrink: 0;
+  z-index: 20;
 }
 
-.workspace-content {
+/* Main Workspace Scroll Area */
+.workspace-main-area {
   flex: 1;
   overflow-y: auto;
-  padding: 1.5rem 1.5rem 3rem;
+  overflow-x: hidden;
+  min-height: 0;
+  padding-right: var(--space-1);
 }
 
-@media (min-width: 1024px) {
-  .workspace-content {
-    padding: 1.5rem 2rem 3rem;
-  }
+/* Centered content column (max-width 1200px per design.md Section 4) */
+.workspace-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: var(--space-6);
 }
 
-.mobile-menu-trigger {
+.mobile-nav-trigger {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  color: var(--text-secondary, #a1a1aa);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  border-radius: var(--radius-sm, 6px);
-  background: transparent;
+  width: 32px;
+  height: 32px;
+  color: var(--text-muted);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: all var(--dur-fast) var(--ease);
 }
 
-.mobile-menu-trigger:hover {
-  color: var(--text-primary, #f4f4f5);
-  background: rgba(255, 255, 255, 0.04);
-  border-color: var(--border-hover, rgba(255, 255, 255, 0.16));
+.mobile-nav-trigger:hover {
+  color: var(--text);
+  background: var(--glass-bg-strong);
 }
 
-.sidebar-scrim {
+.app-scrim {
   display: none;
   position: fixed;
   inset: 0;
   z-index: 45;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
 }
 
+/* Responsive collapse & adjustments under 900px */
 @media (max-width: 900px) {
-  .mobile-menu-trigger { display: flex; }
-  .sidebar-scrim--visible { display: block; }
-  .workspace-header { padding: 0 1rem; }
-  .workspace-content { padding: 1rem 1rem 2.5rem; }
+  .app-main-column {
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .mobile-nav-trigger {
+    display: flex;
+  }
+
+  .app-scrim--visible {
+    display: block;
+  }
+
+  .workspace-toolbar {
+    height: 48px;
+    padding: 0 var(--space-3);
+  }
+}
+
+/* 800x560 minimum window guarantee */
+@media (max-width: 800px) {
+  .app-main-column {
+    padding: var(--space-2);
+  }
 }

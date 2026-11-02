@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Menu, PanelLeftClose, Search, Plus } from "lucide-react";
+import { Menu, Search, Plus, PanelLeftOpen } from "lucide-react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import CommandPalette from "../../components/CommandPalette/CommandPalette";
+import { ThemeToggle } from "../../components/ui/ThemeToggle";
 import "./DashboardLayout.css";
 
 function DashboardLayout() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
 
   const workspaceLabels: Record<string, string> = {
@@ -21,6 +23,19 @@ function DashboardLayout() {
   };
   const pageLabel = workspaceLabels[location.pathname] ?? "Workspace";
 
+  // Collapse sidebar automatically under 900px
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 900) {
+        setIsCollapsed(true);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Global Command+K shortcut
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -33,72 +48,99 @@ function DashboardLayout() {
   }, []);
 
   return (
-    <div className="app-shell">
+    <div className="app-shell-root">
+      {/* Mobile backdrop scrim */}
       <div
-        className={`sidebar-scrim ${isSidebarOpen ? "sidebar-scrim--visible" : ""}`}
+        className={`app-scrim ${isSidebarOpen ? "app-scrim--visible" : ""}`}
         onClick={() => setIsSidebarOpen(false)}
+        aria-hidden="true"
       />
+
+      {/* Floating Glass Sidebar (232px -> 64px collapsible) */}
       <Sidebar
         isOpen={isSidebarOpen}
         onNavigate={() => setIsSidebarOpen(false)}
         onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+        isCollapsed={isCollapsed}
+        onToggleCollapse={() => setIsCollapsed((prev) => !prev)}
       />
 
-      <div className="app-main">
-        {/* Top Control Bar (48px Restrained Header) */}
-        <header className="workspace-header select-none">
-          {/* Left: Breadcrumbs & Section Title */}
-          <div className="flex items-center gap-2.5">
+      {/* Main Workspace Column */}
+      <div className="app-main-column">
+        {/* Top Glass Toolbar (52px per design.md Section 4) */}
+        <header className="workspace-toolbar glass select-none">
+          {/* Left: Mobile trigger & breadcrumb */}
+          <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
-              className="mobile-menu-trigger"
+              className="mobile-nav-trigger"
               onClick={() => setIsSidebarOpen((open) => !open)}
               aria-label={isSidebarOpen ? "Close navigation" : "Open navigation"}
             >
-              {isSidebarOpen ? <PanelLeftClose size={15} /> : <Menu size={15} />}
+              <Menu size={16} />
             </button>
-            <div className="flex items-center gap-1.5 text-xs">
-              <span className="text-[#71717a]">Career Companion</span>
-              <span className="text-[#71717a]/40">/</span>
-              <span className="text-[#f4f4f5] font-medium">{pageLabel}</span>
+
+            {isCollapsed && (
+              <button
+                type="button"
+                onClick={() => setIsCollapsed(false)}
+                className="hidden lg:flex items-center justify-center w-8 h-8 rounded-[var(--radius-md)] text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--glass-bg)] border border-transparent transition-colors cursor-pointer"
+                title="Expand sidebar"
+                aria-label="Expand sidebar"
+              >
+                <PanelLeftOpen size={16} />
+              </button>
+            )}
+
+            <div className="flex items-center gap-2 text-[var(--text-sm)]">
+              <span className="text-[var(--text-muted)] hidden sm:inline">
+                Career Companion
+              </span>
+              <span className="text-[var(--divider)] hidden sm:inline">/</span>
+              <span className="text-[var(--text)] font-semibold truncate">
+                {pageLabel}
+              </span>
             </div>
           </div>
 
-          {/* Center: Command Palette Trigger */}
+          {/* Center: Search trigger */}
           <div className="hidden md:flex items-center relative w-72">
             <button
               type="button"
               onClick={() => setIsCommandPaletteOpen(true)}
-              className="w-full h-7 pl-7 pr-10 rounded-[6px] bg-[#09090b] hover:bg-[#18181b] border border-white/[0.08] hover:border-white/[0.14] text-left text-xs text-[#71717a] hover:text-[#a1a1aa] flex items-center transition-colors cursor-pointer"
+              className="w-full h-8 pl-8 pr-10 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] text-left text-[var(--text-xs)] text-[var(--text-muted)] hover:text-[var(--text)] flex items-center transition-colors cursor-pointer"
             >
-              <Search size={12} className="absolute left-2 text-[#71717a]" />
+              <Search size={13} className="absolute left-2.5 text-[var(--text-muted)]" />
               <span className="truncate">Search commands, jobs, roles...</span>
-              <kbd className="absolute right-1.5 px-1 py-0.2 rounded bg-white/[0.04] border border-white/[0.08] text-[9px] text-[#71717a] font-mono">
+              <kbd className="absolute right-2 px-1 py-0.5 rounded-[var(--radius-sm)] bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] text-[9px] font-mono text-[var(--text-muted)]">
                 ⌘K
               </kbd>
             </button>
           </div>
 
-          {/* Right: Quick Action CTAs */}
-          <div className="flex items-center gap-2">
+          {/* Right: Quick actions */}
+          <div className="flex items-center gap-2.5 shrink-0">
+            <ThemeToggle size="sm" />
+
             <Link
               to="/applications"
-              className="h-7 px-2.5 rounded-[6px] bg-[#10b981] hover:bg-[#34d399] active:bg-[#059669] text-[#09090b] font-medium text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="h-8 px-3 rounded-[var(--radius-md)] bg-[var(--accent)] text-[var(--accent-contrast)] hover:bg-[var(--accent-hover)] font-medium text-[var(--text-xs)] flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm active:scale-[0.98]"
             >
-              <Plus size={13} />
+              <Plus size={14} />
               <span>Track Job</span>
             </Link>
           </div>
         </header>
 
-        {/* Main Content Workspace */}
-        <main className="workspace-content">
-          <div className="mx-auto w-full max-w-[1440px]">
+        {/* Main Workspace Scroll Area */}
+        <main className="workspace-main-area">
+          <div className="workspace-container">
             <Outlet />
           </div>
         </main>
       </div>
 
+      {/* Global Command Palette */}
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}

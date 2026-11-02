@@ -156,20 +156,20 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
     <AnimatePresence>
       {isOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-4 pt-20 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 pt-20 backdrop-blur-[6px]"
           onClick={onClose}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.98, y: -12 }}
+            initial={{ opacity: 0, scale: 0.97, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.98, y: -12 }}
-            transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, scale: 0.97, y: -10 }}
+            transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-xl overflow-hidden rounded-[12px] border border-white/[0.08] bg-[#18181b] shadow-2xl text-[#f4f4f5]"
+            className="w-full max-w-xl overflow-hidden rounded-[var(--radius-lg)] border border-[var(--glass-border)] glass glass--strong shadow-[var(--glass-shadow)] text-[var(--text)]"
           >
             {/* Search Input */}
-            <div className="flex items-center border-b border-white/[0.08] px-3.5 py-3">
-              <Search size={15} className="mr-2.5 text-[#71717a] shrink-0" />
+            <div className="flex items-center border-b border-[var(--divider)] px-3.5 py-3">
+              <Search size={15} className="mr-2.5 text-[var(--text-muted)] shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
@@ -180,9 +180,9 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder="Type a command or search..."
-                className="w-full bg-transparent text-xs text-[#f4f4f5] placeholder-[#71717a] outline-none"
+                className="w-full bg-transparent text-[var(--text-sm)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none"
               />
-              <span className="rounded-[4px] border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-mono text-[#71717a]">
+              <span className="rounded-[var(--radius-sm)] border border-[var(--glass-border)] bg-[var(--glass-bg)] px-1.5 py-0.5 text-[10px] font-mono text-[var(--text-muted)]">
                 ESC
               </span>
             </div>
@@ -198,20 +198,20 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
                       key={item.id}
                       onClick={item.action}
                       onMouseEnter={() => setSelectedIndex(idx)}
-                      className={`flex w-full items-center justify-between rounded-[8px] px-2.5 py-2 text-left text-xs transition-colors cursor-pointer ${
+                      className={`flex w-full items-center justify-between rounded-[var(--radius-md)] px-2.5 py-2 text-left text-[var(--text-xs)] transition-colors cursor-pointer ${
                         isSelected
-                          ? "bg-[#27272a] text-[#f4f4f5] border border-white/[0.08]"
-                          : "text-[#a1a1aa] hover:bg-white/[0.03] border border-transparent"
+                          ? "bg-[var(--glass-bg-strong)] text-[var(--text)] border border-[var(--glass-border)] shadow-sm"
+                          : "text-[var(--text-muted)] hover:bg-[var(--glass-bg)] border border-transparent"
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <div className={`w-6 h-6 rounded-[6px] flex items-center justify-center ${isSelected ? "bg-[#10b981]/15 text-[#10b981]" : "bg-white/[0.04] text-[#71717a]"}`}>
-                          <Icon size={13} />
+                        <div className={`w-6 h-6 rounded-[var(--radius-sm)] flex items-center justify-center ${isSelected ? "bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent)]" : "bg-[var(--glass-bg)] text-[var(--text-muted)]"}`}>
+                          <Icon size={14} />
                         </div>
-                        <span className="font-medium text-xs">{item.title}</span>
+                        <span className="font-medium text-[var(--text-sm)]">{item.title}</span>
                       </div>
                       <span className={`text-[10px] font-mono tracking-wider uppercase ${
-                        isSelected ? "text-[#10b981]" : "text-[#71717a]"
+                        isSelected ? "text-[var(--accent)]" : "text-[var(--text-faint)]"
                       }`}>
                         {item.category}
                       </span>
@@ -219,20 +219,20 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
                   );
                 })
               ) : (
-                <div className="py-8 text-center text-xs text-[#71717a]">
+                <div className="py-8 text-center text-[var(--text-xs)] text-[var(--text-muted)]">
                   No commands found matching "{query}"
                 </div>
               )}
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between border-t border-white/[0.08] bg-[#09090b] px-3.5 py-2 text-[11px] text-[#71717a]">
+            <div className="flex items-center justify-between border-t border-[var(--divider)] bg-[var(--glass-bg)] px-3.5 py-2 text-[11px] text-[var(--text-muted)]">
               <div className="flex items-center gap-2">
-                <span>Navigate <kbd className="rounded-[4px] border border-white/[0.08] bg-white/[0.05] px-1 py-0.5 font-mono text-[10px]">↑</kbd><kbd className="rounded-[4px] border border-white/[0.08] bg-white/[0.05] px-1 py-0.5 font-mono text-[10px]">↓</kbd></span>
-                <span className="text-[#3f3f46]">•</span>
-                <span>Select <kbd className="rounded-[4px] border border-white/[0.08] bg-white/[0.05] px-1 py-0.5 font-mono text-[10px]">↵</kbd></span>
+                <span>Navigate <kbd className="rounded-[var(--radius-sm)] border border-[var(--glass-border)] bg-[var(--glass-bg)] px-1 py-0.5 font-mono text-[10px]">↑</kbd><kbd className="rounded-[var(--radius-sm)] border border-[var(--glass-border)] bg-[var(--glass-bg)] px-1 py-0.5 font-mono text-[10px]">↓</kbd></span>
+                <span className="text-[var(--divider)]">•</span>
+                <span>Select <kbd className="rounded-[var(--radius-sm)] border border-[var(--glass-border)] bg-[var(--glass-bg)] px-1 py-0.5 font-mono text-[10px]">↵</kbd></span>
               </div>
-              <span className="text-[#52525b] font-mono text-[10px]">Career Companion</span>
+              <span className="text-[var(--text-faint)] font-mono text-[10px]">Career Companion</span>
             </div>
           </motion.div>
         </div>
