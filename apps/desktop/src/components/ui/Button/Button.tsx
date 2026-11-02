@@ -1,9 +1,7 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
-import clsx from "clsx";
+import React, { ButtonHTMLAttributes, ReactNode } from "react";
 import { Loader2 } from "lucide-react";
 
-export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "glass" | "ghost" | "outline" | "danger";
   size?: "xs" | "sm" | "md" | "lg";
   children: ReactNode;
@@ -12,10 +10,10 @@ export interface ButtonProps
   rightIcon?: ReactNode;
 }
 
-export default function Button({
+export function Button({
   variant = "primary",
   size = "md",
-  className,
+  className = "",
   children,
   loading = false,
   disabled = false,
@@ -23,67 +21,80 @@ export default function Button({
   rightIcon,
   ...props
 }: ButtonProps) {
-  // Determine if button is disabled (loading or explicitly disabled)
   const isDisabled = disabled || loading;
+
+  // Base styling: 4px grid tokens, transitions, focus ring
+  const baseClasses =
+    "inline-flex items-center justify-center font-medium select-none transition-all duration-[var(--dur-fast)] ease-[var(--ease)] rounded-[var(--radius-md)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--accent)_55%,transparent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg)] cursor-pointer disabled:pointer-events-none disabled:active:scale-100 disabled:opacity-40";
+
+  // Size hierarchy
+  const sizeClasses = {
+    xs: "h-7 px-[var(--space-2)] text-[var(--text-xs)] gap-1.5",
+    sm: "h-8 px-[var(--space-3)] text-[var(--text-sm)] gap-2",
+    md: "h-9 px-[var(--space-4)] text-[var(--text-md)] gap-2", // 36px standard per design.md
+    lg: "h-10 px-[var(--space-5)] text-[var(--text-md)] gap-2.5",
+  }[size];
+
+  // Variant hierarchy per design.md Section 6
+  let variantClasses = "";
+  switch (variant) {
+    case "primary":
+      variantClasses =
+        "bg-[var(--accent)] text-[var(--accent-contrast)] shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] hover:bg-[var(--accent-hover)]";
+      break;
+    case "secondary":
+    case "glass":
+    case "outline":
+      variantClasses =
+        "glass text-[var(--text)] hover:bg-[var(--glass-bg-strong)] hover:border-[var(--glass-highlight)]";
+      break;
+    case "ghost":
+      variantClasses =
+        "bg-transparent text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--glass-bg)] border border-transparent";
+      break;
+    case "danger":
+      variantClasses =
+        "bg-[var(--danger)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] hover:opacity-90";
+      break;
+  }
+
+  const spinnerSizes = {
+    xs: 12,
+    sm: 14,
+    md: 16,
+    lg: 18,
+  };
 
   return (
     <button
-      className={clsx(
-        "inline-flex items-center justify-center font-medium transition-all duration-200 ease-out rounded-lg active:scale-[0.98]",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981] focus-visible:ring-offset-1 focus-visible:ring-offset-[#09090b]",
-        "disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100",
-        {
-          "h-7 px-2.5 text-xs gap-1.5": size === "xs",
-          "h-8 px-3 text-xs gap-2": size === "sm",
-          "h-8 px-3.5 text-xs gap-2": size === "md",
-          "h-9 px-4.5 text-sm gap-2.5": size === "lg",
-        },
-        {
-          "bg-[#10b981] text-[#09090b] font-medium hover:bg-[#34d399] active:bg-[#059669] shadow-sm hover:shadow-md":
-            variant === "primary" && !isDisabled,
-
-          "bg-transparent text-[#f4f4f5] border border-white/[0.08] hover:bg-white/[0.04] hover:border-white/[0.16] active:bg-white/[0.06] shadow-sm hover:shadow-md":
-            variant === "secondary" || variant === "glass" || variant === "outline",
-
-          "bg-transparent text-[#a1a1aa] hover:text-[#f4f4f5] hover:bg-white/[0.04] active:bg-white/[0.06] shadow-sm hover:shadow-md":
-            variant === "ghost",
-
-          "bg-rose-500/10 text-[#f43f5e] border border-rose-500/20 hover:bg-rose-500/20 active:bg-rose-500/25 shadow-sm hover:shadow-md":
-            variant === "danger",
-        },
-        // Loading state styles
-        loading && "relative cursor-wait",
-        className
-      )}
+      className={`${baseClasses} ${sizeClasses} ${variantClasses} ${
+        loading ? "relative cursor-wait" : ""
+      } ${className}`}
       disabled={isDisabled}
       {...props}
     >
-      {/* Loading spinner - positioned appropriately */}
       {loading && (
         <Loader2
-          className={clsx(
-            "animate-spin absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2",
-            size === "xs" ? "h-3 w-3" : size === "sm" ? "h-3.5 w-3.5" : size === "md" ? "h-4 w-4" : "h-4.5 w-4.5"
-          )}
+          size={spinnerSizes[size]}
+          className="animate-spin absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-current"
         />
       )}
 
-      {/* Left icon with proper spacing */}
       {leftIcon && !loading && (
-        <span className="mr-1.5 flex-shrink-0">
+        <span className="shrink-0 flex items-center justify-center">
           {leftIcon}
         </span>
       )}
 
-      {/* Button content with reduced opacity when loading */}
-      <span className={clsx(loading && "opacity-0")}>{children}</span>
+      <span className={loading ? "opacity-0 invisible" : ""}>{children}</span>
 
-      {/* Right icon with proper spacing */}
       {rightIcon && !loading && (
-        <span className="ml-1.5 flex-shrink-0">
+        <span className="shrink-0 flex items-center justify-center">
           {rightIcon}
         </span>
       )}
     </button>
   );
 }
+
+export default Button;

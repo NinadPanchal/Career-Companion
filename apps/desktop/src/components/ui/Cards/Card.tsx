@@ -1,35 +1,58 @@
-import type { HTMLAttributes, ReactNode } from "react";
-import clsx from "clsx";
+import React, { HTMLAttributes, ReactNode } from "react";
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
   hover?: boolean;
-  ambient?: boolean;
-  variant?: "glass" | "default" | "elevated" | "subtle";
+  variant?: "glass" | "solid" | "subtle" | "default" | "elevated";
+  padding?: "none" | "sm" | "md" | "lg";
 }
 
-export default function Card({
+export function Card({
   children,
   hover = false,
-  variant = "default",
-  className,
+  variant = "glass",
+  padding = "md",
+  className = "",
   ...props
 }: CardProps) {
+  // Padding map
+  const paddingClasses = {
+    none: "",
+    sm: "p-[var(--space-3)]",
+    md: "p-[var(--space-4)] sm:p-[var(--space-5)]", // standard 24px per design.md
+    lg: "p-[var(--space-6)]",
+  }[padding];
+
+  // Variant surface map
+  let surfaceClasses = "";
+  switch (variant) {
+    case "glass":
+    case "default":
+      surfaceClasses = "glass";
+      break;
+    case "elevated":
+      surfaceClasses = "glass glass--strong";
+      break;
+    case "solid":
+      surfaceClasses =
+        "bg-[var(--surface-solid)] border border-[var(--divider)] rounded-[var(--radius-lg)] shadow-[var(--glass-shadow)]";
+      break;
+    case "subtle":
+      surfaceClasses =
+        "bg-[var(--glass-bg)] border border-[var(--divider)] rounded-[var(--radius-lg)]";
+      break;
+  }
+
   return (
     <div
-      className={clsx(
-        "relative rounded-[10px] transition-colors duration-150",
-        {
-          "bg-[#0f0f12] border border-white/[0.08]": variant === "default" || variant === "glass",
-          "bg-[#18181b] border border-white/[0.12] shadow-[0_8px_24px_-4px_rgba(0,0,0,0.6)]": variant === "elevated",
-          "bg-[#09090b] border border-white/[0.06]": variant === "subtle",
-        },
-        hover && "hover:border-white/[0.16]",
-        className
-      )}
+      className={`relative select-none ${surfaceClasses} ${paddingClasses} ${
+        hover ? "glass--interactive cursor-pointer" : ""
+      } ${className}`}
       {...props}
     >
       {children}
     </div>
   );
 }
+
+export default Card;

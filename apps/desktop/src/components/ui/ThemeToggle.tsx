@@ -27,3 +27,4 @@ export function ThemeToggle({ className = "", size = "md" }: ThemeToggleProps) {
 }
 
 export default ThemeToggle;
+
