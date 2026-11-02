@@ -1,9 +1,25 @@
 import { useState, useEffect } from "react";
-import { User, Server, Key, Save, CheckCircle2, RefreshCw, Database, Eye, EyeOff, ShieldCheck, AlertCircle } from "lucide-react";
-import { Card, Button, Badge } from "../../components/ui";
+import {
+  User,
+  Server,
+  Key,
+  Save,
+  CheckCircle2,
+  RefreshCw,
+  Database,
+  Eye,
+  EyeOff,
+  ShieldCheck,
+  Moon,
+  Sun,
+  Laptop,
+} from "lucide-react";
+import { Card, Button, Badge, Input } from "../../components/ui";
+import { useTheme } from "../../context/ThemeContext";
 import { api } from "../../lib/api";
 
-function Settings() {
+export function Settings() {
+  const { theme, setTheme } = useTheme();
   const [userName, setUserName] = useState("Ninad Panchal");
   const [userRole, setUserRole] = useState("AI & DS Engineer");
   const [userEmail, setUserEmail] = useState("ninad.panchal@career-companion.app");
@@ -38,217 +54,284 @@ function Settings() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in font-sans select-none max-w-4xl pb-10">
+    <div className="space-y-[var(--space-5)] animate-fade-in font-sans select-none max-w-4xl pb-10">
       {/* Header */}
-      <div className="pb-4 border-b border-white/[0.08]">
+      <div className="pb-4 border-b border-[var(--divider)]">
         <div className="flex items-center gap-2.5">
-          <h1 className="text-base font-semibold text-[#f4f4f5] tracking-tight">System settings</h1>
-          <Badge variant="emerald" size="sm">Local first</Badge>
+          <h1 className="text-[var(--text-xl)] font-semibold text-[var(--text)] tracking-tight">
+            System Settings
+          </h1>
+          <Badge variant="success">Local first</Badge>
         </div>
-        <p className="mt-1 text-xs text-[#a1a1aa]">
-          Manage local engine services, database synchronization, profile metadata, and external credentials.
+        <p className="mt-1 text-[var(--text-sm)] text-[var(--text-muted)]">
+          Manage local engine services, database synchronization, profile metadata, and interface preferences.
         </p>
       </div>
 
-      <div className="grid gap-5">
+      <div className="grid gap-[var(--space-4)]">
+        {/* Appearance & Theme Card */}
+        <Card className="p-[var(--space-5)] space-y-[var(--space-4)]">
+          <div className="flex items-center gap-3 pb-3 border-b border-[var(--divider)]">
+            <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] flex items-center justify-center text-[var(--accent)]">
+              <Sun size={16} />
+            </div>
+            <div>
+              <h2 className="text-[var(--text-md)] font-medium text-[var(--text)]">Appearance & Theme</h2>
+              <p className="text-[var(--text-xs)] text-[var(--text-muted)]">
+                Select your preferred interface appearance or sync with your operating system.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <button
+              type="button"
+              onClick={() => setTheme("dark")}
+              className={`p-3.5 rounded-[var(--radius-md)] border text-left transition-all duration-[var(--dur-fast)] flex items-center gap-3 cursor-pointer ${
+                theme === "dark"
+                  ? "bg-[color-mix(in_srgb,var(--accent)_14%,var(--glass-bg))] border-[var(--accent)] shadow-[0_0_12px_rgba(79,140,255,0.25)]"
+                  : "bg-[var(--glass-bg)] border-[var(--glass-border)] hover:bg-[var(--glass-bg-strong)]"
+              }`}
+            >
+              <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[var(--surface-solid)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--accent)]">
+                <Moon size={15} />
+              </div>
+              <div>
+                <p className="text-[var(--text-sm)] font-medium text-[var(--text)]">Dark Theme</p>
+                <p className="text-[var(--text-xs)] text-[var(--text-muted)]">Liquid glass dark default</p>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setTheme("light")}
+              className={`p-3.5 rounded-[var(--radius-md)] border text-left transition-all duration-[var(--dur-fast)] flex items-center gap-3 cursor-pointer ${
+                theme === "light"
+                  ? "bg-[color-mix(in_srgb,var(--accent)_14%,var(--glass-bg))] border-[var(--accent)] shadow-[0_0_12px_rgba(79,140,255,0.25)]"
+                  : "bg-[var(--glass-bg)] border-[var(--glass-border)] hover:bg-[var(--glass-bg-strong)]"
+              }`}
+            >
+              <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[var(--surface-solid)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--accent)]">
+                <Sun size={15} />
+              </div>
+              <div>
+                <p className="text-[var(--text-sm)] font-medium text-[var(--text)]">Light Theme</p>
+                <p className="text-[var(--text-xs)] text-[var(--text-muted)]">Soft frosted daylight</p>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setTheme("system")}
+              className={`p-3.5 rounded-[var(--radius-md)] border text-left transition-all duration-[var(--dur-fast)] flex items-center gap-3 cursor-pointer ${
+                theme === "system"
+                  ? "bg-[color-mix(in_srgb,var(--accent)_14%,var(--glass-bg))] border-[var(--accent)] shadow-[0_0_12px_rgba(79,140,255,0.25)]"
+                  : "bg-[var(--glass-bg)] border-[var(--glass-border)] hover:bg-[var(--glass-bg-strong)]"
+              }`}
+            >
+              <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[var(--surface-solid)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--accent)]">
+                <Laptop size={15} />
+              </div>
+              <div>
+                <p className="text-[var(--text-sm)] font-medium text-[var(--text)]">System Default</p>
+                <p className="text-[var(--text-xs)] text-[var(--text-muted)]">Follow OS preference</p>
+              </div>
+            </button>
+          </div>
+        </Card>
+
         {/* Local Engine Service Card */}
-        <Card className="p-4.5 space-y-3.5">
-          <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-[8px] bg-[#10b981]/10 border border-[#10b981]/20 flex items-center justify-center text-[#10b981]">
+        <Card className="p-[var(--space-5)] space-y-[var(--space-3)]">
+          <div className="flex items-center justify-between pb-3 border-b border-[var(--divider)]">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] border border-[color-mix(in_srgb,var(--success)_24%,transparent)] flex items-center justify-center text-[var(--success)]">
                 <Server size={16} />
               </div>
               <div>
-                <h2 className="text-sm font-medium text-[#f4f4f5]">Local engine service</h2>
-                <p className="text-xs text-[#71717a]">FastAPI background REST service running on 127.0.0.1:8000</p>
+                <h2 className="text-[var(--text-md)] font-medium text-[var(--text)]">Local Engine Service</h2>
+                <p className="text-[var(--text-xs)] text-[var(--text-muted)]">
+                  FastAPI background REST service running on 127.0.0.1:8000
+                </p>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-[#18181b] border border-white/[0.08]">
+              <div className="flex items-center gap-2 px-3 py-1 rounded-[var(--radius-sm)] bg-[var(--surface-solid)] border border-[var(--glass-border)]">
                 <span
-                  className={`h-1.5 w-1.5 rounded-full ${
+                  className={`h-2 w-2 rounded-full ${
                     apiStatus === "connected"
-                      ? "bg-[#10b981]"
+                      ? "bg-[var(--success)] shadow-[0_0_8px_var(--success)]"
                       : apiStatus === "checking"
-                      ? "bg-[#fbbf24] animate-pulse"
-                      : "bg-[#ef4444]"
+                      ? "bg-[var(--warning)] animate-pulse"
+                      : "bg-[var(--danger)]"
                   }`}
                 />
-                <span className="text-xs text-[#d4d4d8] capitalize">
-                  {apiStatus === "connected" ? "Connected" : apiStatus === "checking" ? "Checking" : "Offline"}
+                <span className="text-[var(--text-xs)] text-[var(--text)] capitalize font-medium">
+                  {apiStatus === "connected" ? "Connected" : apiStatus === "checking" ? "Checking..." : "Offline"}
                 </span>
               </div>
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={checkApiConnection}
-                className="p-1.5 rounded-[6px] bg-white/[0.04] hover:bg-white/[0.08] text-[#a1a1aa] hover:text-[#f4f4f5] border border-white/[0.08] transition-colors cursor-pointer"
+                className="h-8 w-8 !p-0"
                 aria-label="Refresh API connection"
                 title="Refresh API connection"
               >
-                <RefreshCw size={13} className={apiStatus === "checking" ? "animate-spin" : ""} />
-              </button>
+                <RefreshCw size={14} className={apiStatus === "checking" ? "animate-spin" : ""} />
+              </Button>
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-[#71717a]">
+          <div className="flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)] pt-1">
             <span>Provides local vector matching, resume parsing, and outreach drafting.</span>
-            <span className="text-[#a1a1aa]">Port 8000</span>
+            <span className="font-mono text-[var(--text-faint)]">Port 8000</span>
           </div>
         </Card>
 
         {/* Database & Synchronization */}
-        <Card className="p-4.5 space-y-3.5">
-          <div className="flex items-center gap-2.5 pb-3 border-b border-white/[0.06]">
-            <div className="w-8 h-8 rounded-[8px] bg-[#3b82f6]/10 border border-[#3b82f6]/20 flex items-center justify-center text-[#3b82f6]">
+        <Card className="p-[var(--space-5)] space-y-[var(--space-3)]">
+          <div className="flex items-center gap-3 pb-3 border-b border-[var(--divider)]">
+            <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] flex items-center justify-center text-[var(--accent)]">
               <Database size={16} />
             </div>
             <div>
-              <h2 className="text-sm font-medium text-[#f4f4f5]">Database and synchronization</h2>
-              <p className="text-xs text-[#71717a]">Hybrid storage architecture for privacy and cloud backup</p>
+              <h2 className="text-[var(--text-md)] font-medium text-[var(--text)]">Database & Storage</h2>
+              <p className="text-[var(--text-xs)] text-[var(--text-muted)]">
+                Hybrid storage architecture for private, zero-latency desktop workflows
+              </p>
             </div>
           </div>
 
-          <p className="text-xs text-[#a1a1aa] leading-relaxed">
-            Career Companion stores candidate data locally in an embedded <strong className="text-[#f4f4f5] font-medium">SQLite</strong> database for zero-latency desktop operation and complete privacy. When configured, it supports syncing with <strong className="text-[#f4f4f5] font-medium">Neon PostgreSQL</strong> for multi-device backup.
+          <p className="text-[var(--text-sm)] text-[var(--text-muted)] leading-relaxed">
+            Career Companion stores candidate data locally in an embedded{" "}
+            <strong className="text-[var(--text)] font-medium">SQLite</strong> database for zero-latency desktop operation
+            and complete privacy. Syncing with <strong className="text-[var(--text)] font-medium">PostgreSQL</strong> is
+            supported for encrypted cloud backup.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-            <div className="p-2.5 rounded-[8px] bg-[#18181b] border border-white/[0.06] flex items-start gap-2">
-              <ShieldCheck size={14} className="text-[#10b981] mt-0.5 shrink-0" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+            <div className="p-3 rounded-[var(--radius-md)] bg-[var(--surface-solid)] border border-[var(--glass-border)] flex items-start gap-2.5">
+              <ShieldCheck size={16} className="text-[var(--success)] mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-medium text-[#f4f4f5]">Local SQLite</p>
-                <p className="text-[11px] text-[#71717a]">Primary offline store</p>
+                <p className="text-[var(--text-sm)] font-medium text-[var(--text)]">Local SQLite</p>
+                <p className="text-[var(--text-xs)] text-[var(--text-muted)]">Primary offline store</p>
               </div>
             </div>
-            <div className="p-2.5 rounded-[8px] bg-[#18181b] border border-white/[0.06] flex items-start gap-2">
-              <ShieldCheck size={14} className="text-[#10b981] mt-0.5 shrink-0" />
+            <div className="p-3 rounded-[var(--radius-md)] bg-[var(--surface-solid)] border border-[var(--glass-border)] flex items-start gap-2.5">
+              <ShieldCheck size={16} className="text-[var(--success)] mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-medium text-[#f4f4f5]">Resume parsed cache</p>
-                <p className="text-[11px] text-[#71717a]">Local vector index</p>
+                <p className="text-[var(--text-sm)] font-medium text-[var(--text)]">Parsed Cache</p>
+                <p className="text-[var(--text-xs)] text-[var(--text-muted)]">Local vector index</p>
               </div>
             </div>
-            <div className="p-2.5 rounded-[8px] bg-[#18181b] border border-white/[0.06] flex items-start gap-2">
-              <ShieldCheck size={14} className="text-[#10b981] mt-0.5 shrink-0" />
+            <div className="p-3 rounded-[var(--radius-md)] bg-[var(--surface-solid)] border border-[var(--glass-border)] flex items-start gap-2.5">
+              <ShieldCheck size={16} className="text-[var(--success)] mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-medium text-[#f4f4f5]">Applications pipeline</p>
-                <p className="text-[11px] text-[#71717a]">Local state & sync log</p>
+                <p className="text-[var(--text-sm)] font-medium text-[var(--text)]">Pipeline DB</p>
+                <p className="text-[var(--text-xs)] text-[var(--text-muted)]">Local state & sync log</p>
               </div>
             </div>
           </div>
         </Card>
 
         {/* Candidate Profile */}
-        <Card className="p-4.5 space-y-4">
-          <div className="flex items-center gap-2.5 pb-3 border-b border-white/[0.06]">
-            <div className="w-8 h-8 rounded-[8px] bg-[#8b5cf6]/10 border border-[#8b5cf6]/20 flex items-center justify-center text-[#8b5cf6]">
+        <Card className="p-[var(--space-5)] space-y-[var(--space-4)]">
+          <div className="flex items-center gap-3 pb-3 border-b border-[var(--divider)]">
+            <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] flex items-center justify-center text-[var(--accent)]">
               <User size={16} />
             </div>
             <div>
-              <h2 className="text-sm font-medium text-[#f4f4f5]">Candidate profile</h2>
-              <p className="text-xs text-[#71717a]">Used to auto-populate applications and tailor outreach drafts</p>
+              <h2 className="text-[var(--text-md)] font-medium text-[var(--text)]">Candidate Profile</h2>
+              <p className="text-[var(--text-xs)] text-[var(--text-muted)]">
+                Used to auto-populate applications and tailor outreach drafts
+              </p>
             </div>
           </div>
 
-          <div className="grid gap-3.5 sm:grid-cols-2">
-            <div>
-              <label htmlFor="settings-name" className="mb-1.5 block text-xs font-medium text-[#d4d4d8]">Full name</label>
-              <input
-                id="settings-name"
-                type="text"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                className="w-full h-8.5 px-3 rounded-[8px] border border-white/[0.08] bg-[#09090b] text-xs text-[#f4f4f5] outline-none focus:border-[#10b981] transition-colors"
-              />
-            </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Input
+              label="Full name"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              placeholder="e.g. Alex Johnson"
+            />
 
-            <div>
-              <label htmlFor="settings-role" className="mb-1.5 block text-xs font-medium text-[#d4d4d8]">Target role title</label>
-              <input
-                id="settings-role"
-                type="text"
-                value={userRole}
-                onChange={(e) => setUserRole(e.target.value)}
-                className="w-full h-8.5 px-3 rounded-[8px] border border-white/[0.08] bg-[#09090b] text-xs text-[#f4f4f5] outline-none focus:border-[#10b981] transition-colors"
-              />
-            </div>
+            <Input
+              label="Target role title"
+              value={userRole}
+              onChange={(e) => setUserRole(e.target.value)}
+              placeholder="e.g. Senior Software Engineer"
+            />
 
             <div className="sm:col-span-2">
-              <label htmlFor="settings-email" className="mb-1.5 block text-xs font-medium text-[#d4d4d8]">Primary contact email</label>
-              <input
-                id="settings-email"
+              <Input
+                label="Primary contact email"
                 type="email"
                 value={userEmail}
+                error={emailError}
                 onChange={(e) => {
                   setUserEmail(e.target.value);
                   if (emailError) setEmailError("");
                 }}
-                className={`w-full h-8.5 px-3 rounded-[8px] border ${
-                  emailError ? "border-[#ef4444]" : "border-white/[0.08]"
-                } bg-[#09090b] text-xs text-[#f4f4f5] outline-none focus:border-[#10b981] transition-colors`}
+                placeholder="you@domain.com"
               />
-              {emailError && (
-                <div className="mt-1 flex items-center gap-1 text-[11px] text-[#ef4444]">
-                  <AlertCircle size={12} />
-                  <span>{emailError}</span>
-                </div>
-              )}
             </div>
           </div>
         </Card>
 
         {/* External API Credentials */}
-        <Card className="p-4.5 space-y-3.5">
-          <div className="flex items-center gap-2.5 pb-3 border-b border-white/[0.06]">
-            <div className="w-8 h-8 rounded-[8px] bg-[#f59e0b]/10 border border-[#f59e0b]/20 flex items-center justify-center text-[#f59e0b]">
+        <Card className="p-[var(--space-5)] space-y-[var(--space-4)]">
+          <div className="flex items-center gap-3 pb-3 border-b border-[var(--divider)]">
+            <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--warning)_12%,transparent)] border border-[color-mix(in_srgb,var(--warning)_24%,transparent)] flex items-center justify-center text-[var(--warning)]">
               <Key size={16} />
             </div>
             <div>
-              <h2 className="text-sm font-medium text-[#f4f4f5]">External API credentials</h2>
-              <p className="text-xs text-[#71717a]">Optional live job search or external LLM API key</p>
+              <h2 className="text-[var(--text-md)] font-medium text-[var(--text)]">External API Credentials</h2>
+              <p className="text-[var(--text-xs)] text-[var(--text-muted)]">
+                Optional live job search or external LLM API key
+              </p>
             </div>
           </div>
 
-          <p className="text-xs text-[#71717a] leading-relaxed">
+          <p className="text-[var(--text-sm)] text-[var(--text-muted)] leading-relaxed">
             API keys are masked by default and stored securely in your local environment. Keys are used only when initiating live external provider queries.
           </p>
 
           <div>
-            <label htmlFor="settings-api-key" className="mb-1.5 block text-xs font-medium text-[#d4d4d8]">
-              JSearch / RapidAPI key
-            </label>
-            <div className="relative">
-              <input
-                id="settings-api-key"
-                type={showApiKey ? "text" : "password"}
-                placeholder="Enter API key"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                className="w-full h-8.5 pl-3 pr-10 rounded-[8px] border border-white/[0.08] bg-[#09090b] text-xs text-[#f4f4f5] outline-none focus:border-[#10b981] transition-colors"
-              />
-              <button
-                type="button"
-                onClick={() => setShowApiKey(!showApiKey)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#71717a] hover:text-[#f4f4f5] transition-colors cursor-pointer"
-                aria-label={showApiKey ? "Mask API key" : "Show API key"}
-                title={showApiKey ? "Mask API key" : "Show API key"}
-              >
-                {showApiKey ? <EyeOff size={14} /> : <Eye size={14} />}
-              </button>
-            </div>
+            <Input
+              label="JSearch / RapidAPI key"
+              type={showApiKey ? "text" : "password"}
+              placeholder="Enter API key"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              rightIcon={
+                <button
+                  type="button"
+                  onClick={() => setShowApiKey(!showApiKey)}
+                  className="p-1 text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-pointer"
+                  aria-label={showApiKey ? "Mask API key" : "Show API key"}
+                  title={showApiKey ? "Mask API key" : "Show API key"}
+                >
+                  {showApiKey ? <EyeOff size={14} /> : <Eye size={14} />}
+                </button>
+              }
+            />
           </div>
         </Card>
 
         {/* Action Button & Feedback */}
         <div className="flex items-center justify-between pt-2">
           {saveSuccess ? (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-[#10b981]/10 border border-[#10b981]/20 text-xs text-[#10b981]">
-              <CheckCircle2 size={14} />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] border border-[color-mix(in_srgb,var(--success)_24%,transparent)] text-[var(--text-sm)] text-[var(--success)]">
+              <CheckCircle2 size={15} />
               <span>Preferences saved successfully</span>
             </div>
-          ) : <div />}
+          ) : (
+            <div />
+          )}
 
-          <Button variant="primary" size="sm" onClick={handleSave} className="gap-1.5">
+          <Button variant="primary" size="sm" onClick={handleSave} className="gap-2">
             <Save size={14} />
             <span>Save preferences</span>
           </Button>
