@@ -350,25 +350,29 @@ export default function Resume() {
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
               <div className="flex items-center gap-2 text-[var(--text-xs)]">
-                <button
+                <Button
                   type="button"
+                  variant="link"
+                  size="xs"
                   onClick={() =>
                     setBulletInput("Built Redis caching layer for GraphQL microservices to cut server costs.")
                   }
-                  className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors underline cursor-pointer"
+                  className="p-0 h-auto text-[var(--text-muted)] hover:text-[var(--accent)] underline font-normal"
                 >
                   Load Redis example
-                </button>
+                </Button>
                 <span className="text-[var(--divider)]">•</span>
-                <button
+                <Button
                   type="button"
+                  variant="link"
+                  size="xs"
                   onClick={() =>
                     setBulletInput("Migrated manual testing pipeline to automated CI/CD GitHub Actions.")
                   }
-                  className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors underline cursor-pointer"
+                  className="p-0 h-auto text-[var(--text-muted)] hover:text-[var(--accent)] underline font-normal"
                 >
                   Load CI/CD example
-                </button>
+                </Button>
               </div>
 
               <Button
@@ -401,18 +405,21 @@ export default function Resume() {
                     </Badge>
                   </div>
 
-                  <button
+                  <Button
                     type="button"
+                    variant="secondary"
+                    size="xs"
                     onClick={() => handleCopy(ver.text, idx)}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] hover:border-[var(--glass-highlight)] text-[var(--text-xs)] text-[var(--text)] transition-all cursor-pointer"
+                    leftIcon={
+                      copiedIdx === idx ? (
+                        <Check size={12} className="text-[var(--success)]" />
+                      ) : (
+                        <Copy size={12} />
+                      )
+                    }
                   >
-                    {copiedIdx === idx ? (
-                      <Check size={12} className="text-[var(--success)]" />
-                    ) : (
-                      <Copy size={12} />
-                    )}
-                    <span>{copiedIdx === idx ? "Copied" : "Copy bullet"}</span>
-                  </button>
+                    {copiedIdx === idx ? "Copied" : "Copy bullet"}
+                  </Button>
                 </div>
 
                 <p className="text-[var(--text-sm)] text-[var(--text)] leading-relaxed">

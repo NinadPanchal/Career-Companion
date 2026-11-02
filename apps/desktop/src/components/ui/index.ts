@@ -1,5 +1,5 @@
-export { Button } from "./Button";
-export type { ButtonProps } from "./Button";
+export { Button, buttonVariants } from "./button";
+export type { ButtonProps } from "./button";
 
 export { Card } from "./Cards";
 export type { CardProps } from "./Cards";

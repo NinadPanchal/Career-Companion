@@ -95,13 +95,12 @@ export default function Dashboard() {
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          <Link
-            to="/resume"
-            className="h-9.5 px-4 rounded-[var(--radius-md)] glass text-[var(--text)] text-[var(--text-sm)] font-medium flex items-center gap-2 hover:bg-[var(--glass-bg-strong)] transition-all cursor-pointer whitespace-nowrap"
-          >
-            <Upload size={15} className="text-[var(--text-muted)] shrink-0" />
-            <span>Update resume</span>
-          </Link>
+          <Button asChild variant="secondary" size="md">
+            <Link to="/resume">
+              <Upload size={15} />
+              <span>Update resume</span>
+            </Link>
+          </Button>
 
           <Button
             variant="primary"
@@ -232,16 +231,18 @@ export default function Dashboard() {
                 Overview of active opportunities by status
               </p>
             </div>
-            <Link
-              to="/applications"
-              className="text-[var(--text-xs)] text-[var(--accent)] hover:text-[var(--accent-hover)] font-medium flex items-center gap-1.5 group transition-colors"
-            >
-              <span>View kanban board</span>
-              <ArrowRight
-                size={14}
-                className="group-hover:translate-x-0.5 transition-transform shrink-0"
-              />
-            </Link>
+            <Button asChild variant="link" size="sm" className="p-0 h-auto">
+              <Link
+                to="/applications"
+                className="text-[var(--text-xs)] text-[var(--accent)] hover:text-[var(--accent-hover)] font-medium inline-flex items-center gap-1.5 group transition-colors"
+              >
+                <span>View kanban board</span>
+                <ArrowRight
+                  size={14}
+                  className="group-hover:translate-x-0.5 transition-transform shrink-0"
+                />
+              </Link>
+            </Button>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -325,12 +326,15 @@ export default function Dashboard() {
                   Round 2: Technical Architecture
                 </span>
               </div>
-              <Link
-                to="/interview-prep"
-                className="text-[var(--text-xs)] text-[var(--accent)] hover:underline font-medium shrink-0"
-              >
-                Prepare answers →
-              </Link>
+              <Button asChild variant="link" size="sm" className="p-0 h-auto shrink-0">
+                <Link
+                  to="/interview-prep"
+                  className="text-[var(--text-xs)] text-[var(--accent)] hover:underline font-medium inline-flex items-center gap-1"
+                >
+                  <span>Prepare answers</span>
+                  <ArrowRight size={13} className="shrink-0" />
+                </Link>
+              </Button>
             </div>
 
             <div className="p-4 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -358,9 +362,9 @@ export default function Dashboard() {
               </span>
               <Button
                 variant="secondary"
-                size="xs"
+                size="sm"
                 onClick={() => navigate("/interview-prep")}
-                leftIcon={<Bot size={13} className="text-[var(--accent)] shrink-0" />}
+                leftIcon={<Bot size={14} className="text-[var(--accent)] shrink-0" />}
               >
                 Open STAR simulator
               </Button>
@@ -390,7 +394,7 @@ export default function Dashboard() {
                 </div>
                 <Button
                   variant="secondary"
-                  size="xs"
+                  size="sm"
                   onClick={() => navigate("/interview-prep")}
                   className="shrink-0"
                 >
@@ -409,7 +413,7 @@ export default function Dashboard() {
                 </div>
                 <Button
                   variant="secondary"
-                  size="xs"
+                  size="sm"
                   onClick={() => navigate("/jobs")}
                   className="shrink-0"
                 >
@@ -428,7 +432,7 @@ export default function Dashboard() {
                 </div>
                 <Button
                   variant="secondary"
-                  size="xs"
+                  size="sm"
                   onClick={() => navigate("/cover-letter")}
                   className="shrink-0"
                 >
@@ -606,12 +610,15 @@ export default function Dashboard() {
               <h2 className="text-[var(--text-md)] font-semibold text-[var(--text)]">
                 Verified profile skills
               </h2>
-              <Link
-                to="/resume"
-                className="text-[var(--text-xs)] text-[var(--accent)] hover:underline font-medium"
-              >
-                Manage skills →
-              </Link>
+              <Button asChild variant="link" size="sm" className="p-0 h-auto">
+                <Link
+                  to="/resume"
+                  className="text-[var(--text-xs)] text-[var(--accent)] hover:underline font-medium inline-flex items-center gap-1"
+                >
+                  <span>Manage skills</span>
+                  <ArrowRight size={13} className="shrink-0" />
+                </Link>
+              </Button>
             </div>
             <div className="flex flex-wrap gap-2 pt-1">
               {activeSkills.map((skill) => (

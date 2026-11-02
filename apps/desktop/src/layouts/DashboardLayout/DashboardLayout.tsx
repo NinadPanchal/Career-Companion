@@ -4,6 +4,7 @@ import { Menu, Search, Plus, PanelLeftOpen } from "lucide-react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import CommandPalette from "../../components/CommandPalette/CommandPalette";
 import { ThemeToggle } from "../../components/ui/ThemeToggle";
+import { Button } from "../../components/ui";
 import "./DashboardLayout.css";
 
 function DashboardLayout() {
@@ -71,25 +72,29 @@ function DashboardLayout() {
         <header className="workspace-toolbar glass select-none">
           {/* Left: Mobile trigger & breadcrumb */}
           <div className="flex items-center gap-3 min-w-0">
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon-sm"
               className="mobile-nav-trigger"
               onClick={() => setIsSidebarOpen((open) => !open)}
               aria-label={isSidebarOpen ? "Close navigation" : "Open navigation"}
             >
               <Menu size={16} />
-            </button>
+            </Button>
 
             {isCollapsed && (
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon-sm"
                 onClick={() => setIsCollapsed(false)}
-                className="hidden lg:flex items-center justify-center w-8 h-8 rounded-[var(--radius-md)] text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--glass-bg)] border border-transparent transition-colors cursor-pointer"
+                className="hidden lg:inline-flex text-[var(--text-muted)] hover:text-[var(--text)]"
                 title="Expand sidebar"
                 aria-label="Expand sidebar"
               >
                 <PanelLeftOpen size={16} />
-              </button>
+              </Button>
             )}
 
             <div className="flex items-center gap-2 text-[var(--text-sm)]">
@@ -105,30 +110,31 @@ function DashboardLayout() {
 
           {/* Center: Search trigger */}
           <div className="hidden md:flex items-center relative w-72">
-            <button
+            <Button
               type="button"
+              variant="secondary"
+              size="sm"
               onClick={() => setIsCommandPaletteOpen(true)}
-              className="w-full h-8 pl-8 pr-10 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] text-left text-[var(--text-xs)] text-[var(--text-muted)] hover:text-[var(--text)] flex items-center transition-colors cursor-pointer"
+              className="w-full h-8 justify-between font-normal text-[var(--text-muted)] hover:text-[var(--text)] text-xs pl-8 pr-2 relative"
             >
-              <Search size={13} className="absolute left-2.5 text-[var(--text-muted)]" />
+              <Search size={13} className="absolute left-2.5 text-[var(--text-muted)] pointer-events-none" />
               <span className="truncate">Search commands, jobs, roles...</span>
-              <kbd className="absolute right-2 px-1 py-0.5 rounded-[var(--radius-sm)] bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] text-[9px] font-mono text-[var(--text-muted)]">
+              <kbd className="px-1.5 py-0.5 rounded-[var(--radius-sm)] bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] text-[9px] font-mono text-[var(--text-muted)] shrink-0">
                 ⌘K
               </kbd>
-            </button>
+            </Button>
           </div>
 
           {/* Right: Quick actions */}
           <div className="flex items-center gap-2.5 shrink-0">
             <ThemeToggle size="sm" />
 
-            <Link
-              to="/applications"
-              className="h-8 px-3 rounded-[var(--radius-md)] bg-[var(--accent)] text-[var(--accent-contrast)] hover:bg-[var(--accent-hover)] font-medium text-[var(--text-xs)] flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm active:scale-[0.98]"
-            >
-              <Plus size={14} />
-              <span>Track Job</span>
-            </Link>
+            <Button asChild variant="primary" size="sm">
+              <Link to="/applications">
+                <Plus size={14} />
+                <span>Track Job</span>
+              </Link>
+            </Button>
           </div>
         </header>
 

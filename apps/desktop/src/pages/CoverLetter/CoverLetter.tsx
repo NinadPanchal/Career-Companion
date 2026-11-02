@@ -181,27 +181,29 @@ export default function CoverLetter() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button
+                  <Button
                     type="button"
+                    variant="secondary"
+                    size="xs"
                     onClick={handleCopy}
                     disabled={!result?.content}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] hover:border-[var(--glass-highlight)] text-[var(--text-xs)] text-[var(--text)] transition-all disabled:opacity-30 cursor-pointer"
+                    leftIcon={copied ? <Check size={12} className="text-[var(--success)]" /> : <Copy size={12} />}
                     aria-label="Copy draft"
                   >
-                    {copied ? <Check size={12} className="text-[var(--success)]" /> : <Copy size={12} />}
-                    <span>{copied ? "Copied" : "Copy"}</span>
-                  </button>
+                    {copied ? "Copied" : "Copy"}
+                  </Button>
 
-                  <button
+                  <Button
                     type="button"
+                    variant="secondary"
+                    size="xs"
                     onClick={handleDownload}
                     disabled={!result?.content}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] hover:border-[var(--glass-highlight)] text-[var(--text-xs)] text-[var(--text)] transition-all disabled:opacity-30 cursor-pointer"
+                    leftIcon={<Download size={12} />}
                     aria-label="Export Markdown file"
                   >
-                    <Download size={12} />
-                    <span>Export .md</span>
-                  </button>
+                    Export .md
+                  </Button>
                 </div>
               </div>
 

@@ -223,27 +223,31 @@ export default function InterviewPrep() {
                   <div className="flex items-center gap-2 rounded-[var(--radius-sm)] border border-[var(--glass-border)] bg-[var(--surface-solid)] px-2.5 py-1 text-[var(--text-xs)] font-mono text-[var(--text)]">
                     <Clock size={12} className="text-[var(--accent)]" />
                     <span className="tabular-nums font-semibold">{formatTimer(timerSeconds)}</span>
-                    <button
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon-sm"
                       onClick={() => setIsTimerRunning(!isTimerRunning)}
-                      className="ml-1 text-[var(--text-muted)] hover:text-[var(--text)] cursor-pointer"
+                      className="h-5 w-5 text-[var(--text-muted)] hover:text-[var(--text)] ml-1"
                       title={isTimerRunning ? "Pause timer" : "Start timer"}
                       aria-label={isTimerRunning ? "Pause timer" : "Start timer"}
                     >
                       {isTimerRunning ? <Pause size={11} /> : <Play size={11} />}
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon-sm"
                       onClick={() => {
                         setIsTimerRunning(false);
                         setTimerSeconds(120);
                       }}
-                      className="text-[var(--text-faint)] hover:text-[var(--text)] cursor-pointer"
+                      className="h-5 w-5 text-[var(--text-faint)] hover:text-[var(--text)]"
                       title="Reset timer"
                       aria-label="Reset timer"
                     >
                       <RotateCcw size={11} />
-                    </button>
+                    </Button>
                   </div>
                 </div>
 
@@ -274,14 +278,16 @@ export default function InterviewPrep() {
 
               {/* Evaluation Action */}
               <div className="flex items-center justify-between pt-1">
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setShowSampleAnswer(!showSampleAnswer)}
-                  className="text-[var(--text-xs)] text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 cursor-pointer"
+                  className="text-xs text-[var(--text-muted)] hover:text-[var(--accent)] p-0 h-auto font-normal"
                 >
                   <span>{showSampleAnswer ? "Hide Sample STAR Answer" : "View Ideal STAR Model"}</span>
                   {showSampleAnswer ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-                </button>
+                </Button>
 
                 <Button
                   variant="primary"

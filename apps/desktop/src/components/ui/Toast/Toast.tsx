@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from "react";
 import { CheckCircle2, AlertCircle, Info, X } from "lucide-react";
+import { Button } from "../button";
 
 export type ToastType = "info" | "success" | "warning" | "error";
 
@@ -84,14 +85,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                   {t.message}
                 </p>
               </div>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon-sm"
                 onClick={() => dismiss(t.id)}
-                className="text-[var(--text-faint)] hover:text-[var(--text)] transition-colors p-0.5 rounded cursor-pointer"
+                className="h-6 w-6 text-[var(--text-faint)] hover:text-[var(--text)]"
                 aria-label="Dismiss notification"
               >
                 <X size={13} />
-              </button>
+              </Button>
             </div>
           );
         })}

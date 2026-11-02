@@ -306,15 +306,17 @@ export function Settings() {
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
               rightIcon={
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon-sm"
                   onClick={() => setShowApiKey(!showApiKey)}
-                  className="p-1 text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-pointer"
+                  className="h-6 w-6 text-[var(--text-muted)] hover:text-[var(--text)]"
                   aria-label={showApiKey ? "Mask API key" : "Show API key"}
                   title={showApiKey ? "Mask API key" : "Show API key"}
                 >
                   {showApiKey ? <EyeOff size={14} /> : <Eye size={14} />}
-                </button>
+                </Button>
               }
             />
           </div>

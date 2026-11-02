@@ -341,14 +341,16 @@ export default function Jobs() {
             </select>
 
             {hasActiveFilters && (
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="xs"
                 onClick={resetFilters}
-                className="flex items-center gap-1 text-[11px] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors ml-1 cursor-pointer"
+                className="text-[11px] text-[var(--text-muted)] hover:text-[var(--text)] ml-1 h-7 px-2"
+                leftIcon={<RotateCcw size={12} />}
               >
-                <RotateCcw size={11} />
-                <span>Reset filters</span>
-              </button>
+                Reset filters
+              </Button>
             )}
           </div>
 
@@ -608,15 +610,16 @@ function JobCardItem({
         </Button>
 
         {job.url && (
-          <a
-            href={job.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center justify-center gap-1.5 h-8 text-[var(--text-xs)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors rounded-[var(--radius-md)] hover:bg-[var(--glass-bg)]"
-          >
-            <span>View listing</span>
-            <ExternalLink size={12} />
-          </a>
+          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex text-xs">
+            <a
+              href={job.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>View listing</span>
+              <ExternalLink size={12} />
+            </a>
+          </Button>
         )}
       </div>
     </article>

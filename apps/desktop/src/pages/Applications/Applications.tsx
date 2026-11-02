@@ -190,17 +190,19 @@ export default function Applications() {
                       </Badge>
                     </div>
 
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
                       onClick={() => {
                         setNewStatus(col.key);
                         setIsAddModalOpen(true);
                       }}
-                      className="p-1 rounded-[var(--radius-sm)] hover:bg-[var(--glass-bg)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-pointer"
+                      className="h-6 w-6 text-[var(--text-muted)] hover:text-[var(--text)]"
                       title={`Add application to ${col.label}`}
                       aria-label={`Add application to ${col.label}`}
                     >
                       <Plus size={14} />
-                    </button>
+                    </Button>
                   </div>
 
                   {/* Scrollable Column Cards Container */}
@@ -279,24 +281,28 @@ export default function Applications() {
                               </select>
 
                               <div className="flex items-center gap-1">
-                                <button
+                                <Button
                                   type="button"
+                                  variant="ghost"
+                                  size="icon-sm"
                                   onClick={() => handleOpenNotes(app)}
-                                  className="p-1 rounded-[var(--radius-sm)] text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--glass-bg-strong)] transition-colors cursor-pointer"
+                                  className="h-6 w-6 text-[var(--text-muted)] hover:text-[var(--text)]"
                                   title="Add/Edit notes"
                                   aria-label="Edit notes"
                                 >
                                   <MessageSquareText size={13} />
-                                </button>
-                                <button
+                                </Button>
+                                <Button
                                   type="button"
+                                  variant="ghost"
+                                  size="icon-sm"
                                   onClick={() => deleteApplication(app.id)}
-                                  className="p-1 rounded-[var(--radius-sm)] text-[var(--text-muted)] hover:text-[var(--danger)] hover:bg-[var(--glass-bg-strong)] transition-colors cursor-pointer"
+                                  className="h-6 w-6 text-[var(--text-muted)] hover:text-[var(--danger)]"
                                   title="Remove application"
                                   aria-label="Delete application"
                                 >
                                   <Trash2 size={13} />
-                                </button>
+                                </Button>
                               </div>
                             </div>
                           </article>
@@ -341,24 +347,28 @@ export default function Applications() {
                     <td className="p-3 text-[var(--text-muted)] max-w-xs truncate">{app.notes || "—"}</td>
                     <td className="p-3 text-right pr-4">
                       <div className="flex items-center justify-end gap-1.5">
-                        <button
+                        <Button
                           type="button"
+                          variant="ghost"
+                          size="icon-sm"
                           onClick={() => handleOpenNotes(app)}
-                          className="p-1.5 rounded-[var(--radius-sm)] text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--glass-bg)] transition-colors cursor-pointer"
+                          className="h-7 w-7 text-[var(--text-muted)] hover:text-[var(--text)]"
                           title="Notes"
                           aria-label="Notes"
                         >
                           <MessageSquareText size={14} />
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                           type="button"
+                          variant="ghost"
+                          size="icon-sm"
                           onClick={() => deleteApplication(app.id)}
-                          className="p-1.5 rounded-[var(--radius-sm)] text-[var(--text-muted)] hover:text-[var(--danger)] hover:bg-[var(--glass-bg)] transition-colors cursor-pointer"
+                          className="h-7 w-7 text-[var(--text-muted)] hover:text-[var(--danger)]"
                           title="Delete"
                           aria-label="Delete"
                         >
                           <Trash2 size={14} />
-                        </button>
+                        </Button>
                       </div>
                     </td>
                   </tr>

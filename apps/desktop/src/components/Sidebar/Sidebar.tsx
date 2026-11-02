@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useResumeStore } from "../../features/resume/stores/resume.store";
 import { Tooltip } from "../ui/Tooltip";
+import { Button } from "../ui";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -128,35 +129,41 @@ export function Sidebar({
               )}
             </NavLink>
 
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon-sm"
               onClick={toggleCollapse}
               className="sidebar-collapse-trigger"
               aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
               title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
               {isCollapsed ? <PanelLeft size={15} /> : <PanelLeftClose size={15} />}
-            </button>
+            </Button>
           </div>
 
           {/* Quick Search Action */}
           <div className="px-1">
             {isCollapsed ? (
               <Tooltip content="Search workspace (⌘K)" position="right">
-                <button
+                <Button
                   type="button"
+                  variant="secondary"
+                  size="icon-sm"
                   onClick={onOpenCommandPalette}
-                  className="w-9 h-9 mx-auto rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] text-[var(--text-muted)] hover:text-[var(--text)] flex items-center justify-center transition-colors cursor-pointer"
+                  className="w-9 h-9 mx-auto"
                   aria-label="Open command palette"
                 >
                   <Search size={15} />
-                </button>
+                </Button>
               </Tooltip>
             ) : (
-              <button
+              <Button
                 type="button"
+                variant="secondary"
+                size="sm"
                 onClick={onOpenCommandPalette}
-                className="w-full h-9 px-3 rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] text-[var(--text-muted)] hover:text-[var(--text)] flex items-center justify-between text-[var(--text-xs)] transition-colors cursor-pointer"
+                className="w-full h-9 px-3 justify-between font-normal text-[var(--text-muted)] hover:text-[var(--text)] text-[var(--text-xs)]"
                 aria-label="Search workspace (⌘K)"
               >
                 <div className="flex items-center gap-2">
@@ -166,7 +173,7 @@ export function Sidebar({
                 <kbd className="px-1.5 py-0.5 rounded-[var(--radius-sm)] bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] font-mono text-[10px] text-[var(--text-muted)]">
                   ⌘K
                 </kbd>
-              </button>
+              </Button>
             )}
           </div>
 
@@ -174,27 +181,29 @@ export function Sidebar({
           <div className="px-1">
             {isCollapsed ? (
               <Tooltip content="Track new application" position="right">
+                <Button asChild variant="primary" size="icon-sm" className="w-9 h-9 mx-auto shadow-sm">
+                  <NavLink
+                    to="/applications"
+                    onClick={onNavigate}
+                    aria-label="Track new application"
+                  >
+                    <Plus size={16} />
+                  </NavLink>
+                </Button>
+              </Tooltip>
+            ) : (
+              <Button asChild variant="primary" size="sm" className="w-full h-9 justify-between shadow-sm">
                 <NavLink
                   to="/applications"
                   onClick={onNavigate}
-                  className="w-9 h-9 mx-auto rounded-[var(--radius-md)] bg-[var(--accent)] text-[var(--accent-contrast)] flex items-center justify-center shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
-                  aria-label="Track new application"
                 >
-                  <Plus size={16} />
+                  <span className="flex items-center gap-2">
+                    <Plus size={14} />
+                    <span>Track application</span>
+                  </span>
+                  <span className="font-mono text-[10px] opacity-75">N</span>
                 </NavLink>
-              </Tooltip>
-            ) : (
-              <NavLink
-                to="/applications"
-                onClick={onNavigate}
-                className="w-full h-9 px-3 rounded-[var(--radius-md)] bg-[var(--accent)] text-[var(--accent-contrast)] font-medium text-[var(--text-xs)] flex items-center justify-between shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
-              >
-                <span className="flex items-center gap-2">
-                  <Plus size={14} />
-                  <span>Track application</span>
-                </span>
-                <span className="font-mono text-[10px] opacity-75">N</span>
-              </NavLink>
+              </Button>
             )}
           </div>
 
