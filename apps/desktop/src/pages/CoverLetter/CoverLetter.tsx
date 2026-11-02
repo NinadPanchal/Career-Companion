@@ -9,7 +9,7 @@ import {
   Mail, 
   SlidersHorizontal 
 } from "lucide-react";
-import { Card, Button, Tabs, Badge } from "../../components/ui";
+import { Card, Button, Tabs, Badge, Input, Textarea, EmptyState } from "../../components/ui";
 import { aiService, CoverLetterResult } from "../../features/ai/services/ai.service";
 import { useResumeStore } from "../../features/resume/stores/resume.store";
 
@@ -66,15 +66,21 @@ export default function CoverLetter() {
   };
 
   return (
-    <div className="space-y-5 animate-fade-in font-sans select-none">
+    <div className="space-y-[var(--space-4)] font-sans select-none">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[var(--divider)]">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold text-[#f4f4f5] tracking-tight">Outreach Studio</h1>
-            <Badge variant="emerald" size="sm">Tailored draft</Badge>
+            <h1 className="text-[var(--text-xl)] font-semibold text-[var(--text)] tracking-tight">
+              Outreach Studio
+            </h1>
+            <Badge variant="emerald" size="sm">
+              Tailored draft
+            </Badge>
           </div>
-          <p className="text-xs text-[#71717a] mt-0.5">Generate tailored cover letters, referral pitches, and hiring manager cold emails.</p>
+          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+            Generate tailored cover letters, referral pitches, and hiring manager cold emails.
+          </p>
         </div>
 
         <Tabs
@@ -89,51 +95,47 @@ export default function CoverLetter() {
         />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-12 items-start">
+      <div className="grid gap-[var(--space-4)] lg:grid-cols-12 items-start">
         {/* Left Column: Configuration Form (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
-          <Card className="p-4 sm:p-5 space-y-3.5">
-            <div className="flex items-center gap-2 pb-2.5 border-b border-white/[0.08]">
-              <SlidersHorizontal size={14} className="text-[#10b981]" />
-              <h2 className="text-xs font-semibold text-[#f4f4f5]">Role details</h2>
+          <Card className="space-y-3.5">
+            <div className="flex items-center gap-2 pb-2.5 border-b border-[var(--divider)]">
+              <SlidersHorizontal size={14} className="text-[var(--accent)]" />
+              <h2 className="text-[var(--text-xs)] font-semibold text-[var(--text)]">
+                Role details
+              </h2>
             </div>
 
             <div className="space-y-3">
-              <div>
-                <label className="mb-1 block text-xs text-[#a1a1aa]">Target role title *</label>
-                <input
-                  type="text"
-                  value={jobTitle}
-                  onChange={(e) => setJobTitle(e.target.value)}
-                  placeholder="e.g. Lead Platform Engineer"
-                  className="w-full h-8 px-2.5 rounded-[8px] border border-white/[0.08] bg-[#09090b] text-xs text-[#f4f4f5] placeholder-[#71717a] outline-none focus:border-[#10b981] transition-colors"
-                />
-              </div>
+              <Input
+                label="Target role title *"
+                value={jobTitle}
+                onChange={(e) => setJobTitle(e.target.value)}
+                placeholder="e.g. Lead Platform Engineer"
+              />
 
-              <div>
-                <label className="mb-1 block text-xs text-[#a1a1aa]">Company name *</label>
-                <input
-                  type="text"
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
-                  placeholder="e.g. Razorpay, Zepto, Stripe"
-                  className="w-full h-8 px-2.5 rounded-[8px] border border-white/[0.08] bg-[#09090b] text-xs text-[#f4f4f5] placeholder-[#71717a] outline-none focus:border-[#10b981] transition-colors"
-                />
-              </div>
+              <Input
+                label="Company name *"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                placeholder="e.g. Razorpay, Zepto, Stripe"
+              />
 
               {/* Tone Selection */}
               <div>
-                <label className="mb-1.5 block text-xs text-[#a1a1aa]">Voice & tone</label>
+                <label className="mb-1.5 block text-[var(--text-xs)] font-medium text-[var(--text-muted)]">
+                  Voice & tone
+                </label>
                 <div className="grid grid-cols-2 gap-2">
                   {(["professional", "enthusiastic", "technical", "direct"] as const).map((t) => (
                     <button
                       key={t}
                       type="button"
                       onClick={() => setTone(t)}
-                      className={`rounded-[6px] border px-2.5 py-1.5 text-xs capitalize transition-colors cursor-pointer ${
+                      className={`rounded-[var(--radius-md)] border px-2.5 py-1.5 text-[var(--text-xs)] capitalize transition-all cursor-pointer ${
                         tone === t
-                          ? "border-[#10b981]/40 bg-[#10b981]/10 text-[#10b981] font-semibold"
-                          : "border-white/[0.08] bg-[#18181b] text-[#71717a] hover:text-[#d4d4d8] hover:border-white/[0.16]"
+                          ? "border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-[var(--accent)] font-semibold shadow-sm"
+                          : "border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--glass-bg-strong)]"
                       }`}
                     >
                       {t}
@@ -143,26 +145,23 @@ export default function CoverLetter() {
               </div>
 
               {/* Job Description */}
-              <div>
-                <label className="mb-1 block text-xs text-[#a1a1aa]">Role requirements or description snippet</label>
-                <textarea
-                  rows={4}
-                  value={jobDescription}
-                  onChange={(e) => setJobDescription(e.target.value)}
-                  placeholder="Paste snippet or role requirements..."
-                  className="w-full rounded-[8px] border border-white/[0.08] bg-[#09090b] p-2.5 text-xs text-[#f4f4f5] placeholder-[#71717a] outline-none focus:border-[#10b981] resize-none transition-colors"
-                />
-              </div>
+              <Textarea
+                label="Role requirements or description snippet"
+                rows={4}
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+                placeholder="Paste snippet or role requirements..."
+              />
 
               <Button
                 variant="primary"
-                size="sm"
+                size="md"
                 onClick={handleGenerate}
                 disabled={isLoading || !jobTitle.trim() || !companyName.trim()}
-                className="w-full gap-2 mt-1"
+                leftIcon={<Sparkles size={14} />}
+                className="w-full mt-1"
               >
-                <Sparkles size={13} />
-                <span>{isLoading ? "Generating draft..." : "Generate draft"}</span>
+                {isLoading ? "Generating draft..." : "Generate draft"}
               </Button>
             </div>
           </Card>
@@ -170,13 +169,13 @@ export default function CoverLetter() {
 
         {/* Right Column: Live Document Preview (7 cols) */}
         <div className="lg:col-span-7 space-y-4">
-          <Card className="p-5 min-h-[480px] flex flex-col justify-between">
+          <Card className="min-h-[480px] flex flex-col justify-between">
             <div>
               {/* Document Header Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--divider)]">
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]" />
-                  <span className="text-xs font-semibold text-[#f4f4f5] capitalize">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+                  <span className="text-[var(--text-xs)] font-semibold text-[var(--text)] capitalize">
                     {formatType.replace("_", " ")}
                   </span>
                 </div>
@@ -186,10 +185,10 @@ export default function CoverLetter() {
                     type="button"
                     onClick={handleCopy}
                     disabled={!result?.content}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs text-[#d4d4d8] hover:text-white transition-all disabled:opacity-30 cursor-pointer"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] hover:border-[var(--glass-highlight)] text-[var(--text-xs)] text-[var(--text)] transition-all disabled:opacity-30 cursor-pointer"
                     aria-label="Copy draft"
                   >
-                    {copied ? <Check size={12} className="text-[#10b981]" /> : <Copy size={12} />}
+                    {copied ? <Check size={12} className="text-[var(--success)]" /> : <Copy size={12} />}
                     <span>{copied ? "Copied" : "Copy"}</span>
                   </button>
 
@@ -197,7 +196,7 @@ export default function CoverLetter() {
                     type="button"
                     onClick={handleDownload}
                     disabled={!result?.content}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs text-[#d4d4d8] hover:text-white transition-all disabled:opacity-30 cursor-pointer"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] hover:border-[var(--glass-highlight)] text-[var(--text-xs)] text-[var(--text)] transition-all disabled:opacity-30 cursor-pointer"
                     aria-label="Export Markdown file"
                   >
                     <Download size={12} />
@@ -208,31 +207,30 @@ export default function CoverLetter() {
 
               {/* Subject Line if email */}
               {result?.subject_line && (
-                <div className="my-3 p-2.5 rounded-[6px] bg-[#18181b] border border-white/[0.08] text-xs">
-                  <span className="text-[#71717a]">Subject: </span>
-                  <span className="text-[#10b981] font-medium">{result.subject_line}</span>
+                <div className="my-3 p-2.5 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-xs)]">
+                  <span className="text-[var(--text-muted)]">Subject: </span>
+                  <span className="text-[var(--accent)] font-medium">{result.subject_line}</span>
                 </div>
               )}
 
               {/* Document Text Body */}
-              <div className="mt-4 text-xs sm:text-sm text-[#d4d4d8] leading-relaxed font-sans whitespace-pre-wrap select-text">
+              <div className="mt-4 text-[var(--text-sm)] text-[var(--text)] leading-relaxed font-sans whitespace-pre-wrap select-text">
                 {result?.content ? (
                   result.content
                 ) : (
-                  <div className="py-20 text-center text-[#71717a]">
-                    <FileText size={28} className="mx-auto mb-2 opacity-30 text-[#71717a]" />
-                    <p className="text-xs text-[#a1a1aa] font-medium">No draft generated yet</p>
-                    <p className="text-xs text-[#71717a] mt-1 max-w-sm mx-auto">
-                      Fill in the target role and company details on the left, then click "Generate draft" to create a personalized pitch.
-                    </p>
-                  </div>
+                  <EmptyState
+                    icon={FileText}
+                    title="No draft generated yet"
+                    description="Fill in the target role and company details on the left, then click 'Generate draft' to create a personalized pitch."
+                    className="py-16 border-none bg-transparent shadow-none"
+                  />
                 )}
               </div>
             </div>
 
             {/* Document Telemetry Footer */}
             {result?.content && (
-              <div className="mt-5 pt-2.5 border-t border-white/[0.08] flex items-center justify-between text-xs text-[#71717a]">
+              <div className="mt-5 pt-2.5 border-t border-[var(--divider)] flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)] font-mono">
                 <span>{result.content.split(/\s+/).length} words</span>
                 <span>Est. read time: ~{result.estimated_read_time_secs || 45}s</span>
               </div>
