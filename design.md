@@ -1,252 +1,254 @@
----
-name: Career Operating System
-colors:
-  surface: '#131315'
-  surface-dim: '#131315'
-  surface-bright: '#39393b'
-  surface-container-lowest: '#0e0e10'
-  surface-container-low: '#1c1b1d'
-  surface-container: '#201f22'
-  surface-container-high: '#2a2a2c'
-  surface-container-highest: '#353437'
-  on-surface: '#e5e1e4'
-  on-surface-variant: '#bbcabf'
-  inverse-surface: '#e5e1e4'
-  inverse-on-surface: '#313032'
-  outline: '#86948a'
-  outline-variant: '#3c4a42'
-  surface-tint: '#4edea3'
-  primary: '#4edea3'
-  on-primary: '#003824'
-  primary-container: '#10b981'
-  on-primary-container: '#00422b'
-  inverse-primary: '#006c49'
-  secondary: '#c2c7d0'
-  on-secondary: '#2c3138'
-  secondary-container: '#444951'
-  on-secondary-container: '#b4b9c2'
-  tertiary: '#ffb3af'
-  on-tertiary: '#650911'
-  tertiary-container: '#fc7c78'
-  on-tertiary-container: '#711419'
-  error: '#ffb4ab'
-  on-error: '#690005'
-  error-container: '#93000a'
-  on-error-container: '#ffdad6'
-  primary-fixed: '#6ffbbe'
-  primary-fixed-dim: '#4edea3'
-  on-primary-fixed: '#002113'
-  on-primary-fixed-variant: '#005236'
-  secondary-fixed: '#dee3ec'
-  secondary-fixed-dim: '#c2c7d0'
-  on-secondary-fixed: '#171c23'
-  on-secondary-fixed-variant: '#42474f'
-  tertiary-fixed: '#ffdad7'
-  tertiary-fixed-dim: '#ffb3af'
-  on-tertiary-fixed: '#410005'
-  on-tertiary-fixed-variant: '#842225'
-  background: '#131315'
-  on-background: '#e5e1e4'
-  surface-variant: '#353437'
-  surface-base: '#09090b'
-  surface-card: '#0f0f12'
-  surface-overlay: '#18181b'
-  surface-subtle: '#27272a'
-  border-subtle: rgba(255, 255, 255, 0.08)
-  border-hover: rgba(255, 255, 255, 0.16)
-  border-active: rgba(255, 255, 255, 0.24)
-  text-primary: '#f4f4f5'
-  text-secondary: '#a1a1aa'
-  text-muted: '#71717a'
-  primary-hover: '#34d399'
-  status-applied: '#38bdf8'
-  status-interview: '#f59e0b'
-  status-offer: '#10b981'
-  status-rejected: '#f43f5e'
-typography:
-  headline-lg:
-    fontFamily: Inter
-    fontSize: 24px
-    fontWeight: '600'
-    lineHeight: 32px
-    letterSpacing: -0.02em
-  headline-md:
-    fontFamily: Inter
-    fontSize: 18px
-    fontWeight: '600'
-    lineHeight: 24px
-    letterSpacing: -0.015em
-  headline-sm:
-    fontFamily: Inter
-    fontSize: 15px
-    fontWeight: '600'
-    lineHeight: 20px
-    letterSpacing: -0.01em
-  body-default:
-    fontFamily: Inter
-    fontSize: 13px
-    fontWeight: '400'
-    lineHeight: 18px
-    letterSpacing: -0.005em
-  body-medium:
-    fontFamily: Inter
-    fontSize: 13px
-    fontWeight: '500'
-    lineHeight: 18px
-    letterSpacing: -0.005em
-  body-muted:
-    fontFamily: Inter
-    fontSize: 12px
-    fontWeight: '400'
-    lineHeight: 16px
-    letterSpacing: 0em
-  mono-metric-lg:
-    fontFamily: JetBrains Mono
-    fontSize: 20px
-    fontWeight: '600'
-    lineHeight: 24px
-    letterSpacing: -0.02em
-  mono-metric-default:
-    fontFamily: JetBrains Mono
-    fontSize: 13px
-    fontWeight: '500'
-    lineHeight: 18px
-    letterSpacing: -0.01em
-  mono-label-sm:
-    fontFamily: JetBrains Mono
-    fontSize: 11px
-    fontWeight: '400'
-    lineHeight: 14px
-    letterSpacing: 0.02em
-  keybinding-kbd:
-    fontFamily: JetBrains Mono
-    fontSize: 10px
-    fontWeight: '500'
-    lineHeight: 12px
-    letterSpacing: 0.04em
-rounded:
-  sm: 0.25rem
-  DEFAULT: 0.5rem
-  md: 0.75rem
-  lg: 1rem
-  xl: 1.5rem
-  full: 9999px
-spacing:
-  space-2xs: 2px
-  space-xs: 4px
-  space-sm: 8px
-  space-md: 12px
-  space-lg: 16px
-  space-xl: 24px
-  space-2xl: 32px
-  layout-sidebar: 240px
-  layout-inspector: 360px
-  gutter-dense: 8px
-  gutter-standard: 12px
----
+# DESIGN.md — Liquid Glass, Minimal, Professional
 
-## Brand & Style
+This is the single source of truth for the app's front-end design. Every UI change MUST follow it. If something isn't covered here, choose the more minimal option.
 
-This design system embodies a high-density, keyboard-first engineering workbench built for precision, speed, and analytical rigor. Stripped of superficial marketing gloss, fuzzy gradients, or decorative bloat, the aesthetic takes inspiration from toolchains like Linear, Raycast, and Stripe Dashboard. It treats career trajectory not as a passive résumé feed, but as an active technical operating system.
+## 1. Principles
 
-The core visual language relies on:
-- **Technical Minimalist Density:** Maximum signal-to-noise ratio. Information density is prioritized via compact layouts, crisp internal dividers, and structural tabular data.
-- **Human-Crafted Utility:** Deliberate, high-contrast monochrome surfaces accented by precise, semantic telemetry colors. 
-- **Deterministic Hierarchy:** Sub-pixel alignment, razor-sharp 1px structural outlines (`rgba(255,255,255,0.08)`), and dedicated monospaced figures for metrics, salaries, dates, and execution state.
-- **Quiet Authority:** Surfaces remain deep, quiet, and grounded, allowing interactive focal points (emerald highlights, keyboard shortcuts, match indicators) to command immediate spatial awareness.
+1. **Minimal first.** Remove before adding. No decorative gradients, shadows or borders unless they communicate hierarchy or state.
+2. **Glass is for surfaces, not for everything.** Only floating layers (sidebar, toolbar, cards, modals, popovers) use glass. Text-heavy content areas sit on calm, near-solid surfaces for legibility.
+3. **One accent color.** Everything else is neutral.
+4. **Consistent spacing, radius and type.** Use tokens only. No magic numbers.
+5. **Content > chrome.** The UI should fade into the background.
+6. **Accessible.** Text contrast >= 4.5:1, visible focus rings, respects `prefers-reduced-motion` and `prefers-reduced-transparency`.
 
-## Colors
+## 2. Design Tokens
 
-The palette operates in a deterministic dark mode architecture anchored by deep, neutral zinc values to eliminate optical vibration and eye strain during sustained usage sessions.
+Put these in `src/styles/tokens.css` and import once at the app root.
 
-### Application Rules
-- **Base Canvas (`#09090b`):** The definitive ground layer for root views, toolbars, and background panes.
-- **Card & Workspace Surface (`#0f0f12`):** Primary interactive blocks, workbench cards, and floating inspector panes. Delimited exclusively by `border-subtle` (`rgba(255,255,255,0.08)`), never heavy drop shadows.
-- **Overlay & Popover Surface (`#18181b`):** Command palettes (Cmd+K), dropdown menus, tooltips, and modal sheets.
-- **Primary Emerald (`#10b981`, hover `#34d399`):** Reserved strictly for high-value actions, verified state completions, high match scores (e.g., >85%), and accepted offers. Never used decoratively across large surface fills.
-- **Semantic State Architecture:**
-  - `status-applied` (`#38bdf8`): Cold blue signaling transmission and pending external response.
-  - `status-interview` (`#f59e0b`): Active, high-urgency amber denoting scheduling, pending rounds, and active review.
-  - `status-offer` (`#10b981`): Crisp green signaling positive conclusion and contract negotiation.
-  - `status-rejected` (`#f43f5e`): Controlled rose/crimson denoting closed cycles or declined tracks.
+```css
+:root {
+  /* Typography */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-## Typography
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-md: 14px;   /* body default */
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 28px;
 
-Typography prioritizes maximum scan-ability at compact scales. The dual-typeface configuration assigns structural UI text to **Inter** and analytical payloads to **JetBrains Mono**.
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
 
-### Composition Guidelines
-- **Tabular Alignment:** All quantitative telemetry—including base comp, equity valuations, application elapsed timers, stage counters, and dates—must use `jetbrainsMono` with `font-variant-numeric: tabular-nums` enabled.
-- **Optical Leading:** Line heights are restrained (1.25x to 1.38x) to preserve vertical density across list-intensive views, table layouts, and multi-column kanbans.
-- **Letter Spacing:** Headings feature negative tracking (`-0.01em` to `-0.02em`) to bind dense title forms tightly. Monospaced metadata and keyboard shortcuts utilize neutral or slight positive tracking (`+0.02em` to `+0.04em`) to ensure character delineation at sub-12px sizes.
+  /* Spacing (4px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
 
-## Layout & Spacing
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
 
-The layout is built on a 4px spatial baseline engineered for dense screen real estate. The primary mental model is a deterministic workstation panel split:
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 120ms;
+  --dur-base: 220ms;
+  --dur-slow: 360ms;
 
-### Spatial Structure
-- **Global Left Navigation (Fixed 240px):** Application pipeline tree, smart filters, active searches, and status aggregators. Collapsible via shortcut `[`.
-- **Main Canvas (Fluid):** Tabular workbench or kanban stream displaying pipeline records. Employs an explicit inner grid with tight `12px` column gutters.
-- **Contextual Inspector Pane (Fixed 360px):** Slides or docks to the right for single-item deep work (job description raw text, requirements match analysis, compensation breakdown, contact matrix). Toggleable via shortcut `]`.
+  /* Accent (single brand color) */
+  --accent: #4f8cff;
+  --accent-hover: #6a9fff;
+  --accent-contrast: #ffffff;
 
-### Breakpoint Scaling & Adaptability
-- **Desktop (>1280px):** Full 3-pane orchestration visible simultaneously.
-- **Compact Desktop / Tablet (768px - 1279px):** Inspector pane transitions into an overlaid backdrop drawer. Global navigation converts into an icon rail or compact drawer.
-- **Mobile (<768px):** Single-pane sequential navigation. Priority transitions to swipeable status cards and condensed rows with horizontal scrolling pinned headers. Padding scales from standard `16px/24px` down to `12px`.
+  /* Status */
+  --success: #34c759;
+  --warning: #ff9f0a;
+  --danger: #ff453a;
+}
 
-## Elevation & Depth
+/* ---------- Dark (default) ---------- */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
 
-This design system rejects ambient multi-layered drop shadows, colored glow halos, and skeuomorphic bevels. Depth is articulated through **Tonal Stacking** paired with **Razor Outlines**.
+  --bg: #0b0d12;
+  --bg-gradient:
+    radial-gradient(60% 50% at 15% 10%, rgba(79,140,255,0.18) 0%, transparent 60%),
+    radial-gradient(50% 50% at 90% 85%, rgba(160,110,255,0.14) 0%, transparent 60%),
+    #0b0d12;
 
-### Elevation Tiers
-- **Tier 0 (Base Floor, `#09090b`):** The primary view surface. No border, no elevation.
-- **Tier 1 (Structural Containers, `#0f0f12`):** Cards, boards, tables, and split panes. Outlined with `1px solid rgba(255, 255, 255, 0.08)`. Hover transitions swap border to `rgba(255, 255, 255, 0.16)`. No box shadow.
-- **Tier 2 (Floating Utility Panels, `#18181b`):** Command palettes, dropdown context menus, and inline date pickers. Outlined with `1px solid rgba(255, 255, 255, 0.12)` with a compact directional drop shadow: `0 8px 24px -4px rgba(0, 0, 0, 0.6)`.
-- **Tier 3 (Modal Modifiers, `#18181b`):** Critical confirmation dialogs. Outlined with `1px solid rgba(255, 255, 255, 0.16)` with full-screen backdrop occlusion (`rgba(0, 0, 0, 0.75)` with zero blur filter).
+  --text: rgba(255,255,255,0.92);
+  --text-muted: rgba(255,255,255,0.60);
+  --text-faint: rgba(255,255,255,0.38);
 
-## Shapes
+  --glass-bg: rgba(255,255,255,0.06);
+  --glass-bg-strong: rgba(255,255,255,0.10);
+  --glass-border: rgba(255,255,255,0.14);
+  --glass-highlight: rgba(255,255,255,0.22);
+  --glass-shadow: 0 8px 32px rgba(0,0,0,0.35);
 
-Shapes reflect precision-milled hardware tools. Micro-radii prevent the interface from appearing either aggressively industrial or toy-like.
+  --surface-solid: #12151c;      /* for dense content / tables / editors */
+  --divider: rgba(255,255,255,0.08);
+}
 
-### Token Application
-- **Default Elements (`10px`):** Standard interactive elements such as form inputs, standard buttons, table rows, and contextual popovers.
-- **Nested Inner Elements (`6px` - `8px`):** Badges, keyboard shortcut tags (`<kbd>`), toggle switches, and nested chips within a parent card.
-- **Major Structural Cards (`12px`):** Kanban columns, dashboard summary widgets, and the primary inspector container.
-- **Strict Prohibition:** Full circular pill radii (`9999px`) are forbidden except for status indicator dots (6px × 6px) and circular avatar thumbnails.
+/* ---------- Light ---------- */
+:root[data-theme="light"] {
+  color-scheme: light;
 
-## Components
+  --bg: #eef1f6;
+  --bg-gradient:
+    radial-gradient(60% 50% at 15% 10%, rgba(79,140,255,0.22) 0%, transparent 60%),
+    radial-gradient(50% 50% at 90% 85%, rgba(190,150,255,0.18) 0%, transparent 60%),
+    #eef1f6;
 
-### Buttons
-- **Primary:** Background `#10b981`, foreground `#09090b`, weight 500, height 32px, padding `0 12px`, radius 10px. Hover: `#34d399`. Focus: 2px offset ring `#10b981`.
-- **Secondary / Ghost:** Background `transparent`, border `1px solid rgba(255, 255, 255, 0.08)`, foreground `#f4f4f5`. Hover: background `rgba(255, 255, 255, 0.04)`, border `rgba(255, 255, 255, 0.16)`.
-- **Icon / Action Trigger:** 28px × 28px square, radius 6px. Color `#a1a1aa`, hover `#f4f4f5` on subtle fill `rgba(255,255,255,0.06)`.
+  --text: rgba(10,14,22,0.92);
+  --text-muted: rgba(10,14,22,0.62);
+  --text-faint: rgba(10,14,22,0.40);
 
-### Semantic Status Badges
-- Compact height (20px), padding `0 6px`, radius 6px.
-- Composed of an optional 5px solid indicator dot, font `mono-label-sm` (uppercase), and tinted background:
-  - **Applied:** Background `rgba(56, 189, 248, 0.10)`, text `#38bdf8`, border `rgba(56, 189, 248, 0.20)`.
-  - **Interview:** Background `rgba(245, 158, 11, 0.10)`, text `#f59e0b`, border `rgba(245, 158, 11, 0.20)`.
-  - **Offer:** Background `rgba(16, 185, 129, 0.10)`, text `#10b981`, border `rgba(16, 185, 129, 0.20)`.
-  - **Rejected:** Background `rgba(244, 63, 94, 0.10)`, text `#f43f5e`, border `rgba(244, 63, 94, 0.20)`.
+  --glass-bg: rgba(255,255,255,0.55);
+  --glass-bg-strong: rgba(255,255,255,0.75);
+  --glass-border: rgba(255,255,255,0.7);
+  --glass-highlight: rgba(255,255,255,0.9);
+  --glass-shadow: 0 8px 32px rgba(30,40,70,0.12);
 
-### Cards & Kanban Tiles
-- Background `#0f0f12`, border `1px solid rgba(255, 255, 255, 0.08)`, border-radius 10px, padding `12px`.
-- Interactive hover: Subtle border lift to `rgba(255, 255, 255, 0.16)`. Dragging state adds an active green highlight border (`rgba(16, 185, 129, 0.4)`).
-- Sub-elements within cards (tags, interview round markers) stack with `8px` vertical spacing.
+  --surface-solid: #ffffff;
+  --divider: rgba(10,14,22,0.08);
+}
+```
 
-### Inputs & Search Bars
-- Background `#09090b`, border `1px solid rgba(255, 255, 255, 0.08)`, height 32px, radius 10px, typography `body-default`.
-- Placeholder `#71717a`. Active focus: Border shifts to `#10b981`, zero outer glow.
-- Inline trailing accessory: `<kbd>` shortcut badge (`#27272a` fill, `#a1a1aa` text, 4px radius).
+Follow the OS theme by default (`prefers-color-scheme`), with a manual toggle that sets `data-theme` on `<html>` and persists the choice.
 
-### Tables & Dense Lists
-- Row height: 36px fixed.
-- Alternating fills: None. Clean divider via bottom border `1px solid rgba(255, 255, 255, 0.04)`.
-- Row hover: Full row background `#18181b`.
-- Quantitative data columns align right with `mono-metric-default`. Status columns align left with standard badge styling.
+## 3. Liquid Glass Recipe
 
-### Match Score Gauge
-- Inline indicator: Metric `mono-metric-default` accompanied by an ultra-thin 3px progress bar or circular ring.
-- Score thresholding:
-  - 85–100%: Text and fill `#10b981`
-  - 65–84%: Text and fill `#f59e0b`
-  - <65%: Text and fill `#71717a`
+The "liquid" feel comes from four layers: blur + saturation, a translucent tint, a thin specular border, and an inner top highlight.
+
+```css
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight);   /* specular top edge */
+}
+
+.glass--strong { background: var(--glass-bg-strong); }
+
+.glass--interactive {
+  transition:
+    transform var(--dur-base) var(--ease),
+    background var(--dur-base) var(--ease),
+    border-color var(--dur-base) var(--ease);
+}
+.glass--interactive:hover {
+  background: var(--glass-bg-strong);
+  transform: translateY(-1px);
+}
+.glass--interactive:active { transform: translateY(0) scale(0.99); }
+
+/* Fallbacks */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass { background: var(--surface-solid); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: var(--surface-solid);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+```
+
+### Glass rules
+- Max **2 stacked glass layers** on screen at once (e.g. sidebar + modal). Never glass inside glass inside glass.
+- Blur range: 16–32px. Never above 40px (performance).
+- Text on glass must still meet contrast; if not, increase `--glass-bg-strong` opacity.
+- Dense content (tables, code, long text, forms with many fields) goes on `--surface-solid` or a very light glass, not heavy blur.
+- The app background (`body`) uses `var(--bg-gradient)`, since glass needs something behind it to refract.
+
+## 4. Layout
+
+- **App shell:** left sidebar (glass, 232px, collapsible to 64px) + main content area (max-width 1200px content column, centered if wide) + optional top toolbar (glass, 52px).
+- Outer padding: `--space-4`. Gap between panels: `--space-3`. Panels float with rounded corners, not edge-to-edge.
+- Custom title bar if the window is frameless: 40px high, draggable via `data-tauri-drag-region`, window controls on the platform's native side.
+- Responsive: collapse sidebar under 900px width. The app must work at 800x560 minimum with no overflow or overlap.
+
+## 5. Typography
+
+- Font: Inter (bundle it locally in `src/assets/fonts`, don't load from a CDN since this is a desktop app and should work offline).
+- Body 14px/1.5, headings use `--weight-semibold` with tight letter-spacing (`-0.01em`).
+- Page title `--text-2xl`, section title `--text-lg`, labels `--text-sm` in `--text-muted`.
+- Use tabular numbers (`font-variant-numeric: tabular-nums`) for any data/number columns.
+- Max 2 weights visible per screen section.
+
+## 6. Components
+
+**Buttons** (height 36px, radius `--radius-md`, padding 0 `--space-4`)
+- *Primary:* solid `--accent`, `--accent-contrast` text, subtle inner highlight, no glass.
+- *Secondary:* `.glass` style, text `--text`.
+- *Ghost:* transparent, `--text-muted`, hover gets `--glass-bg`.
+- *Danger:* same as primary but `--danger`.
+- Disabled: 40% opacity, no hover. Loading: inline spinner, width stays fixed.
+
+**Inputs / selects / textareas** (height 36px)
+- Background `--glass-bg`, border `--glass-border`, radius `--radius-md`.
+- Focus: 2px ring `color-mix(in srgb, var(--accent) 55%, transparent)` + border `--accent`. Never remove the outline without a replacement.
+- Labels above the field, helper/error text below in `--text-xs`.
+
+**Cards:** `.glass`, padding `--space-5`, radius `--radius-lg`, no inner borders. Separate sections with `--divider` hairlines.
+
+**Sidebar nav items:** 36px tall, radius `--radius-md`, icon 18px + label. Active item: `--glass-bg-strong` + 2px accent indicator on the left; no loud fills.
+
+**Modals / dialogs:** centered, `.glass--strong`, radius `--radius-lg`, backdrop is `rgba(0,0,0,0.4)` with `blur(6px)`. Open animation: fade + scale from 0.97, `--dur-base`.
+
+**Tables / lists:** solid surface, 44px rows, hairline dividers, hover `--glass-bg`. No zebra stripes, no heavy borders.
+
+**Toasts:** bottom-right, `.glass`, auto-dismiss 4s, max 3 visible.
+
+**Tooltips:** small `.glass--strong`, 12px text, 300ms delay.
+
+**Empty states:** centered icon (48px, `--text-faint`), one sentence, one primary action.
+
+**Icons:** a single set only (Lucide), 1.5px stroke, 18px default. No emoji in the UI.
+
+## 7. Motion
+
+- Only animate `opacity`, `transform`, `background-color`, `border-color`. Never animate `backdrop-filter` or layout properties.
+- Durations: hover/press `--dur-fast`, panels/modals `--dur-base`, page transitions `--dur-slow`.
+- Always wrap in:
+  ```css
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  ```
+
+## 8. Tauri-Specific Notes
+
+- **WebView differences:** Tauri uses WebView2 (Windows), WKWebView (macOS), WebKitGTK (Linux). `backdrop-filter` works on all three, but WebKitGTK can be slow with large blurred areas. Keep blur radius moderate, avoid full-window blurred overlays, and test on Linux if you ship there.
+- **Native translucent window (optional, big visual upgrade):**
+  In `src-tauri/tauri.conf.json` (Tauri v2), on the main window set `"transparent": true` and optionally `"windowEffects"` (e.g. `mica` / `acrylic` on Windows, `sidebar` / `hudWindow` on macOS). On macOS, transparency also needs `"macOSPrivateApi": true` under `app`. When the window is transparent, set `html, body { background: transparent }` and let panels carry the glass. Keep a solid fallback for platforms that don't support the effect.
+- **Frameless window:** `"decorations": false` plus a custom title bar using `data-tauri-drag-region`. Make sure buttons inside the drag region are not draggable.
+- **No layout jank:** set the window background color in config to match `--bg` to avoid a white flash on launch.
+- Don't change Rust commands, IPC names or data shapes during the redesign. Front-end only.
+
+## 9. Do / Don't
+
+| Do | Don't |
+|---|---|
+| Use tokens for every color, space, radius | Hardcode hex values or pixel numbers |
+| One accent color, used sparingly | Rainbow gradients, multiple brand colors |
+| Generous whitespace | Cramming controls together |
+| Subtle, fast animations | Bouncy or long animations |
+| Solid surfaces for dense data | Blur behind long text or tables |
+| Consistent 36px control height | Mixed button/input sizes |
+| Inline SVG icons from one set | Emoji, mixed icon styles |
+
+## 10. Definition of Done (per screen)
+
+- [ ] Uses only tokens (grep for stray `#hex` / `px` outside `tokens.css`)
+- [ ] Works in dark and light themes
+- [ ] No overflow/overlap at 800x560 and at 1440x900
+- [ ] All interactive elements have hover, focus-visible, active, disabled states
+- [ ] Keyboard navigable, visible focus rings
+- [ ] Text contrast >= 4.5:1
+- [ ] No console errors/warnings
+- [ ] Reduced motion and reduced transparency respected
+- [ ] `npm run tauri dev` launches and every existing feature still works

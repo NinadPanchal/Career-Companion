@@ -1,0 +1,1 @@
+Before changing any UI code, read `design.md` in the project root and follow it exactly. Only modify front-end files (`src/`, `index.html`, styles). Never modify `src-tauri/` Rust code, IPC command names, or data shapes, except `tauri.conf.json` window settings when explicitly asked.

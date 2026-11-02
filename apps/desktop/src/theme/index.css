@@ -1,11 +1,7 @@
 @import "tailwindcss";
 @source "../";
 
-@import "./tokens.css";
-@import "./typography.css";
+@import "../styles/tokens.css";
+@import "../styles/base.css";
 @import "./utilities.css";
 @import "./animations.css";
-
-
-
-
