@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, ReactNode } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 import { Loader2 } from "lucide-react";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -23,16 +23,16 @@ export function Button({
 }: ButtonProps) {
   const isDisabled = disabled || loading;
 
-  // Base styling: 4px grid tokens, transitions, focus ring
+  // Base styling per Step 2: height 36-40px, padding 0 16-20px, gap 8px, whitespace-nowrap
   const baseClasses =
-    "inline-flex items-center justify-center font-medium select-none transition-all duration-[var(--dur-fast)] ease-[var(--ease)] rounded-[var(--radius-md)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--accent)_55%,transparent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg)] cursor-pointer disabled:pointer-events-none disabled:active:scale-100 disabled:opacity-40";
+    "inline-flex items-center justify-center font-medium whitespace-nowrap select-none transition-all duration-[var(--dur-fast)] ease-[var(--ease)] rounded-[var(--radius-md)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--accent)_55%,transparent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg)] cursor-pointer disabled:pointer-events-none disabled:active:scale-100 disabled:opacity-40 shrink-0";
 
   // Size hierarchy
   const sizeClasses = {
-    xs: "h-7 px-[var(--space-2)] text-[var(--text-xs)] gap-1.5",
-    sm: "h-8 px-[var(--space-3)] text-[var(--text-sm)] gap-2",
-    md: "h-9 px-[var(--space-4)] text-[var(--text-md)] gap-2", // 36px standard per design.md
-    lg: "h-10 px-[var(--space-5)] text-[var(--text-md)] gap-2.5",
+    xs: "h-7 px-3 text-[var(--text-xs)] gap-2",
+    sm: "h-8.5 px-4 text-[var(--text-sm)] gap-2",
+    md: "h-9.5 px-4.5 sm:px-5 text-[var(--text-md)] gap-2", // 38px height, 18-20px padding
+    lg: "h-10 px-5 sm:px-6 text-[var(--text-md)] gap-2.5",  // 40px height, 20-24px padding
   }[size];
 
   // Variant hierarchy per design.md Section 6
@@ -86,7 +86,7 @@ export function Button({
         </span>
       )}
 
-      <span className={loading ? "opacity-0 invisible" : ""}>{children}</span>
+      <span className={`inline-block ${loading ? "opacity-0 invisible" : ""}`}>{children}</span>
 
       {rightIcon && !loading && (
         <span className="shrink-0 flex items-center justify-center">

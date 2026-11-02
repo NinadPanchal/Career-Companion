@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, ReactNode } from "react";
+import { useEffect, useRef, ReactNode } from "react";
 import { X } from "lucide-react";
 
 export interface ModalProps {
@@ -64,7 +64,7 @@ export function Modal({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-[var(--space-4)]"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
     >
       {/* Backdrop: rgba(0,0,0,0.4) with blur(6px) per design.md */}
       <div
@@ -73,16 +73,16 @@ export function Modal({
         aria-hidden="true"
       />
 
-      {/* Modal Surface: .glass--strong, radius-lg, open animation scale from 0.97 */}
+      {/* Modal Surface: .glass--strong, radius-xl, padding 24-28px */}
       <div
         ref={modalRef}
-        className={`relative z-10 w-full ${sizeClasses} glass glass--strong rounded-[var(--radius-lg)] p-[var(--space-5)] shadow-[var(--glass-shadow)] animate-[scale-in_var(--dur-base)_var(--ease)] overflow-hidden ${className}`}
+        className={`relative z-10 w-full ${sizeClasses} glass glass--strong rounded-[var(--radius-xl)] p-6 sm:p-7 shadow-[var(--glass-shadow)] animate-[scale-in_var(--dur-base)_var(--ease)] overflow-hidden ${className}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         {(title || showCloseButton) && (
-          <div className="flex items-start justify-between gap-4 pb-[var(--space-3)] mb-[var(--space-4)] border-b border-[var(--divider)]">
-            <div className="flex flex-col gap-1">
+          <div className="flex items-start justify-between gap-4 pb-4 mb-5 border-b border-[var(--divider)]">
+            <div className="flex flex-col gap-1 min-w-0">
               {typeof title === "string" ? (
                 <h2 className="text-[var(--text-lg)] font-semibold text-[var(--text)] tracking-tight">
                   {title}

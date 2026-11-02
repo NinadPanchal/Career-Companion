@@ -14,26 +14,30 @@
   --weight-medium: 500;
   --weight-semibold: 600;
 
-  /* Spacing (4px grid) */
+  /* Spacing (4px grid: 4, 8, 12, 16, 20, 24, 32, 48, 64, 96) */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 48px;
+  --space-9: 64px;
+  --space-10: 96px;
 
   /* Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 20px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
   --radius-pill: 999px;
 
   /* Motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dur-fast: 120ms;
-  --dur-base: 220ms;
-  --dur-slow: 360ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
 
   /* Accent (single brand color) */
   --accent: #4f8cff;
@@ -44,6 +48,14 @@
   --success: #34c759;
   --warning: #ff9f0a;
   --danger: #ff453a;
+
+  /* Semantic status mappings */
+  --status-applied: #38bdf8;     /* Sky */
+  --status-screening: #4f8cff;   /* Accent */
+  --status-interview: #ff9f0a;   /* Amber */
+  --status-offer: #34c759;       /* Emerald */
+  --status-rejected: #ff453a;    /* Rose */
+  --status-discovered: #a1a1aa;  /* Neutral */
 }
 
 /* ---------- Dark (default) ---------- */
@@ -53,156 +65,120 @@
 
   --bg: #0b0d12;
   --bg-gradient:
-    radial-gradient(60% 50% at 15% 10%, rgba(79,140,255,0.18) 0%, transparent 60%),
-    radial-gradient(50% 50% at 90% 85%, rgba(160,110,255,0.14) 0%, transparent 60%),
+    radial-gradient(60% 50% at 15% 10%, rgba(79,140,255,0.16) 0%, transparent 60%),
+    radial-gradient(50% 50% at 90% 85%, rgba(160,110,255,0.12) 0%, transparent 60%),
     #0b0d12;
 
   --text: rgba(255,255,255,0.92);
   --text-muted: rgba(255,255,255,0.60);
   --text-faint: rgba(255,255,255,0.38);
 
-  --glass-bg: rgba(255,255,255,0.06);
-  --glass-bg-strong: rgba(255,255,255,0.10);
-  --glass-border: rgba(255,255,255,0.14);
-  --glass-highlight: rgba(255,255,255,0.22);
+  --glass-bg: rgba(255,255,255,0.05);
+  --glass-bg-strong: rgba(255,255,255,0.09);
+  --glass-border: rgba(255,255,255,0.10);
+  --glass-highlight: rgba(255,255,255,0.18);
   --glass-shadow: 0 8px 32px rgba(0,0,0,0.35);
 
   --surface-solid: #12151c;      /* for dense content / tables / editors */
   --divider: rgba(255,255,255,0.08);
 
-  /* Transitional compatibility aliases */
-  --surface-base: var(--bg);
-  --surface-card: var(--surface-solid);
-  --surface-overlay: var(--glass-bg-strong);
-  --surface-subtle: rgba(255, 255, 255, 0.04);
-  --surface-dim: var(--bg);
-  --surface-bright: var(--glass-bg-strong);
-  --surface-container-lowest: var(--bg);
-  --surface-container-low: var(--surface-solid);
-  --surface-container: var(--surface-solid);
-  --surface-container-high: var(--glass-bg-strong);
-  --surface-container-highest: var(--glass-bg-strong);
-  --surface-0: var(--bg);
-  --surface-1: var(--surface-solid);
-  --surface-2: var(--glass-bg);
-  --surface-3: var(--glass-bg-strong);
-  --border-subtle: var(--divider);
-  --border-default: var(--glass-border);
-  --border-hover: var(--glass-highlight);
-  --border-active: var(--accent);
-  --text-primary: var(--text);
-  --text-secondary: var(--text-muted);
-  --text-tertiary: var(--text-faint);
-  --primary: var(--accent);
-  --primary-hover: var(--accent-hover);
-  --status-applied: #38bdf8;
-  --status-interview: #ff9f0a;
-  --status-offer: #34c759;
-  --status-rejected: #ff453a;
-  --status-discovered: var(--text-muted);
-  --layout-sidebar: 232px;
+  /* Transition compatibility aliases */
+  --surface-0: #0b0d12;
+  --surface-1: #12151c;
+  --surface-2: rgba(255,255,255,0.05);
+  --surface-3: rgba(255,255,255,0.09);
+  --border-default: rgba(255,255,255,0.10);
+  --border-subtle: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.18);
+  --text-primary: rgba(255,255,255,0.92);
+  --text-secondary: rgba(255,255,255,0.60);
+  --text-tertiary: rgba(255,255,255,0.38);
 }
 
 /* ---------- Light ---------- */
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --bg: #eef1f6;
+  --bg: #f4f6fa;
   --bg-gradient:
-    radial-gradient(60% 50% at 15% 10%, rgba(79,140,255,0.22) 0%, transparent 60%),
-    radial-gradient(50% 50% at 90% 85%, rgba(190,150,255,0.18) 0%, transparent 60%),
-    #eef1f6;
+    radial-gradient(60% 50% at 15% 10%, rgba(79,140,255,0.18) 0%, transparent 60%),
+    radial-gradient(50% 50% at 90% 85%, rgba(190,150,255,0.14) 0%, transparent 60%),
+    #f4f6fa;
 
   --text: rgba(10,14,22,0.92);
   --text-muted: rgba(10,14,22,0.62);
   --text-faint: rgba(10,14,22,0.40);
 
-  --glass-bg: rgba(255,255,255,0.55);
-  --glass-bg-strong: rgba(255,255,255,0.75);
-  --glass-border: rgba(255,255,255,0.7);
-  --glass-highlight: rgba(255,255,255,0.9);
-  --glass-shadow: 0 8px 32px rgba(30,40,70,0.12);
+  --glass-bg: rgba(255,255,255,0.65);
+  --glass-bg-strong: rgba(255,255,255,0.85);
+  --glass-border: rgba(10,14,22,0.08);
+  --glass-highlight: rgba(255,255,255,0.95);
+  --glass-shadow: 0 8px 32px rgba(30,40,70,0.08);
 
   --surface-solid: #ffffff;
-  --divider: rgba(10,14,22,0.08);
+  --divider: rgba(10,14,22,0.07);
 
-  /* Transitional compatibility aliases */
-  --surface-base: var(--bg);
-  --surface-card: var(--surface-solid);
-  --surface-overlay: var(--glass-bg-strong);
-  --surface-subtle: rgba(10, 14, 22, 0.04);
-  --surface-dim: var(--bg);
-  --surface-bright: var(--glass-bg-strong);
-  --surface-container-lowest: var(--bg);
-  --surface-container-low: var(--surface-solid);
-  --surface-container: var(--surface-solid);
-  --surface-container-high: var(--glass-bg-strong);
-  --surface-container-highest: var(--glass-bg-strong);
-  --surface-0: var(--bg);
-  --surface-1: var(--surface-solid);
-  --surface-2: var(--glass-bg);
-  --surface-3: var(--glass-bg-strong);
-  --border-subtle: var(--divider);
-  --border-default: var(--glass-border);
-  --border-hover: var(--glass-highlight);
-  --border-active: var(--accent);
-  --text-primary: var(--text);
-  --text-secondary: var(--text-muted);
-  --text-tertiary: var(--text-faint);
-  --primary: var(--accent);
-  --primary-hover: var(--accent-hover);
-  --status-applied: #0284c7;
-  --status-interview: #d97706;
-  --status-offer: #16a34a;
-  --status-rejected: #dc2626;
-  --status-discovered: var(--text-muted);
-  --layout-sidebar: 232px;
+  /* Transition compatibility aliases */
+  --surface-0: #f4f6fa;
+  --surface-1: #ffffff;
+  --surface-2: rgba(255,255,255,0.65);
+  --surface-3: rgba(255,255,255,0.85);
+  --border-default: rgba(10,14,22,0.08);
+  --border-subtle: rgba(10,14,22,0.06);
+  --border-hover: rgba(10,14,22,0.16);
+  --text-primary: rgba(10,14,22,0.92);
+  --text-secondary: rgba(10,14,22,0.62);
+  --text-tertiary: rgba(10,14,22,0.40);
 }
 
-/* ========================================================================= */
-/* LIQUID GLASS UTILITIES (design.md Section 3)                              */
-/* ========================================================================= */
-
+/* Glass utility classes */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   border-radius: var(--radius-lg);
-  box-shadow:
-    var(--glass-shadow),
-    inset 0 1px 0 var(--glass-highlight);   /* specular top edge */
 }
 
 .glass--strong {
   background: var(--glass-bg-strong);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
 }
 
 .glass--interactive {
-  transition:
-    transform var(--dur-base) var(--ease),
-    background var(--dur-base) var(--ease),
-    border-color var(--dur-base) var(--ease);
+  transition: transform var(--dur-fast) var(--ease),
+              background var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease);
 }
 
 .glass--interactive:hover {
   background: var(--glass-bg-strong);
+  border-color: var(--glass-highlight);
   transform: translateY(-1px);
 }
 
 .glass--interactive:active {
-  transform: translateY(0) scale(0.99);
+  transform: translateY(0);
 }
 
-/* Fallbacks */
-@supports not (backdrop-filter: blur(1px)) {
-  .glass {
+/* Fallback for environments without backdrop-filter support */
+@supports not (backdrop-filter: blur(20px)) {
+  .glass,
+  .glass--strong {
     background: var(--surface-solid);
   }
 }
 
+/* Accessibility: Reduced transparency preference */
 @media (prefers-reduced-transparency: reduce) {
-  .glass {
+  .glass,
+  .glass--strong {
     background: var(--surface-solid);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;

@@ -13,7 +13,6 @@ import {
   Zap,
   Briefcase,
   ChevronRight,
-  Sparkles,
 } from "lucide-react";
 import { jobsService, ApplicationStats } from "../../features/jobs/services/jobs.service";
 import { useResumeStore } from "../../features/resume/stores/resume.store";
@@ -67,22 +66,22 @@ export default function Dashboard() {
     : ["React 19", "TypeScript", "Python", "FastAPI", "PostgreSQL", "Docker"];
 
   return (
-    <div className="space-y-[var(--space-5)] select-none">
+    <div className="flex flex-col gap-8 select-none pb-12">
       {/* ========================================================================= */}
       {/* WELCOME HEADER & PRIMARY ACTIONS                                          */}
       {/* ========================================================================= */}
-      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-[var(--space-4)] border-b border-[var(--divider)]">
+      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-[var(--divider)]">
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2 mb-2">
             <span className="w-2 h-2 rounded-full bg-[var(--success)] shadow-[0_0_8px_var(--success)]" />
             <span className="text-[var(--text-xs)] text-[var(--text-muted)] font-medium">
               Search active
             </span>
           </div>
-          <h1 className="text-[var(--text-2xl)] font-semibold tracking-tight text-[var(--text)]">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[var(--text)]">
             {getGreeting()}, <span className="text-[var(--accent)]">Ninad</span>
           </h1>
-          <p className="mt-1 text-[var(--text-sm)] text-[var(--text-muted)]">
+          <p className="mt-2 text-[var(--text-sm)] text-[var(--text-muted)] leading-relaxed">
             You have{" "}
             <span className="text-[var(--text)] font-semibold">
               {inInterview} active interview rounds
@@ -95,12 +94,12 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0">
+        <div className="flex items-center gap-3 shrink-0">
           <Link
             to="/resume"
-            className="h-9 px-3.5 rounded-[var(--radius-md)] glass text-[var(--text)] text-[var(--text-xs)] font-medium flex items-center gap-1.5 hover:bg-[var(--glass-bg-strong)] transition-all cursor-pointer"
+            className="h-9.5 px-4 rounded-[var(--radius-md)] glass text-[var(--text)] text-[var(--text-sm)] font-medium flex items-center gap-2 hover:bg-[var(--glass-bg-strong)] transition-all cursor-pointer whitespace-nowrap"
           >
-            <Upload size={14} className="text-[var(--text-muted)]" />
+            <Upload size={15} className="text-[var(--text-muted)] shrink-0" />
             <span>Update resume</span>
           </Link>
 
@@ -111,7 +110,7 @@ export default function Dashboard() {
               navigate("/applications");
               setIsAddModalOpen(true);
             }}
-            leftIcon={<Plus size={14} />}
+            leftIcon={<Plus size={15} />}
           >
             New application
           </Button>
@@ -119,30 +118,30 @@ export default function Dashboard() {
       </section>
 
       {/* ========================================================================= */}
-      {/* BALANCED METRIC CARDS (design.md Section 6)                               */}
+      {/* BALANCED METRIC CARDS (Step 2: padding 20px, label-to-value 8px)          */}
       {/* ========================================================================= */}
       <section
         aria-label="Key metrics"
-        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-[var(--space-3)]"
+        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5"
       >
         {/* Metric 1: Total Tracked */}
-        <Card hover className="flex flex-col justify-between">
+        <Card hover className="p-5 flex flex-col justify-between gap-3">
           <div className="flex items-center justify-between text-[var(--text-muted)]">
             <span className="text-[var(--text-xs)] font-medium">Total applications</span>
-            <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] flex items-center justify-center text-[var(--accent)]">
-              <FolderOpen size={14} />
+            <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] flex items-center justify-center text-[var(--accent)] shrink-0">
+              <FolderOpen size={15} />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-[var(--text-2xl)] font-bold font-mono tracking-tight text-[var(--text)] tabular-nums">
+          <div className="mt-2 flex items-baseline justify-between gap-2">
+            <span className="text-3xl font-bold font-mono tracking-tight text-[var(--text)] tabular-nums">
               {totalApps}
             </span>
-            <span className="inline-flex items-center gap-1 text-[11px] text-[var(--success)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] px-1.5 py-0.5 rounded-[var(--radius-sm)] border border-[color-mix(in_srgb,var(--success)_20%,transparent)] font-medium">
-              <TrendingUp size={11} />
+            <span className="inline-flex items-center gap-1.5 text-xs text-[var(--success)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] px-2 py-0.5 rounded-[var(--radius-sm)] border border-[color-mix(in_srgb,var(--success)_20%,transparent)] font-medium whitespace-nowrap">
+              <TrendingUp size={12} className="shrink-0" />
               +4 this week
             </span>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-[var(--divider)] flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)]">
+          <div className="mt-3 pt-3 border-t border-[var(--divider)] flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)]">
             <span>Active in pipeline</span>
             <span className="text-[var(--text)] font-medium">
               {inApplied + inInterview} active
@@ -151,54 +150,54 @@ export default function Dashboard() {
         </Card>
 
         {/* Metric 2: Active Interviews */}
-        <Card hover className="flex flex-col justify-between">
+        <Card hover className="p-5 flex flex-col justify-between gap-3">
           <div className="flex items-center justify-between text-[var(--text-muted)]">
             <span className="text-[var(--text-xs)] font-medium">Active interviews</span>
-            <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--warning)_12%,transparent)] border border-[color-mix(in_srgb,var(--warning)_24%,transparent)] flex items-center justify-center text-[var(--warning)]">
-              <Clock size={14} />
+            <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--warning)_12%,transparent)] border border-[color-mix(in_srgb,var(--warning)_24%,transparent)] flex items-center justify-center text-[var(--warning)] shrink-0">
+              <Clock size={15} />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-[var(--text-2xl)] font-bold font-mono tracking-tight text-[var(--text)] tabular-nums">
+          <div className="mt-2 flex items-baseline justify-between gap-2">
+            <span className="text-3xl font-bold font-mono tracking-tight text-[var(--text)] tabular-nums">
               {inInterview}
             </span>
             <Badge variant="interview" size="sm">
               Next: Tomorrow
             </Badge>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-[var(--divider)] flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)]">
+          <div className="mt-3 pt-3 border-t border-[var(--divider)] flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)]">
             <span className="truncate">Razorpay (System Arch)</span>
-            <span className="text-[var(--warning)] font-medium font-mono">2:30 PM</span>
+            <span className="text-[var(--warning)] font-medium font-mono shrink-0">2:30 PM</span>
           </div>
         </Card>
 
         {/* Metric 3: Profile Match */}
-        <Card hover className="flex flex-col justify-between">
+        <Card hover className="p-5 flex flex-col justify-between gap-3">
           <div className="flex items-center justify-between text-[var(--text-muted)]">
             <span className="text-[var(--text-xs)] font-medium">Average match rate</span>
-            <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--status-applied)_12%,transparent)] border border-[color-mix(in_srgb,var(--status-applied)_24%,transparent)] flex items-center justify-center text-[var(--status-applied)]">
-              <Zap size={14} />
+            <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--status-applied)_12%,transparent)] border border-[color-mix(in_srgb,var(--status-applied)_24%,transparent)] flex items-center justify-center text-[var(--status-applied)] shrink-0">
+              <Zap size={15} />
             </div>
           </div>
-          <div className="mt-2.5">
+          <div className="mt-2">
             <MatchGauge score={avgMatch} />
           </div>
-          <div className="mt-2.5 pt-2.5 border-t border-[var(--divider)] flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)]">
+          <div className="mt-3 pt-3 border-t border-[var(--divider)] flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)]">
             <span>Core alignment</span>
             <span className="text-[var(--success)] font-medium">Backend & Cloud</span>
           </div>
         </Card>
 
         {/* Metric 4: Weekly Goal */}
-        <Card hover className="flex flex-col justify-between">
+        <Card hover className="p-5 flex flex-col justify-between gap-3">
           <div className="flex items-center justify-between text-[var(--text-muted)]">
             <span className="text-[var(--text-xs)] font-medium">Weekly target</span>
-            <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--text)]">
-              <Briefcase size={14} />
+            <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--text)] shrink-0">
+              <Briefcase size={15} />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-[var(--text-2xl)] font-bold font-mono tracking-tight text-[var(--text)] tabular-nums">
+          <div className="mt-2 flex items-baseline justify-between gap-2">
+            <span className="text-3xl font-bold font-mono tracking-tight text-[var(--text)] tabular-nums">
               {appliedThisWeek}{" "}
               <span className="text-[var(--text-xs)] font-normal text-[var(--text-muted)]">
                 / 10 target
@@ -208,8 +207,8 @@ export default function Dashboard() {
               {Math.round((appliedThisWeek / 10) * 100)}% met
             </span>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-[var(--divider)]">
-            <div className="w-full bg-[var(--glass-border)] h-[3px] rounded-full overflow-hidden">
+          <div className="mt-3 pt-3 border-t border-[var(--divider)]">
+            <div className="w-full bg-[var(--glass-border)] h-[4px] rounded-full overflow-hidden">
               <div
                 className="bg-[var(--accent)] h-full rounded-full transition-all duration-300"
                 style={{ width: `${Math.min(100, (appliedThisWeek / 10) * 100)}%` }}
@@ -220,94 +219,90 @@ export default function Dashboard() {
       </section>
 
       {/* ========================================================================= */}
-      {/* APPLICATION STAGE PROGRESSION SUMMARY                                     */}
+      {/* APPLICATION STAGE PROGRESSION SUMMARY (Step 2: gap 16px, padding 16px)   */}
       {/* ========================================================================= */}
       <section aria-label="Application stages">
-        <Card>
-          <div className="flex items-center justify-between mb-[var(--space-4)]">
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-5">
             <div>
               <h2 className="text-[var(--text-md)] font-semibold text-[var(--text)]">
                 Application stages
               </h2>
-              <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+              <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1">
                 Overview of active opportunities by status
               </p>
             </div>
             <Link
               to="/applications"
-              className="text-[var(--text-xs)] text-[var(--accent)] hover:text-[var(--accent-hover)] font-medium flex items-center gap-1 group transition-colors"
+              className="text-[var(--text-xs)] text-[var(--accent)] hover:text-[var(--accent-hover)] font-medium flex items-center gap-1.5 group transition-colors"
             >
               <span>View kanban board</span>
               <ArrowRight
-                size={13}
-                className="group-hover:translate-x-0.5 transition-transform"
+                size={14}
+                className="group-hover:translate-x-0.5 transition-transform shrink-0"
               />
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-[var(--space-3)]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {/* Stage 1: Wishlist */}
             <div
               onClick={() => navigate("/applications")}
-              className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] transition-all cursor-pointer group"
+              className="p-4 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] transition-all cursor-pointer group flex flex-col gap-1.5"
             >
-              <div className="flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)] mb-1.5 font-medium">
+              <div className="flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)] font-medium">
                 <span>Wishlist</span>
-                <span className="w-2 h-2 rounded-full bg-[var(--text-muted)]" />
+                <span className="w-2 h-2 rounded-full bg-[var(--text-muted)] shrink-0" />
               </div>
-              <div className="text-[var(--text-xl)] font-bold font-mono text-[var(--text)] tabular-nums">
+              <div className="text-2xl font-bold font-mono text-[var(--text)] tabular-nums">
                 {inWishlist}
               </div>
-              <p className="mt-1 text-[11px] text-[var(--text-faint)]">Bookmarked roles</p>
+              <p className="text-[11px] text-[var(--text-faint)]">Bookmarked roles</p>
             </div>
 
             {/* Stage 2: Applied */}
             <div
               onClick={() => navigate("/applications")}
-              className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] transition-all cursor-pointer group"
+              className="p-4 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] transition-all cursor-pointer group flex flex-col gap-1.5"
             >
-              <div className="flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)] mb-1.5 font-medium">
+              <div className="flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)] font-medium">
                 <span>Applied</span>
-                <span className="w-2 h-2 rounded-full bg-[var(--status-applied)]" />
+                <span className="w-2 h-2 rounded-full bg-[var(--status-applied)] shrink-0" />
               </div>
-              <div className="text-[var(--text-xl)] font-bold font-mono text-[var(--status-applied)] tabular-nums">
+              <div className="text-2xl font-bold font-mono text-[var(--status-applied)] tabular-nums">
                 {inApplied}
               </div>
-              <p className="mt-1 text-[11px] text-[var(--text-faint)]">
-                Awaiting response
-              </p>
+              <p className="text-[11px] text-[var(--text-faint)]">Awaiting response</p>
             </div>
 
             {/* Stage 3: Interviewing */}
             <div
               onClick={() => navigate("/applications")}
-              className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] transition-all cursor-pointer group"
+              className="p-4 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] transition-all cursor-pointer group flex flex-col gap-1.5"
             >
-              <div className="flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)] mb-1.5 font-medium">
+              <div className="flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)] font-medium">
                 <span>Interviewing</span>
-                <span className="w-2 h-2 rounded-full bg-[var(--status-interview)]" />
+                <span className="w-2 h-2 rounded-full bg-[var(--status-interview)] shrink-0" />
               </div>
-              <div className="text-[var(--text-xl)] font-bold font-mono text-[var(--status-interview)] tabular-nums">
+              <div className="text-2xl font-bold font-mono text-[var(--status-interview)] tabular-nums">
                 {inInterview}
               </div>
-              <p className="mt-1 text-[11px] text-[var(--text-faint)]">
-                Active interview rounds
-              </p>
+              <p className="text-[11px] text-[var(--text-faint)]">Active interview rounds</p>
             </div>
 
             {/* Stage 4: Offers */}
             <div
               onClick={() => navigate("/applications")}
-              className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] transition-all cursor-pointer group"
+              className="p-4 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] transition-all cursor-pointer group flex flex-col gap-1.5"
             >
-              <div className="flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)] mb-1.5 font-medium">
+              <div className="flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)] font-medium">
                 <span>Offers</span>
-                <span className="w-2 h-2 rounded-full bg-[var(--status-offer)]" />
+                <span className="w-2 h-2 rounded-full bg-[var(--status-offer)] shrink-0" />
               </div>
-              <div className="text-[var(--text-xl)] font-bold font-mono text-[var(--status-offer)] tabular-nums">
+              <div className="text-2xl font-bold font-mono text-[var(--status-offer)] tabular-nums">
                 {inOffer}
               </div>
-              <p className="mt-1 text-[11px] text-[var(--text-faint)]">Offers received</p>
+              <p className="text-[11px] text-[var(--text-faint)]">Offers received</p>
             </div>
           </div>
         </Card>
@@ -316,43 +311,42 @@ export default function Dashboard() {
       {/* ========================================================================= */}
       {/* 2-COLUMN MAIN: UPCOMING INTERVIEWS & ACTIONS / ACTIVITY                   */}
       {/* ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-[var(--space-4)]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column (7 cols): Upcoming Interview & Next Actions */}
-        <div className="lg:col-span-7 space-y-[var(--space-4)]">
+        <div className="lg:col-span-7 flex flex-col gap-6">
           {/* Upcoming Interview Spotlight Card */}
-          <Card className="space-y-[var(--space-3)]">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+          <Card className="p-6 flex flex-col gap-4">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
                 <Badge variant="interview" size="sm">
                   Upcoming interview
                 </Badge>
-                <span className="text-[var(--text-xs)] text-[var(--text-muted)]">
+                <span className="text-[var(--text-xs)] text-[var(--text-muted)] truncate">
                   Round 2: Technical Architecture
                 </span>
               </div>
               <Link
                 to="/interview-prep"
-                className="text-[var(--text-xs)] text-[var(--accent)] hover:underline font-medium"
+                className="text-[var(--text-xs)] text-[var(--accent)] hover:underline font-medium shrink-0"
               >
                 Prepare answers →
               </Link>
             </div>
 
-            <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="p-4 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h3 className="text-[var(--text-sm)] font-semibold text-[var(--text)]">
                   Razorpay • Distributed Systems Engineer
                 </h3>
-                <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1">
-                  Focus: High-throughput idempotent ledger, Kafka partitioning, and database
-                  concurrency.
+                <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1.5 leading-relaxed">
+                  Focus: High-throughput idempotent ledger, Kafka partitioning, and database concurrency.
                 </p>
               </div>
-              <div className="text-left sm:text-right shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[var(--divider)]">
+              <div className="text-left sm:text-right shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-[var(--divider)]">
                 <span className="text-[var(--text-xs)] font-semibold text-[var(--warning)] font-mono block">
                   Tomorrow, 2:30 PM
                 </span>
-                <span className="text-[11px] text-[var(--text-muted)]">
+                <span className="text-[11px] text-[var(--text-muted)] mt-0.5 block">
                   Google Meet (45 mins)
                 </span>
               </div>
@@ -366,7 +360,7 @@ export default function Dashboard() {
                 variant="secondary"
                 size="xs"
                 onClick={() => navigate("/interview-prep")}
-                leftIcon={<Bot size={13} className="text-[var(--accent)]" />}
+                leftIcon={<Bot size={13} className="text-[var(--accent)] shrink-0" />}
               >
                 Open STAR simulator
               </Button>
@@ -374,7 +368,7 @@ export default function Dashboard() {
           </Card>
 
           {/* Next Actions & Priorities */}
-          <Card className="space-y-[var(--space-3)]">
+          <Card className="p-6 flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <h2 className="text-[var(--text-md)] font-semibold text-[var(--text)]">
                 Recommended next actions
@@ -384,9 +378,9 @@ export default function Dashboard() {
               </span>
             </div>
 
-            <div className="space-y-2">
-              <div className="p-3 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-between gap-3 hover:bg-[var(--glass-bg-strong)] transition-colors">
-                <div className="min-w-0">
+            <div className="flex flex-col gap-2.5">
+              <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-between gap-4 hover:bg-[var(--glass-bg-strong)] transition-colors">
+                <div className="min-w-0 flex flex-col gap-1">
                   <p className="text-[var(--text-xs)] font-medium text-[var(--text)]">
                     Prepare for Razorpay architecture drill
                   </p>
@@ -404,8 +398,8 @@ export default function Dashboard() {
                 </Button>
               </div>
 
-              <div className="p-3 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-between gap-3 hover:bg-[var(--glass-bg-strong)] transition-colors">
-                <div className="min-w-0">
+              <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-between gap-4 hover:bg-[var(--glass-bg-strong)] transition-colors">
+                <div className="min-w-0 flex flex-col gap-1">
                   <p className="text-[var(--text-xs)] font-medium text-[var(--text)]">
                     Review 4 new high-match positions
                   </p>
@@ -423,8 +417,8 @@ export default function Dashboard() {
                 </Button>
               </div>
 
-              <div className="p-3 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-between gap-3 hover:bg-[var(--glass-bg-strong)] transition-colors">
-                <div className="min-w-0">
+              <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-between gap-4 hover:bg-[var(--glass-bg-strong)] transition-colors">
+                <div className="min-w-0 flex flex-col gap-1">
                   <p className="text-[var(--text-xs)] font-medium text-[var(--text)]">
                     Send outreach pitch for Zepto referral
                   </p>
@@ -446,9 +440,9 @@ export default function Dashboard() {
         </div>
 
         {/* Right Column (5 cols): Recent Activity & Tools Launchpad */}
-        <div className="lg:col-span-5 space-y-[var(--space-4)]">
+        <div className="lg:col-span-5 flex flex-col gap-6">
           {/* Recent Activity Feed */}
-          <Card className="space-y-[var(--space-3)]">
+          <Card className="p-6 flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <h2 className="text-[var(--text-md)] font-semibold text-[var(--text)]">
                 Recent activity
@@ -456,10 +450,10 @@ export default function Dashboard() {
               <span className="text-[var(--text-xs)] text-[var(--text-muted)]">Timeline</span>
             </div>
 
-            <div className="space-y-3">
-              <div className="flex items-start gap-2.5 text-[var(--text-xs)]">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--warning)] mt-1.5 shrink-0" />
-                <div className="flex-1 min-w-0">
+            <div className="flex flex-col gap-3.5">
+              <div className="flex items-start gap-3 text-[var(--text-xs)]">
+                <div className="w-2 h-2 rounded-full bg-[var(--warning)] mt-1.5 shrink-0" />
+                <div className="flex-1 min-w-0 flex flex-col gap-0.5">
                   <p className="text-[var(--text)] font-medium truncate">
                     Razorpay scheduled Round 2 Interview
                   </p>
@@ -469,9 +463,9 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-2.5 text-[var(--text-xs)]">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--status-applied)] mt-1.5 shrink-0" />
-                <div className="flex-1 min-w-0">
+              <div className="flex items-start gap-3 text-[var(--text-xs)]">
+                <div className="w-2 h-2 rounded-full bg-[var(--status-applied)] mt-1.5 shrink-0" />
+                <div className="flex-1 min-w-0 flex flex-col gap-0.5">
                   <p className="text-[var(--text)] font-medium truncate">Applied to Zepto</p>
                   <p className="text-[var(--text-muted)] text-[11px]">
                     Senior Backend Engineer • Yesterday
@@ -479,9 +473,9 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-2.5 text-[var(--text-xs)]">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--success)] mt-1.5 shrink-0" />
-                <div className="flex-1 min-w-0">
+              <div className="flex items-start gap-3 text-[var(--text-xs)]">
+                <div className="w-2 h-2 rounded-full bg-[var(--success)] mt-1.5 shrink-0" />
+                <div className="flex-1 min-w-0 flex flex-col gap-0.5">
                   <p className="text-[var(--text)] font-medium truncate">
                     Offer letter received from Postman
                   </p>
@@ -491,9 +485,9 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-2.5 text-[var(--text-xs)]">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--text-faint)] mt-1.5 shrink-0" />
-                <div className="flex-1 min-w-0">
+              <div className="flex items-start gap-3 text-[var(--text-xs)]">
+                <div className="w-2 h-2 rounded-full bg-[var(--text-faint)] mt-1.5 shrink-0" />
+                <div className="flex-1 min-w-0 flex flex-col gap-0.5">
                   <p className="text-[var(--text)] font-medium truncate">
                     Resume parsed & competencies verified
                   </p>
@@ -506,108 +500,108 @@ export default function Dashboard() {
           </Card>
 
           {/* Quick Tools Launchpad */}
-          <Card className="space-y-[var(--space-2)]">
+          <Card className="p-6 flex flex-col gap-3.5">
             <h2 className="text-[var(--text-md)] font-semibold text-[var(--text)]">
               Quick tools
             </h2>
 
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-2">
               <Link
                 to="/resume"
-                className="p-2.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] flex items-center justify-between group transition-colors"
+                className="p-3 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] flex items-center justify-between group transition-colors"
               >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] text-[var(--success)] flex items-center justify-center">
-                    <FileText size={14} />
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] text-[var(--success)] flex items-center justify-center shrink-0">
+                    <FileText size={15} />
                   </div>
-                  <div>
-                    <p className="text-[var(--text-xs)] font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                  <div className="min-w-0">
+                    <p className="text-[var(--text-xs)] font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors truncate">
                       Resume & ATS audit
                     </p>
-                    <p className="text-[11px] text-[var(--text-muted)]">
+                    <p className="text-[11px] text-[var(--text-muted)] truncate">
                       Rewrite accomplishment bullets with Google XYZ
                     </p>
                   </div>
                 </div>
                 <ChevronRight
-                  size={14}
-                  className="text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors"
+                  size={15}
+                  className="text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors shrink-0 ml-2"
                 />
               </Link>
 
               <Link
                 to="/jobs"
-                className="p-2.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] flex items-center justify-between group transition-colors"
+                className="p-3 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] flex items-center justify-between group transition-colors"
               >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-[var(--accent)] flex items-center justify-center">
-                    <Zap size={14} />
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-[var(--accent)] flex items-center justify-center shrink-0">
+                    <Zap size={15} />
                   </div>
-                  <div>
-                    <p className="text-[var(--text-xs)] font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                  <div className="min-w-0">
+                    <p className="text-[var(--text-xs)] font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors truncate">
                       Job discovery & matching
                     </p>
-                    <p className="text-[11px] text-[var(--text-muted)]">
+                    <p className="text-[11px] text-[var(--text-muted)] truncate">
                       Browse curated roles with live profile compatibility
                     </p>
                   </div>
                 </div>
                 <ChevronRight
-                  size={14}
-                  className="text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors"
+                  size={15}
+                  className="text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors shrink-0 ml-2"
                 />
               </Link>
 
               <Link
                 to="/cover-letter"
-                className="p-2.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] flex items-center justify-between group transition-colors"
+                className="p-3 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] flex items-center justify-between group transition-colors"
               >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--warning)_12%,transparent)] text-[var(--warning)] flex items-center justify-center">
-                    <Wand2 size={14} />
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--warning)_12%,transparent)] text-[var(--warning)] flex items-center justify-center shrink-0">
+                    <Wand2 size={15} />
                   </div>
-                  <div>
-                    <p className="text-[var(--text-xs)] font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                  <div className="min-w-0">
+                    <p className="text-[var(--text-xs)] font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors truncate">
                       Outreach & cover letter
                     </p>
-                    <p className="text-[11px] text-[var(--text-muted)]">
+                    <p className="text-[11px] text-[var(--text-muted)] truncate">
                       Tailored pitches and referral requests
                     </p>
                   </div>
                 </div>
                 <ChevronRight
-                  size={14}
-                  className="text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors"
+                  size={15}
+                  className="text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors shrink-0 ml-2"
                 />
               </Link>
 
               <Link
                 to="/interview-prep"
-                className="p-2.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] flex items-center justify-between group transition-colors"
+                className="p-3 rounded-[var(--radius-md)] bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] flex items-center justify-between group transition-colors"
               >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[var(--glass-bg-strong)] text-[var(--text-muted)] flex items-center justify-center">
-                    <Bot size={14} />
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[var(--glass-bg-strong)] text-[var(--text-muted)] flex items-center justify-center shrink-0">
+                    <Bot size={15} />
                   </div>
-                  <div>
-                    <p className="text-[var(--text-xs)] font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                  <div className="min-w-0">
+                    <p className="text-[var(--text-xs)] font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors truncate">
                       STAR interview simulator
                     </p>
-                    <p className="text-[11px] text-[var(--text-muted)]">
+                    <p className="text-[11px] text-[var(--text-muted)] truncate">
                       Timed practice with structured rubrics
                     </p>
                   </div>
                 </div>
                 <ChevronRight
-                  size={14}
-                  className="text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors"
+                  size={15}
+                  className="text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors shrink-0 ml-2"
                 />
               </Link>
             </div>
           </Card>
 
-          {/* Active Profile Skills */}
-          <Card className="space-y-[var(--space-2)]">
+          {/* Active Profile Skills (Step 2: padding 6px 12px, gap 8px) */}
+          <Card className="p-6 flex flex-col gap-3.5">
             <div className="flex items-center justify-between">
               <h2 className="text-[var(--text-md)] font-semibold text-[var(--text)]">
                 Verified profile skills
@@ -619,11 +613,11 @@ export default function Dashboard() {
                 Manage skills →
               </Link>
             </div>
-            <div className="flex flex-wrap gap-1.5 pt-1">
+            <div className="flex flex-wrap gap-2 pt-1">
               {activeSkills.map((skill) => (
                 <span
                   key={skill}
-                  className="px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] text-[var(--text)] border border-[var(--glass-border)] text-[var(--text-xs)] font-mono"
+                  className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[var(--glass-bg)] text-[var(--text)] border border-[var(--glass-border)] text-xs font-mono whitespace-nowrap"
                 >
                   ✓ {skill}
                 </span>

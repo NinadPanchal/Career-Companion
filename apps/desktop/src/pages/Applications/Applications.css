@@ -2,33 +2,34 @@
 .applications-viewport {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 110px);
   user-select: none;
+  gap: 16px;
 }
 
 /* Kanban column: solid surface per Principle 2 */
 .kanban-col {
   flex: 1;
-  min-width: 220px;
-  max-width: 280px;
+  min-width: 240px;
+  max-width: 300px;
   display: flex;
   flex-direction: column;
   background: var(--surface-solid);
-  border: 1px solid var(--divider);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   height: 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 /* Kanban item card: .glass style floating on solid surface */
 .kanban-item {
-  padding: var(--space-3);
+  padding: 14px;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 10px;
   transition: all var(--dur-fast) var(--ease);
 }
 
@@ -41,14 +42,14 @@
 /* Table surface per design.md Section 6 */
 .pipeline-table-container {
   border-radius: var(--radius-lg);
-  border: 1px solid var(--divider);
+  border: 1px solid var(--glass-border);
   background: var(--surface-solid);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .pipeline-table-row {
-  height: 44px;
+  height: 48px;
   transition: background var(--dur-fast) var(--ease);
 }
 

@@ -49,11 +49,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             id={selectId}
             ref={ref}
             disabled={disabled}
-            className={`h-9 w-full appearance-none rounded-[var(--radius-md)] bg-[var(--glass-bg)] border ${
+            className={`h-9.5 w-full appearance-none rounded-[var(--radius-md)] bg-[var(--glass-bg)] border ${
               error
                 ? "border-[var(--danger)] focus:border-[var(--danger)]"
                 : "border-[var(--glass-border)] focus:border-[var(--accent)]"
-            } pl-3 pr-9 text-[var(--text-md)] text-[var(--text)] outline-none transition-colors duration-[var(--dur-fast)] ease-[var(--ease)] focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--accent)_55%,transparent)] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${className}`}
+            } pl-3.5 pr-10 text-[var(--text-md)] text-[var(--text)] outline-none transition-colors duration-[var(--dur-fast)] ease-[var(--ease)] focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--accent)_55%,transparent)] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${className}`}
             {...props}
           >
             {options
@@ -93,3 +93,4 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 Select.displayName = "Select";
 
 export default Select;
+

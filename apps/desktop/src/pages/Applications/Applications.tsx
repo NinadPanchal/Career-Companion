@@ -122,15 +122,15 @@ export default function Applications() {
       {/* ========================================================================= */}
       {/* HEADER & VIEW CONTROLS                                                    */}
       {/* ========================================================================= */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-[var(--space-3)] border-b border-[var(--divider)] shrink-0">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[var(--divider)] shrink-0">
         <div>
-          <h1 className="text-[var(--text-xl)] font-semibold tracking-tight text-[var(--text)] flex items-center gap-2.5">
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--text)] flex items-center gap-3">
             <span>Application Pipeline</span>
-            <span className="text-[var(--text-xs)] font-mono font-normal px-2 py-0.5 rounded-full bg-[var(--glass-bg)] text-[var(--text-muted)] border border-[var(--glass-border)]">
+            <span className="text-[var(--text-xs)] font-mono font-normal px-2.5 py-0.5 rounded-full bg-[var(--glass-bg)] text-[var(--text-muted)] border border-[var(--glass-border)]">
               {filteredApps.length} tracked
             </span>
           </h1>
-          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1 leading-relaxed">
             Manage your active recruitment stages and company dialogues.
           </p>
         </div>
@@ -144,7 +144,7 @@ export default function Applications() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Filter company or role..."
-              className="h-8.5 w-full pl-9 pr-3 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-xs)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none focus:border-[var(--accent)] transition-colors"
+              className="h-9 w-full pl-10 pr-3 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-xs)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none focus:border-[var(--accent)] transition-colors"
             />
           </div>
 

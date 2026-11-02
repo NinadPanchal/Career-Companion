@@ -60,9 +60,9 @@ export default function EasyApplyModal({ job, isOpen, onClose, onSuccess }: Easy
   };
 
   const modalTitle = (
-    <div className="flex items-center gap-2.5">
-      <div className="rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] p-1.5 text-[var(--accent)]">
-        <Zap size={16} />
+    <div className="flex items-center gap-3">
+      <div className="rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] p-2 text-[var(--accent)] shrink-0">
+        <Zap size={18} />
       </div>
       <div>
         <div className="flex items-center gap-2">
@@ -71,7 +71,7 @@ export default function EasyApplyModal({ job, isOpen, onClose, onSuccess }: Easy
             Verified
           </Badge>
         </div>
-        <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+        <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1">
           {job.title} • <span className="font-medium text-[var(--text)]">{job.company_name}</span>
         </p>
       </div>

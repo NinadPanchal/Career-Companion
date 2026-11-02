@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, ReactNode, forwardRef } from "react";
+import { InputHTMLAttributes, ReactNode, forwardRef } from "react";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -40,7 +40,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         <div className="relative flex items-center w-full">
           {leftIcon && (
-            <div className="absolute left-3 flex items-center pointer-events-none text-[var(--text-muted)] shrink-0">
+            <div className="absolute left-3 flex items-center justify-center pointer-events-none text-[var(--text-muted)] shrink-0 w-4 h-4">
               {leftIcon}
             </div>
           )}
@@ -49,18 +49,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             ref={ref}
             disabled={disabled}
-            className={`h-9 w-full rounded-[var(--radius-md)] bg-[var(--glass-bg)] border ${
+            className={`h-9.5 w-full rounded-[var(--radius-md)] bg-[var(--glass-bg)] border ${
               error
                 ? "border-[var(--danger)] focus:border-[var(--danger)]"
                 : "border-[var(--glass-border)] focus:border-[var(--accent)]"
-            } px-3 text-[var(--text-md)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none transition-colors duration-[var(--dur-fast)] ease-[var(--ease)] focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--accent)_55%,transparent)] disabled:opacity-40 disabled:cursor-not-allowed ${
-              leftIcon ? "pl-9" : ""
-            } ${rightIcon ? "pr-9" : ""} ${className}`}
+            } px-3.5 text-[var(--text-md)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none transition-colors duration-[var(--dur-fast)] ease-[var(--ease)] focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--accent)_55%,transparent)] disabled:opacity-40 disabled:cursor-not-allowed ${
+              leftIcon ? "pl-10" : ""
+            } ${rightIcon ? "pr-10" : ""} ${className}`}
             {...props}
           />
 
           {rightIcon && (
-            <div className="absolute right-3 flex items-center text-[var(--text-muted)] shrink-0">
+            <div className="absolute right-3 flex items-center justify-center text-[var(--text-muted)] shrink-0">
               {rightIcon}
             </div>
           )}

@@ -5,57 +5,64 @@
 /* BASE & RESET STYLESHEET (design.md Section 2, 5, 7)                       */
 /* ========================================================================= */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-html {
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-}
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
 
-body {
-  min-height: 100vh;
-  font-family: var(--font-sans);
-  font-size: var(--text-md);
-  line-height: 1.5;
-  color: var(--text);
-  background: var(--bg-gradient);
-  background-attachment: fixed;
-  background-color: var(--bg);
-}
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
 
-#root {
-  min-height: 100vh;
-}
+  body {
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    font-size: var(--text-md);
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    background-color: var(--bg);
+  }
 
-/* Headings */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: var(--weight-semibold);
-  letter-spacing: -0.01em;
-  color: var(--text);
-  line-height: 1.25;
-}
+  #root {
+    min-height: 100vh;
+  }
 
-h1 { font-size: var(--text-2xl); }
-h2 { font-size: var(--text-xl); }
-h3 { font-size: var(--text-lg); }
-h4 { font-size: var(--text-md); }
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.015em;
+    color: var(--text);
+    line-height: 1.25;
+  }
 
-p {
-  color: var(--text-muted);
-}
+  h1 { font-size: var(--text-2xl); }
+  h2 { font-size: var(--text-xl); }
+  h3 { font-size: var(--text-lg); }
+  h4 { font-size: var(--text-md); }
 
-a {
-  color: inherit;
-  text-decoration: none;
+  p {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 /* Focus Rings */
@@ -104,4 +111,3 @@ a {
     transition: none !important;
   }
 }
-

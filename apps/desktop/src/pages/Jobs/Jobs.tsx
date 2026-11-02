@@ -208,21 +208,21 @@ export default function Jobs() {
   }, [discoveredJobs, remoteOnly, minSalaryFilter, sortBy]);
 
   return (
-    <div className="space-y-[var(--space-4)] font-sans select-none">
+    <div className="flex flex-col gap-6 font-sans select-none pb-12">
       {/* ========================================================================= */}
       {/* PAGE HEADER & VIEW SWITCHER                                               */}
       {/* ========================================================================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[var(--divider)]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--divider)]">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-[var(--text-xl)] font-semibold text-[var(--text)] tracking-tight">
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-semibold text-[var(--text)] tracking-tight">
               Job discovery
             </h1>
-            <span className="text-[var(--text-xs)] text-[var(--text-muted)] bg-[var(--glass-bg)] border border-[var(--glass-border)] px-2 py-0.5 rounded-full font-medium">
+            <span className="text-[var(--text-xs)] text-[var(--text-muted)] bg-[var(--glass-bg)] border border-[var(--glass-border)] px-2.5 py-0.5 rounded-full font-medium">
               {currentDisplayJobs.length} roles found
             </span>
           </div>
-          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1 leading-relaxed">
             Explore positions matched to your profile skills and experience.
           </p>
         </div>
@@ -241,7 +241,7 @@ export default function Jobs() {
       {/* ========================================================================= */}
       {/* SEARCH & FILTERS CARD                                                     */}
       {/* ========================================================================= */}
-      <Card className="space-y-3">
+      <Card className="p-5 sm:p-6 flex flex-col gap-4">
         <form onSubmit={handleSearch} className="flex flex-col md:flex-row items-stretch md:items-center gap-2.5">
           {/* Input 1: Search query */}
           <div className="flex-1 relative">

@@ -66,19 +66,19 @@ export default function CoverLetter() {
   };
 
   return (
-    <div className="space-y-[var(--space-4)] font-sans select-none">
+    <div className="flex flex-col gap-6 font-sans select-none pb-10">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[var(--divider)]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--divider)]">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-[var(--text-xl)] font-semibold text-[var(--text)] tracking-tight">
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-semibold text-[var(--text)] tracking-tight">
               Outreach Studio
             </h1>
             <Badge variant="emerald" size="sm">
               Tailored draft
             </Badge>
           </div>
-          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1 leading-relaxed">
             Generate tailored cover letters, referral pitches, and hiring manager cold emails.
           </p>
         </div>
@@ -95,10 +95,10 @@ export default function CoverLetter() {
         />
       </div>
 
-      <div className="grid gap-[var(--space-4)] lg:grid-cols-12 items-start">
+      <div className="grid gap-6 lg:grid-cols-12 items-start">
         {/* Left Column: Configuration Form (5 cols) */}
-        <div className="lg:col-span-5 space-y-4">
-          <Card className="space-y-3.5">
+        <div className="lg:col-span-5 flex flex-col gap-5">
+          <Card className="p-6 flex flex-col gap-4">
             <div className="flex items-center gap-2 pb-2.5 border-b border-[var(--divider)]">
               <SlidersHorizontal size={14} className="text-[var(--accent)]" />
               <h2 className="text-[var(--text-xs)] font-semibold text-[var(--text)]">

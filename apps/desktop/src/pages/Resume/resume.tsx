@@ -130,21 +130,21 @@ export default function Resume() {
     : ["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Docker", "Redis", "Kafka", "GraphQL", "Kubernetes"];
 
   return (
-    <div className="space-y-[var(--space-4)] font-sans select-none">
+    <div className="flex flex-col gap-6 font-sans select-none pb-10">
       {/* ========================================================================= */}
       {/* TOP HEADER & TAB SWITCHER                                                 */}
       {/* ========================================================================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[var(--divider)]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--divider)]">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-[var(--text-xl)] font-semibold text-[var(--text)] tracking-tight">
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-semibold text-[var(--text)] tracking-tight">
               Resume & ATS
             </h1>
             <Badge variant="emerald" size="sm">
               Resume active
             </Badge>
           </div>
-          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1 leading-relaxed">
             Upload your resume, audit readability for applicant tracking systems, and optimize accomplishment bullets.
           </p>
         </div>
@@ -164,19 +164,19 @@ export default function Resume() {
       {/* TAB 1: ATS READINESS AUDIT & SKILLS                                       */}
       {/* ========================================================================= */}
       {activeTab === "ats" && (
-        <div className="space-y-[var(--space-4)]">
+        <div className="flex flex-col gap-6">
           {/* Top Row: File Upload Dropzone + Score Card */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-[var(--space-4)] items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             {/* Primary Action: Resume Upload & Active Document Info (7 cols) */}
-            <Card className="lg:col-span-7 flex flex-col justify-between">
+            <Card className="lg:col-span-7 flex flex-col justify-between p-6 gap-5">
               <div>
-                <div className="flex items-center justify-between pb-3 border-b border-[var(--divider)]">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] border border-[color-mix(in_srgb,var(--success)_24%,transparent)] flex items-center justify-center text-[var(--success)]">
-                      <FileText size={14} />
+                <div className="flex items-center justify-between pb-3.5 border-b border-[var(--divider)]">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] border border-[color-mix(in_srgb,var(--success)_24%,transparent)] flex items-center justify-center text-[var(--success)] shrink-0">
+                      <FileText size={15} />
                     </div>
                     <div>
-                      <h3 className="text-[var(--text-xs)] font-semibold text-[var(--text)]">
+                      <h3 className="text-[var(--text-sm)] font-semibold text-[var(--text)]">
                         Active document
                       </h3>
                       <p className="text-[11px] text-[var(--text-muted)]">
@@ -309,19 +309,19 @@ export default function Resume() {
       {/* TAB 2: GOOGLE XYZ ACCOMPLISHMENT REWRITER                                  */}
       {/* ========================================================================= */}
       {activeTab === "rewriter" && (
-        <div className="space-y-[var(--space-4)]">
+        <div className="flex flex-col gap-6">
           {/* Formula Guide Card */}
-          <Card className="p-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] flex items-center justify-center text-[var(--accent)]">
-                  <Wand2 size={15} />
+          <Card className="p-5 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5">
+                <div className="w-8.5 h-8.5 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] flex items-center justify-center text-[var(--accent)] shrink-0">
+                  <Wand2 size={16} />
                 </div>
                 <div>
-                  <h3 className="text-[var(--text-xs)] font-semibold text-[var(--text)]">
+                  <h3 className="text-[var(--text-sm)] font-semibold text-[var(--text)]">
                     Google XYZ accomplishment formula
                   </h3>
-                  <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+                  <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1">
                     "Accomplished <span className="text-[var(--success)] font-medium">[X]</span>, as measured by{" "}
                     <span className="text-[var(--accent)] font-medium">[Y]</span>, by doing{" "}
                     <span className="text-[var(--warning)] font-medium">[Z]</span>."
@@ -329,7 +329,7 @@ export default function Resume() {
                 </div>
               </div>
 
-              <span className="px-2 py-0.5 rounded-[var(--radius-sm)] text-[11px] bg-[var(--glass-bg)] text-[var(--text-muted)] border border-[var(--glass-border)] shrink-0 font-medium font-mono">
+              <span className="px-2.5 py-1 rounded-[var(--radius-sm)] text-[11px] bg-[var(--glass-bg)] text-[var(--text-muted)] border border-[var(--glass-border)] shrink-0 font-medium font-mono whitespace-nowrap">
                 High-impact format
               </span>
             </div>

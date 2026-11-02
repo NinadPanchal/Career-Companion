@@ -45,7 +45,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             error
               ? "border-[var(--danger)] focus:border-[var(--danger)]"
               : "border-[var(--glass-border)] focus:border-[var(--accent)]"
-          } p-3 text-[var(--text-md)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none transition-colors duration-[var(--dur-fast)] ease-[var(--ease)] focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--accent)_55%,transparent)] resize-y disabled:opacity-40 disabled:cursor-not-allowed ${className}`}
+          } p-3.5 text-[var(--text-md)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none transition-colors duration-[var(--dur-fast)] ease-[var(--ease)] focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--accent)_55%,transparent)] resize-y disabled:opacity-40 disabled:cursor-not-allowed leading-relaxed ${className}`}
           {...props}
         />
 
@@ -66,3 +66,4 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 Textarea.displayName = "Textarea";
 
 export default Textarea;
+

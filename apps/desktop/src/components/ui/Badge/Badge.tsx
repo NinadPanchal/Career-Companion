@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 
 export type BadgeVariant =
   | "applied"
@@ -13,7 +13,8 @@ export type BadgeVariant =
   | "amber"
   | "rose"
   | "neutral"
-  | "primary";
+  | "primary"
+  | "success";
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   children: ReactNode;
@@ -36,6 +37,7 @@ export function Badge({
     screening: "bg-[var(--accent)]",
     interview: "bg-[var(--status-interview)]",
     offer: "bg-[var(--status-offer)]",
+    success: "bg-[var(--success)]",
     rejected: "bg-[var(--status-rejected)]",
     discovered: "bg-[var(--status-discovered)]",
     archived: "bg-[var(--text-faint)]",
@@ -57,6 +59,8 @@ export function Badge({
       "bg-[color-mix(in_srgb,var(--status-interview)_12%,transparent)] text-[var(--status-interview)] border-[color-mix(in_srgb,var(--status-interview)_25%,transparent)]",
     offer:
       "bg-[color-mix(in_srgb,var(--status-offer)_12%,transparent)] text-[var(--status-offer)] border-[color-mix(in_srgb,var(--status-offer)_25%,transparent)]",
+    success:
+      "bg-[color-mix(in_srgb,var(--success)_12%,transparent)] text-[var(--success)] border-[color-mix(in_srgb,var(--success)_25%,transparent)]",
     rejected:
       "bg-[color-mix(in_srgb,var(--status-rejected)_12%,transparent)] text-[var(--status-rejected)] border-[color-mix(in_srgb,var(--status-rejected)_25%,transparent)]",
     discovered:
@@ -77,14 +81,15 @@ export function Badge({
       "bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-[var(--accent)] border-[color-mix(in_srgb,var(--accent)_25%,transparent)]",
   };
 
+  // Step 2 Spacing: padding 6px 12px (small ones 4px 10px), whitespace-nowrap, gap 6-8px
   const sizeClasses = {
-    sm: "h-5 px-2 text-[11px] gap-1.5",
-    md: "h-6 px-2.5 text-[var(--text-xs)] gap-2",
+    sm: "py-1 px-2.5 text-[11px] gap-1.5", // 4px 10px
+    md: "py-1.5 px-3 text-[var(--text-xs)] gap-2", // 6px 12px
   }[size];
 
   return (
     <span
-      className={`inline-flex items-center font-medium rounded-[var(--radius-sm)] border select-none transition-colors leading-none ${sizeClasses} ${badgeStyleClasses[variant]} ${className}`}
+      className={`inline-flex items-center justify-center font-medium rounded-[var(--radius-sm)] border select-none transition-colors whitespace-nowrap leading-none shrink-0 ${sizeClasses} ${badgeStyleClasses[variant]} ${className}`}
       {...props}
     >
       {dot && (
@@ -93,7 +98,7 @@ export function Badge({
           aria-hidden="true"
         />
       )}
-      <span className="truncate">{children}</span>
+      <span className="whitespace-nowrap">{children}</span>
     </span>
   );
 }

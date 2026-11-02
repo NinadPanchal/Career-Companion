@@ -92,38 +92,38 @@ export default function InterviewPrep() {
   };
 
   return (
-    <div className="space-y-[var(--space-4)] font-sans select-none">
+    <div className="flex flex-col gap-6 font-sans select-none pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[var(--divider)]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--divider)]">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-[var(--text-xl)] font-semibold text-[var(--text)] tracking-tight">
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-semibold text-[var(--text)] tracking-tight">
               STAR Simulator
             </h1>
             <Badge variant="emerald" size="sm">
               Interview prep
             </Badge>
           </div>
-          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+          <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1 leading-relaxed">
             Timed behavioral and technical question practice with structured rubric scoring.
           </p>
         </div>
 
         {/* Target role & company configuration */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
           <input
             type="text"
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
             placeholder="Target role"
-            className="w-36 sm:w-44 h-8.5 px-3 rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text-xs)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none focus:border-[var(--accent)] transition-colors"
+            className="w-36 sm:w-44 h-9 px-3.5 rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text-xs)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none focus:border-[var(--accent)] transition-colors"
           />
           <input
             type="text"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
             placeholder="Company"
-            className="w-28 sm:w-36 h-8.5 px-3 rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text-xs)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none focus:border-[var(--accent)] transition-colors"
+            className="w-28 sm:w-36 h-9 px-3.5 rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text-xs)] text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none focus:border-[var(--accent)] transition-colors"
           />
           <Button
             size="sm"
@@ -137,10 +137,10 @@ export default function InterviewPrep() {
         </div>
       </div>
 
-      <div className="grid gap-[var(--space-4)] lg:grid-cols-12 items-start">
+      <div className="grid gap-6 lg:grid-cols-12 items-start">
         {/* Left Side: Question List Navigation (4 cols) */}
-        <div className="lg:col-span-4 space-y-3">
-          <Card className="space-y-2.5">
+        <div className="lg:col-span-4 flex flex-col gap-4">
+          <Card className="p-5 flex flex-col gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[var(--divider)]">
               <h2 className="text-[var(--text-xs)] font-semibold text-[var(--text)]">
                 Practice questions ({questions.length})

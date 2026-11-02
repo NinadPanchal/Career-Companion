@@ -58,7 +58,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {/* Toast Container: bottom-right per design.md */}
       <div
         aria-live="polite"
-        className="fixed bottom-[var(--space-4)] right-[var(--space-4)] z-50 flex flex-col gap-2 max-w-sm pointer-events-none"
+        className="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 max-w-sm pointer-events-none"
       >
         {toasts.map((t) => {
           const iconMap = {
@@ -71,7 +71,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           return (
             <div
               key={t.id}
-              className="pointer-events-auto glass rounded-[var(--radius-md)] p-3 shadow-[var(--glass-shadow)] flex items-start gap-2.5 animate-[slide-up_var(--dur-base)_var(--ease)] text-[var(--text)] border border-[var(--glass-border)]"
+              className="pointer-events-auto glass rounded-[var(--radius-md)] p-3.5 shadow-[var(--glass-shadow)] flex items-start gap-3 animate-[slide-up_var(--dur-base)_var(--ease)] text-[var(--text)] border border-[var(--glass-border)]"
             >
               {iconMap[t.type || "info"]}
               <div className="flex-1 min-w-0">
@@ -107,3 +107,4 @@ export function useToast(): ToastContextValue {
   }
   return context;
 }
+
