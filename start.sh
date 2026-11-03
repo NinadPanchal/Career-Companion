@@ -24,8 +24,8 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 API_DIR="$PROJECT_ROOT/apps/api"
 DESKTOP_DIR="$PROJECT_ROOT/apps/desktop"
 
-# Default mode
-MODE="web"
+# Default mode (launch native desktop app)
+MODE="desktop"
 FORCE_CLEAN=false
 
 # Parse arguments
@@ -49,8 +49,8 @@ for arg in "$@"; do
       echo "Usage: ./start.sh [mode] [flags]"
       echo ""
       echo "Modes:"
-      echo "  web (default)       Start FastAPI backend + Web dev server (http://localhost:1420)"
-      echo "  desktop | tauri     Start FastAPI backend + Native Tauri desktop app"
+      echo "  desktop (default)   Start FastAPI backend + Native Tauri desktop app"
+      echo "  web                 Start FastAPI backend + Web dev server (http://localhost:1420)"
       echo "  api | backend       Start FastAPI backend only (http://127.0.0.1:8000)"
       echo ""
       echo "Flags:"
@@ -197,7 +197,16 @@ echo ""
 
 # 2. Start Frontend based on requested mode
 if [[ "$MODE" == "desktop" ]]; then
+  if [[ "$FORCE_CLEAN" == true ]]; then
+    free_port 1420
+  fi
+
   info "Launching Tauri Native Desktop Window..."
+  echo -e "  Native App:       ${BOLD}Tauri Desktop Window${NC}"
+  echo -e "  Local Web Server: ${CYAN}http://localhost:1420${NC} (also accessible in browser)"
+  echo -e "  Press ${YELLOW}Ctrl+C${NC} at any time to shut down all services."
+  echo -e "${CYAN}----------------------------------------------------------${NC}"
+
   (cd "$DESKTOP_DIR" && $PACKAGE_MANAGER tauri dev)
 elif [[ "$MODE" == "api" ]]; then
   success "FastAPI Backend is running in standalone mode. Press Ctrl+C to stop."
