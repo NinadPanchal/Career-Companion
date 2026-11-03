@@ -23,6 +23,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { api } from "../../lib/api";
 import { useProfileStore } from "../../features/profile/stores/profile.store";
 import { profileService } from "../../features/profile/services/profile.service";
+import { jobsService } from "../../features/jobs/services/jobs.service";
 
 export function Settings() {
   const { theme, setTheme } = useTheme();
@@ -31,10 +32,29 @@ export function Settings() {
   const [userName, setUserName] = useState(profile?.name || "");
   const [userRole, setUserRole] = useState(profile?.headline || "");
   const [userEmail, setUserEmail] = useState(profile?.email || "");
+  
+  // 4 JSearch Suite API Keys
   const [apiKey, setApiKey] = useState(
     () => localStorage.getItem("jsearch_api_key") || "86d2655e8cmshbe7664027232ce4p1a0b4djsnd144712c6216"
   );
+  const [searchKey, setSearchKey] = useState(
+    () => localStorage.getItem("jsearch_search_key") || ""
+  );
+  const [detailsKey, setDetailsKey] = useState(
+    () => localStorage.getItem("jsearch_details_key") || ""
+  );
+  const [salaryKey, setSalaryKey] = useState(
+    () => localStorage.getItem("jsearch_salary_key") || ""
+  );
+  const [companySalaryKey, setCompanySalaryKey] = useState(
+    () => localStorage.getItem("jsearch_company_salary_key") || ""
+  );
+
   const [showApiKey, setShowApiKey] = useState(false);
+  const [showAdvancedKeys, setShowAdvancedKeys] = useState(false);
+  const [maskState, setMaskState] = useState<Record<string, boolean>>({});
+  const toggleMask = (id: string) => setMaskState((prev) => ({ ...prev, [id]: !prev[id] }));
+
   const [apiStatus, setApiStatus] = useState<"checking" | "connected" | "offline">("checking");
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -44,7 +64,19 @@ export function Settings() {
 
   useEffect(() => {
     checkApiConnection();
+    loadRemoteKeys();
   }, []);
+
+  const loadRemoteKeys = async () => {
+    try {
+      const data = await jobsService.getApiKeys();
+      if (data) {
+        // Backend keys are loaded
+      }
+    } catch {
+      // Ignored if offline
+    }
+  };
 
   useEffect(() => {
     if (profile) {
@@ -82,9 +114,26 @@ export function Settings() {
         });
         setProfile(updated);
       }
-      if (apiKey) {
-        localStorage.setItem("jsearch_api_key", apiKey.trim());
+
+      // Persist all 4 API keys to localStorage and update backend runtime
+      localStorage.setItem("jsearch_api_key", apiKey.trim());
+      localStorage.setItem("jsearch_search_key", searchKey.trim());
+      localStorage.setItem("jsearch_details_key", detailsKey.trim());
+      localStorage.setItem("jsearch_salary_key", salaryKey.trim());
+      localStorage.setItem("jsearch_company_salary_key", companySalaryKey.trim());
+
+      try {
+        await jobsService.updateApiKeys({
+          jsearch_api_key: apiKey.trim(),
+          jsearch_search_key: searchKey.trim(),
+          jsearch_details_key: detailsKey.trim(),
+          jsearch_salary_key: salaryKey.trim(),
+          jsearch_company_salary_key: companySalaryKey.trim(),
+        });
+      } catch (e) {
+        console.warn("Could not sync API keys with backend immediately", e);
       }
+
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (err) {
@@ -335,27 +384,47 @@ export function Settings() {
 
         {/* External API Credentials */}
         <Card className="p-6 flex flex-col gap-5">
-          <div className="flex items-center gap-3 pb-4 border-b border-[var(--divider)]">
-            <div className="w-8.5 h-8.5 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--warning)_12%,transparent)] border border-[color-mix(in_srgb,var(--warning)_24%,transparent)] flex items-center justify-center text-[var(--warning)] shrink-0">
-              <Key size={17} />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[var(--divider)]">
+            <div className="flex items-center gap-3">
+              <div className="w-8.5 h-8.5 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--warning)_12%,transparent)] border border-[color-mix(in_srgb,var(--warning)_24%,transparent)] flex items-center justify-center text-[var(--warning)] shrink-0">
+                <Key size={17} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-[var(--text-md)] font-semibold text-[var(--text)]">RapidAPI & JSearch Integration</h2>
+                  <Badge variant="success" size="sm">4 Endpoints Ready</Badge>
+                </div>
+                <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+                  Real-time Google for Jobs feed, job details, and live salary intelligence
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-[var(--text-md)] font-semibold text-[var(--text)]">External API Credentials</h2>
-              <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
-                Optional live job search or external LLM API key
-              </p>
-            </div>
+
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => setShowAdvancedKeys((prev) => !prev)}
+            >
+              {showAdvancedKeys ? "Collapse 4 Endpoints" : "Configure 4 Endpoints"}
+            </Button>
           </div>
 
           <p className="text-[var(--text-sm)] text-[var(--text-muted)] leading-relaxed">
-            API keys are masked by default and stored securely in your local environment. Keys are used only when initiating live external provider queries.
+            Career Companion connects to 4 RapidAPI endpoints: <strong>Job Search</strong>, <strong>Job Details</strong>, <strong>Job Salary Benchmark</strong>, and <strong>Company Job Salary</strong>. You can use your primary key for all 4, or customize individual endpoint keys below.
           </p>
 
-          <div>
+          {/* Primary Key */}
+          <div className="p-4 rounded-[var(--radius-md)] bg-[var(--surface-solid)] border border-[var(--glass-border)] space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[var(--text-xs)] font-semibold text-[var(--text)]">
+                Primary RapidAPI Key (Shared Default)
+              </span>
+              <span className="text-[11px] text-[var(--text-muted)]">Applies across all 4 endpoints</span>
+            </div>
             <Input
-              label="JSearch / RapidAPI key"
               type={showApiKey ? "text" : "password"}
-              placeholder="Enter API key"
+              placeholder="e.g. 86d2655e8cmshbe..."
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
               rightIcon={
@@ -373,6 +442,123 @@ export function Settings() {
               }
             />
           </div>
+
+          {/* 4 Dedicated Endpoint Inputs */}
+          {showAdvancedKeys && (
+            <div className="space-y-4 pt-2 border-t border-[var(--divider)] animate-in fade-in duration-200">
+              <div className="text-[var(--text-xs)] font-semibold uppercase tracking-wider text-[var(--text-faint)]">
+                Individual Endpoint Overrides (Optional)
+              </div>
+
+              {/* 1. Job Search */}
+              <div className="grid gap-1">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="font-medium text-[var(--text)]">1. Job Search API (/search-v2)</span>
+                  <Badge variant={searchKey ? "success" : "neutral"} size="sm">
+                    {searchKey ? "Custom Key" : "Using Primary"}
+                  </Badge>
+                </div>
+                <Input
+                  type={maskState["search"] ? "text" : "password"}
+                  placeholder={apiKey ? "Inheriting primary key" : "Enter dedicated Job Search key"}
+                  value={searchKey}
+                  onChange={(e) => setSearchKey(e.target.value)}
+                  rightIcon={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => toggleMask("search")}
+                      className="h-6 w-6 text-[var(--text-muted)]"
+                    >
+                      {maskState["search"] ? <EyeOff size={13} /> : <Eye size={13} />}
+                    </Button>
+                  }
+                />
+              </div>
+
+              {/* 2. Job Details */}
+              <div className="grid gap-1">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="font-medium text-[var(--text)]">2. Job Details API (/job-details)</span>
+                  <Badge variant={detailsKey ? "success" : "neutral"} size="sm">
+                    {detailsKey ? "Custom Key" : "Using Primary"}
+                  </Badge>
+                </div>
+                <Input
+                  type={maskState["details"] ? "text" : "password"}
+                  placeholder={apiKey ? "Inheriting primary key" : "Enter dedicated Job Details key"}
+                  value={detailsKey}
+                  onChange={(e) => setDetailsKey(e.target.value)}
+                  rightIcon={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => toggleMask("details")}
+                      className="h-6 w-6 text-[var(--text-muted)]"
+                    >
+                      {maskState["details"] ? <EyeOff size={13} /> : <Eye size={13} />}
+                    </Button>
+                  }
+                />
+              </div>
+
+              {/* 3. Job Salary Benchmark */}
+              <div className="grid gap-1">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="font-medium text-[var(--text)]">3. Job Salary Estimation API (/estimated-salary)</span>
+                  <Badge variant={salaryKey ? "success" : "neutral"} size="sm">
+                    {salaryKey ? "Custom Key" : "Using Primary"}
+                  </Badge>
+                </div>
+                <Input
+                  type={maskState["salary"] ? "text" : "password"}
+                  placeholder={apiKey ? "Inheriting primary key" : "Enter dedicated Job Salary key"}
+                  value={salaryKey}
+                  onChange={(e) => setSalaryKey(e.target.value)}
+                  rightIcon={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => toggleMask("salary")}
+                      className="h-6 w-6 text-[var(--text-muted)]"
+                    >
+                      {maskState["salary"] ? <EyeOff size={13} /> : <Eye size={13} />}
+                    </Button>
+                  }
+                />
+              </div>
+
+              {/* 4. Company Job Salary */}
+              <div className="grid gap-1">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="font-medium text-[var(--text)]">4. Company Job Salary API (/company-job-salary)</span>
+                  <Badge variant={companySalaryKey ? "success" : "neutral"} size="sm">
+                    {companySalaryKey ? "Custom Key" : "Using Primary"}
+                  </Badge>
+                </div>
+                <Input
+                  type={maskState["companySalary"] ? "text" : "password"}
+                  placeholder={apiKey ? "Inheriting primary key" : "Enter dedicated Company Salary key"}
+                  value={companySalaryKey}
+                  onChange={(e) => setCompanySalaryKey(e.target.value)}
+                  rightIcon={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => toggleMask("companySalary")}
+                      className="h-6 w-6 text-[var(--text-muted)]"
+                    >
+                      {maskState["companySalary"] ? <EyeOff size={13} /> : <Eye size={13} />}
+                    </Button>
+                  }
+                />
+              </div>
+            </div>
+          )}
         </Card>
 
         {/* Active Resume & Workspace Management */}

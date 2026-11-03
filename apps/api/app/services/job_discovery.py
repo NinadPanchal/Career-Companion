@@ -257,49 +257,143 @@ class JobDiscoveryService:
         return matched
 
     async def _search_jsearch(self, query: str, location: Optional[str], remote_only: bool, page: int) -> List[DiscoveredJob]:
-        if not hasattr(settings, 'JSEARCH_API_KEY') or not settings.JSEARCH_API_KEY:
+        key = settings.get_search_key()
+        if not key:
             return []
             
         q = f"{query} in {location or 'India'}"
             
         headers = {
-            "X-RapidAPI-Key": settings.JSEARCH_API_KEY,
-            "X-RapidAPI-Host": "jsearch.p.rapidapi.com"
+            "x-rapidapi-key": key,
+            "x-rapidapi-host": "jsearch.p.rapidapi.com"
         }
         params = {
             "query": q,
-            "page": str(page),
-            "num_pages": "1",
-            "remote_jobs_only": "true" if remote_only else "false"
+            "num_pages": 1,
+            "work_from_home": "true" if remote_only else "false"
         }
         
         try:
-            async with httpx.AsyncClient(timeout=3.0) as client:
-                response = await client.get("https://jsearch.p.rapidapi.com/search", headers=headers, params=params)
+            async with httpx.AsyncClient(timeout=18.0) as client:
+                response = await client.get("https://jsearch.p.rapidapi.com/search-v2", headers=headers, params=params)
                 if response.status_code != 200:
+                    logger.debug(f"JSearch HTTP {response.status_code}: {response.text}")
                     return []
                 data = response.json()
                 
+                raw_data = data.get("data", {})
+                if isinstance(raw_data, dict):
+                    raw_jobs = raw_data.get("jobs", [])
+                elif isinstance(raw_data, list):
+                    raw_jobs = raw_data
+                else:
+                    raw_jobs = []
+
                 results = []
-                for item in data.get("data", []):
+                for item in raw_jobs:
+                    min_sal = item.get("job_min_salary")
+                    max_sal = item.get("job_max_salary")
+                    curr = item.get("job_salary_currency") or "INR"
+                    loc = item.get("job_location") or f"{item.get('job_city', '')}, {item.get('job_state', '')}, {item.get('job_country', '')}".strip(', ')
                     results.append(DiscoveredJob(
                         external_id=str(item.get("job_id", "")),
                         title=item.get("job_title", ""),
                         company_name=item.get("employer_name", ""),
-                        location=f"{item.get('job_city', '')}, {item.get('job_state', '')}, India".strip(', '),
+                        location=loc or "India",
                         is_remote=item.get("job_is_remote", False),
-                        salary_min=item.get("job_min_salary"),
-                        salary_max=item.get("job_max_salary"),
-                        currency=item.get("job_salary_currency") or "INR",
-                        description=item.get("job_description"),
-                        url=item.get("job_apply_link"),
-                        source="jsearch",
-                        posted_at=item.get("job_posted_at_datetime_utc")
+                        salary_min=min_sal,
+                        salary_max=max_sal,
+                        currency=curr,
+                        description=item.get("job_description", "") or "",
+                        url=item.get("job_apply_link") or item.get("job_google_link") or "",
+                        source="JSearch (Live)",
+                        posted_at=item.get("job_posted_at_datetime_utc") or item.get("job_posted_at_timestamp")
                     ))
                 return results
         except Exception as e:
             logger.debug(f"JSearch timeout or error: {e}")
             return []
+
+    async def get_job_details(self, job_id: str) -> Optional[dict]:
+        """Fetch complete job details, employer reviews, and apply links via JSearch API."""
+        key = settings.get_details_key()
+        if not key or not job_id:
+            return None
+
+        headers = {
+            "x-rapidapi-key": key,
+            "x-rapidapi-host": "jsearch.p.rapidapi.com"
+        }
+        try:
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                response = await client.get(
+                    "https://jsearch.p.rapidapi.com/job-details",
+                    headers=headers,
+                    params={"job_id": job_id}
+                )
+                if response.status_code == 200:
+                    data = response.json()
+                    jobs = data.get("data", [])
+                    return jobs[0] if jobs else None
+        except Exception as e:
+            logger.error(f"Error fetching job details for {job_id}: {e}")
+        return None
+
+    async def get_estimated_salary(self, job_title: str, location: Optional[str] = "India") -> List[dict]:
+        """Fetch real-world market estimated salary distribution via JSearch API."""
+        key = settings.get_salary_key()
+        if not key or not job_title:
+            return []
+
+        headers = {
+            "x-rapidapi-key": key,
+            "x-rapidapi-host": "jsearch.p.rapidapi.com"
+        }
+        params = {
+            "job_title": job_title,
+            "location": location or "India"
+        }
+        try:
+            async with httpx.AsyncClient(timeout=12.0) as client:
+                response = await client.get(
+                    "https://jsearch.p.rapidapi.com/estimated-salary",
+                    headers=headers,
+                    params=params
+                )
+                if response.status_code == 200:
+                    data = response.json()
+                    return data.get("data", [])
+        except Exception as e:
+            logger.error(f"Error fetching estimated salary for {job_title}: {e}")
+        return []
+
+    async def get_company_salary(self, company: str, job_title: str) -> List[dict]:
+        """Fetch verified company-specific salary benchmarks via JSearch API."""
+        key = settings.get_company_salary_key()
+        if not key or not company or not job_title:
+            return []
+
+        headers = {
+            "x-rapidapi-key": key,
+            "x-rapidapi-host": "jsearch.p.rapidapi.com"
+        }
+        params = {
+            "company": company,
+            "job_title": job_title
+        }
+        try:
+            async with httpx.AsyncClient(timeout=12.0) as client:
+                response = await client.get(
+                    "https://jsearch.p.rapidapi.com/company-job-salary",
+                    headers=headers,
+                    params=params
+                )
+                if response.status_code == 200:
+                    data = response.json()
+                    return data.get("data", [])
+        except Exception as e:
+            logger.error(f"Error fetching company salary for {company} - {job_title}: {e}")
+        return []
 
     async def _search_adzuna(self, query: str, location: Optional[str], remote_only: bool, page: int) -> List[DiscoveredJob]:
         if not hasattr(settings, 'ADZUNA_APP_ID') or not settings.ADZUNA_APP_ID or not hasattr(settings, 'ADZUNA_APP_KEY') or not settings.ADZUNA_APP_KEY:

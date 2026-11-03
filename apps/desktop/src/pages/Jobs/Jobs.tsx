@@ -8,10 +8,13 @@ import {
   Search,
   Check,
   RotateCcw,
+  TrendingUp,
 } from "lucide-react";
 import { jobsService } from "../../features/jobs/services/jobs.service";
 import { useJobsStore, DiscoveredJob, SavedJob } from "../../features/jobs/stores/jobs.store";
 import EasyApplyModal from "../../features/jobs/components/EasyApplyModal";
+import SalaryInsightsModal from "../../features/jobs/components/SalaryInsightsModal";
+import JobDetailsModal from "../../features/jobs/components/JobDetailsModal";
 import { Card, Button, Badge, Tabs, EmptyState, Checkbox } from "../../components/ui";
 
 const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
@@ -20,16 +23,16 @@ const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
     title: "Senior Backend Engineer",
     company_name: "Zepto",
     location: "Mumbai - Powai / Hybrid",
-    salary_min: 3200000,
-    salary_max: 4500000,
+    salary_min: 2400000,
+    salary_max: 3600000,
     currency: "INR",
     is_remote: false,
     match_score: 92,
     matched_skills: ["Python", "FastAPI", "Redis Cluster", "PostgreSQL"],
     missing_skills: ["Apache Flink"],
-    source: "High Priority Match",
+    source: "Verified Direct Source",
     url: "https://www.zepto.com/careers",
-    description: "Build high-throughput order dispatch services",
+    description: "Build high-throughput order dispatch services and low-latency inventory syncing.",
     posted_at: "6 hours ago"
   },
   {
@@ -37,8 +40,8 @@ const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
     title: "Distributed Systems Engineer",
     company_name: "Razorpay",
     location: "Bengaluru / Remote friendly",
-    salary_min: 3800000,
-    salary_max: 5200000,
+    salary_min: 2800000,
+    salary_max: 4200000,
     currency: "INR",
     is_remote: true,
     match_score: 88,
@@ -46,7 +49,7 @@ const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
     missing_skills: ["CockroachDB"],
     source: "Verified Direct Source",
     url: "https://razorpay.com/jobs",
-    description: "Core payments ledger reliability and idempotency",
+    description: "Core payments ledger reliability, idempotent payment routes and fraud prevention.",
     posted_at: "1 day ago"
   },
   {
@@ -54,8 +57,8 @@ const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
     title: "Platform & AI Infrastructure Engineer",
     company_name: "BrowserStack",
     location: "Mumbai - Andheri East",
-    salary_min: 2800000,
-    salary_max: 4000000,
+    salary_min: 2000000,
+    salary_max: 3200000,
     currency: "INR",
     is_remote: false,
     match_score: 84,
@@ -63,7 +66,7 @@ const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
     missing_skills: ["Terraform"],
     source: "Mumbai Tech",
     url: "https://www.browserstack.com/careers",
-    description: "Virtualization device cloud scaling",
+    description: "Virtualization device cloud scaling and test execution infrastructure.",
     posted_at: "2 days ago"
   },
   {
@@ -71,8 +74,8 @@ const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
     title: "Full Stack Engineer",
     company_name: "CRED",
     location: "Remote / Bengaluru",
-    salary_min: 3000000,
-    salary_max: 4400000,
+    salary_min: 2500000,
+    salary_max: 3800000,
     currency: "INR",
     is_remote: true,
     match_score: 79,
@@ -80,10 +83,64 @@ const CURATED_SAMPLE_JOBS: DiscoveredJob[] = [
     missing_skills: ["Kotlin"],
     source: "Fintech Leader",
     url: "https://cred.club/careers",
-    description: "Member experience and transaction pipeline",
+    description: "Member experience and transaction pipeline for high-trust payment network.",
     posted_at: "3 days ago"
   }
 ];
+
+export function formatSalaryDisplay(job: {
+  salary_min?: number | null;
+  salary_max?: number | null;
+  currency?: string | null;
+}): { display: string; isDisclosed: boolean } {
+  const { salary_min, salary_max, currency } = job;
+  const curr = (currency || "INR").toUpperCase();
+
+  // If employer did not disclose compensation in posting
+  if (!salary_min && !salary_max) {
+    return {
+      display: "Competitive (Market Rate)",
+      isDisclosed: false,
+    };
+  }
+
+  // Format INR (Lakhs)
+  if (curr === "INR" || (salary_max && salary_max > 500000 && curr !== "USD" && curr !== "EUR" && curr !== "GBP")) {
+    if (salary_min && salary_max) {
+      const minL = (salary_min / 100000).toFixed(1).replace(/\.0$/, "");
+      const maxL = (salary_max / 100000).toFixed(1).replace(/\.0$/, "");
+      return { display: `₹${minL}L - ₹${maxL}L / yr`, isDisclosed: true };
+    }
+    const val = (salary_min || salary_max || 0) / 100000;
+    return { display: `₹${val.toFixed(1).replace(/\.0$/, "")}L / yr`, isDisclosed: true };
+  }
+
+  // Format USD ($k)
+  if (curr === "USD") {
+    // If rate is hourly (< $500)
+    if ((salary_max && salary_max <= 500) || (salary_min && salary_min <= 500)) {
+      if (salary_min && salary_max) {
+        return { display: `$${Math.round(salary_min)} - $${Math.round(salary_max)} / hr`, isDisclosed: true };
+      }
+      return { display: `$${Math.round(salary_min || salary_max || 0)} / hr`, isDisclosed: true };
+    }
+    // Annual
+    if (salary_min && salary_max) {
+      const minK = Math.round(salary_min / 1000);
+      const maxK = Math.round(salary_max / 1000);
+      return { display: `$${minK}k - $${maxK}k / yr`, isDisclosed: true };
+    }
+    const valK = Math.round((salary_min || salary_max || 0) / 1000);
+    return { display: `$${valK}k / yr`, isDisclosed: true };
+  }
+
+  // Fallback for GBP / EUR
+  const sym = curr === "EUR" ? "€" : curr === "GBP" ? "£" : `${curr} `;
+  if (salary_min && salary_max) {
+    return { display: `${sym}${Math.round(salary_min).toLocaleString()} - ${sym}${Math.round(salary_max).toLocaleString()} / yr`, isDisclosed: true };
+  }
+  return { display: `${sym}${Math.round(salary_min || salary_max || 0).toLocaleString()} / yr`, isDisclosed: true };
+}
 
 export default function Jobs() {
   const discoveredJobs = useJobsStore((s) => s.discoveredJobs);
@@ -110,6 +167,24 @@ export default function Jobs() {
   const [selectedJobForApply, setSelectedJobForApply] = useState<DiscoveredJob | null>(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [appliedJobIds, setAppliedJobIds] = useState<Set<string>>(new Set());
+
+  // Live Salary Insights Modal State (Powered by JSearch Salary Endpoints)
+  const [selectedJobForSalary, setSelectedJobForSalary] = useState<DiscoveredJob | null>(null);
+  const [isSalaryModalOpen, setIsSalaryModalOpen] = useState(false);
+
+  // Live Job Details Modal State (Powered by JSearch Job Details Endpoint)
+  const [selectedJobForDetails, setSelectedJobForDetails] = useState<DiscoveredJob | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+
+  const handleOpenSalaryInsights = (job: DiscoveredJob) => {
+    setSelectedJobForSalary(job);
+    setIsSalaryModalOpen(true);
+  };
+
+  const handleOpenJobDetails = (job: DiscoveredJob) => {
+    setSelectedJobForDetails(job);
+    setIsDetailsModalOpen(true);
+  };
 
   const fetchSavedJobs = useCallback(async () => {
     try {
@@ -407,6 +482,8 @@ export default function Jobs() {
                   setSelectedJobForApply(job);
                   setIsApplyModalOpen(true);
                 }}
+                onOpenSalaryInsights={handleOpenSalaryInsights}
+                onOpenJobDetails={handleOpenJobDetails}
               />
             ))
           )}
@@ -440,6 +517,26 @@ export default function Jobs() {
           setAppliedJobIds((prev) => new Set(prev).add(job.external_id));
         }}
       />
+
+      <SalaryInsightsModal
+        job={selectedJobForSalary}
+        isOpen={isSalaryModalOpen}
+        onClose={() => setIsSalaryModalOpen(false)}
+      />
+
+      <JobDetailsModal
+        job={selectedJobForDetails}
+        isOpen={isDetailsModalOpen}
+        onClose={() => setIsDetailsModalOpen(false)}
+        onEasyApply={(job) => {
+          setSelectedJobForApply(job);
+          setIsApplyModalOpen(true);
+        }}
+        onOpenSalaryInsights={handleOpenSalaryInsights}
+        isSaved={selectedJobForDetails ? isJobSaved(selectedJobForDetails.external_id) : false}
+        onSave={selectedJobForDetails ? () => handleSaveJob(selectedJobForDetails) : undefined}
+        isApplied={selectedJobForDetails ? appliedJobIds.has(selectedJobForDetails.external_id) : false}
+      />
     </div>
   );
 }
@@ -453,23 +550,19 @@ function JobCardItem({
   isSaved,
   isApplied,
   onEasyApply,
+  onOpenSalaryInsights,
+  onOpenJobDetails,
 }: {
   job: DiscoveredJob;
   onSave: () => void;
   isSaved: boolean;
   isApplied: boolean;
   onEasyApply: () => void;
+  onOpenSalaryInsights: (job: DiscoveredJob) => void;
+  onOpenJobDetails: (job: DiscoveredJob) => void;
 }) {
   const matchScore = job.match_score ?? 88;
-
-  const formatSalary = () => {
-    if (job.salary_min && job.salary_max) {
-      const minLakhs = (job.salary_min / 100000).toFixed(1);
-      const maxLakhs = (job.salary_max / 100000).toFixed(1);
-      return `₹${minLakhs}L - ₹${maxLakhs}L / yr`;
-    }
-    return "₹32.0L - ₹45.0L / yr";
-  };
+  const salaryInfo = formatSalaryDisplay(job);
 
   const matchedSkills = job.matched_skills && job.matched_skills.length > 0 
     ? job.matched_skills 
@@ -511,7 +604,11 @@ function JobCardItem({
           {/* Title & Organization Header */}
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1">
             <div className="min-w-0">
-              <h2 className="text-[var(--text-md)] sm:text-[var(--text-lg)] font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors truncate">
+              <h2 
+                onClick={() => onOpenJobDetails(job)}
+                className="text-[var(--text-md)] sm:text-[var(--text-lg)] font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors truncate cursor-pointer hover:underline"
+                title="Click to view full role overview & requirements"
+              >
                 {job.title}
               </h2>
 
@@ -525,11 +622,22 @@ function JobCardItem({
               </div>
             </div>
 
-            {/* Compensation Tag */}
-            <div className="text-left sm:text-right shrink-0 mt-1 sm:mt-0">
-              <span className="font-mono text-xs sm:text-[var(--text-sm)] font-semibold text-[var(--success)] tabular-nums">
-                {formatSalary()}
-              </span>
+            {/* Compensation Tag & Live Insights Trigger */}
+            <div className="text-left sm:text-right shrink-0 mt-1 sm:mt-0 flex sm:flex-col items-start sm:items-end gap-1">
+              <button
+                type="button"
+                onClick={() => onOpenSalaryInsights(job)}
+                className="font-mono text-xs sm:text-[var(--text-sm)] font-semibold text-[var(--success)] tabular-nums hover:underline inline-flex items-center gap-1 cursor-pointer transition-colors"
+                title="Click to view verified company & market salary benchmarks"
+              >
+                <span>{salaryInfo.display}</span>
+                <TrendingUp size={12} className="text-[var(--success)] shrink-0" />
+              </button>
+              {!salaryInfo.isDisclosed && (
+                <span className="text-[10px] text-[var(--text-muted)] font-mono">
+                  Market benchmarks available
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -602,22 +710,31 @@ function JobCardItem({
         <Button
           variant="secondary"
           size="sm"
+          onClick={() => onOpenJobDetails(job)}
+          className="flex-1 lg:flex-none text-xs"
+        >
+          Job Details
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={onSave}
           leftIcon={isSaved ? <BookmarkCheck size={13} className="text-[var(--success)]" /> : <Bookmark size={13} />}
-          className="flex-1 lg:flex-none"
+          className="flex-1 lg:flex-none text-xs"
         >
           {isSaved ? "Saved" : "Save"}
         </Button>
 
         {job.url && (
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex text-xs">
+          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex text-xs text-[var(--text-muted)]">
             <a
               href={job.url}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <span>View listing</span>
-              <ExternalLink size={12} />
+              <span>Original link</span>
+              <ExternalLink size={11} />
             </a>
           </Button>
         )}

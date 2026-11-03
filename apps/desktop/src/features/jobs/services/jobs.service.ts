@@ -98,4 +98,39 @@ export const jobsService = {
     const response = await api.get<ApplicationStats>('/applications/stats');
     return response.data;
   },
+
+  async getJobDetails(jobId: string) {
+    const response = await api.get<any>(`/jobs/details/${encodeURIComponent(jobId)}`);
+    return response.data;
+  },
+
+  async getEstimatedSalary(jobTitle: string, location?: string) {
+    const response = await api.get<{ job_title: string; location: string; estimates: any[] }>('/jobs/salary/estimate', {
+      params: { job_title: jobTitle, location: location || 'India' },
+    });
+    return response.data;
+  },
+
+  async getCompanySalary(company: string, jobTitle: string) {
+    const response = await api.get<{ company: string; job_title: string; benchmarks: any[] }>('/jobs/salary/company', {
+      params: { company, job_title: jobTitle },
+    });
+    return response.data;
+  },
+
+  async getApiKeys() {
+    const response = await api.get<any>('/settings/keys');
+    return response.data;
+  },
+
+  async updateApiKeys(payload: {
+    jsearch_api_key?: string;
+    jsearch_search_key?: string;
+    jsearch_details_key?: string;
+    jsearch_salary_key?: string;
+    jsearch_company_salary_key?: string;
+  }) {
+    const response = await api.post<any>('/settings/keys', payload);
+    return response.data;
+  },
 };

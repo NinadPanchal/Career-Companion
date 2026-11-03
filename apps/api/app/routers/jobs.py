@@ -127,6 +127,26 @@ async def discover_jobs(
         
     return response_jobs
 
+@router.get("/details/{job_id}")
+async def get_job_details(job_id: str):
+    """Fetch live details, application links, and company ratings for a specific job via JSearch."""
+    details = await job_discovery.get_job_details(job_id)
+    if not details:
+        raise HTTPException(status_code=404, detail="Job details not found or API key quota exceeded")
+    return details
+
+@router.get("/salary/estimate")
+async def get_salary_estimate(job_title: str = Query(...), location: Optional[str] = Query("India")):
+    """Fetch live market salary distribution for a job title and location via JSearch."""
+    salaries = await job_discovery.get_estimated_salary(job_title=job_title, location=location)
+    return {"job_title": job_title, "location": location, "estimates": salaries}
+
+@router.get("/salary/company")
+async def get_company_salary(company: str = Query(...), job_title: str = Query(...)):
+    """Fetch live company-specific salary benchmarks via JSearch."""
+    salaries = await job_discovery.get_company_salary(company=company, job_title=job_title)
+    return {"company": company, "job_title": job_title, "benchmarks": salaries}
+
 @router.post("/discover/save", response_model=JobRead)
 async def save_discovered_job(job_in: JobSaveFromDiscovery, db: AsyncSession = Depends(get_db)):
     # Check if exists
