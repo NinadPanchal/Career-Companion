@@ -12,7 +12,11 @@ class Settings(BaseSettings):
     MAX_FILE_SIZE_BYTES: int = 10 * 1024 * 1024  # 10MB
     APP_NAME: str = "Career Companion API"
 
-    model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8', extra='ignore')
+    model_config = SettingsConfigDict(
+        env_file=('.env', 'apps/api/.env', '../.env'),
+        env_file_encoding='utf-8',
+        extra='ignore'
+    )
 
 
 settings = Settings()

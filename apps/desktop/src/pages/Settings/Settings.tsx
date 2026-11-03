@@ -31,7 +31,9 @@ export function Settings() {
   const [userName, setUserName] = useState(profile?.name || "");
   const [userRole, setUserRole] = useState(profile?.headline || "");
   const [userEmail, setUserEmail] = useState(profile?.email || "");
-  const [apiKey, setApiKey] = useState("");
+  const [apiKey, setApiKey] = useState(
+    () => localStorage.getItem("jsearch_api_key") || "86d2655e8cmshbe7664027232ce4p1a0b4djsnd144712c6216"
+  );
   const [showApiKey, setShowApiKey] = useState(false);
   const [apiStatus, setApiStatus] = useState<"checking" | "connected" | "offline">("checking");
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -79,6 +81,9 @@ export function Settings() {
           email: userEmail.trim(),
         });
         setProfile(updated);
+      }
+      if (apiKey) {
+        localStorage.setItem("jsearch_api_key", apiKey.trim());
       }
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
