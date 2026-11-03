@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Zap, CheckCircle2, User, Mail, Phone, MapPin, FileText, Send } from "lucide-react";
 import { DiscoveredJob } from "../stores/jobs.store";
 import { useResumeStore } from "../../resume/stores/resume.store";
+import { useProfileStore } from "../../profile/stores/profile.store";
 import { Button, Badge, Modal, Input, Textarea } from "../../../components/ui";
 import { useApplicationsStore } from "../../applications/stores/applications.store";
 
@@ -13,21 +14,44 @@ interface EasyApplyModalProps {
 }
 
 export default function EasyApplyModal({ job, isOpen, onClose, onSuccess }: EasyApplyModalProps) {
-  const { analysis } = useResumeStore();
+  const { analysis, file } = useResumeStore();
+  const { profile } = useProfileStore();
   const { addApplication } = useApplicationsStore();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const candidateSkills = profile?.skills?.length
+    ? profile.skills
+    : analysis?.skills?.length
+    ? analysis.skills
+    : [];
+
   // Form states
-  const [fullName, setFullName] = useState("Ninad Panchal");
-  const [email, setEmail] = useState("ninad.panchal@career-companion.app");
-  const [phone, setPhone] = useState("+91 98765 43210");
-  const [location, setLocation] = useState("Mumbai, Maharashtra, India");
-  const [coverNote, setCoverNote] = useState(
-    `Hi Hiring Team at ${job?.company_name || 'Company'},\n\nI am applying for the ${job?.title || 'position'} role. With strong skills in ${analysis?.skills?.slice(0, 4).join(', ') || 'software engineering, Python, and React'}, I am confident in delivering high impact.`
-  );
+  const [fullName, setFullName] = useState(profile?.name || "");
+  const [email, setEmail] = useState(profile?.email || "");
+  const [phone, setPhone] = useState(profile?.phone || "");
+  const [location, setLocation] = useState(profile?.location || "");
+  const [coverNote, setCoverNote] = useState("");
+
+  useEffect(() => {
+    if (isOpen) {
+      if (profile) {
+        setFullName(profile.name || "");
+        setEmail(profile.email || "");
+        setPhone(profile.phone || "");
+        setLocation(profile.location || "");
+      }
+      const skillsStr = candidateSkills.slice(0, 4).join(", ") || "full-stack development";
+      setCoverNote(
+        `Hi Hiring Team at ${job?.company_name || 'Company'},\n\nI am applying for the ${job?.title || 'position'} role. With proven competencies in ${skillsStr}, I look forward to discussing how my experience can contribute to your team.`
+      );
+      setStep(1);
+      setSubmitted(false);
+      setErrorMessage("");
+    }
+  }, [isOpen, profile, job]);
 
   if (!job) return null;
 
@@ -143,18 +167,20 @@ export default function EasyApplyModal({ job, isOpen, onClose, onSuccess }: Easy
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <FileText size={16} className="text-[var(--success)]" />
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-[var(--text-xs)] font-semibold text-[var(--text)]">Primary Profile Resume</p>
-                      <p className="text-[11px] font-mono text-[var(--text-muted)]">parsed_resume_v2.pdf</p>
+                      <p className="text-[11px] font-mono text-[var(--text-muted)] truncate max-w-[200px]">
+                        {profile?.resume_filename || file?.name || "Active Resume"}
+                      </p>
                     </div>
                   </div>
                   <Badge variant="offer" size="sm">
-                    ATS Ready
+                    {profile ? `${profile.ats_score || 85}% ATS` : "ATS Ready"}
                   </Badge>
                 </div>
 
                 <div className="mt-2.5 pt-2 border-t border-[var(--divider)] flex flex-wrap gap-1">
-                  {(analysis?.skills?.slice(0, 5) || ["Python", "FastAPI", "React", "Docker"]).map((s) => (
+                  {candidateSkills.slice(0, 6).map((s) => (
                     <span
                       key={s}
                       className="px-2 py-0.5 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] text-[var(--success)] border border-[color-mix(in_srgb,var(--success)_24%,transparent)] text-[10px] font-mono"

@@ -9,6 +9,7 @@ from sqlalchemy.future import select
 from app.services.resume_parser import ResumeExtractionError, extract_resume_text
 from app.services.resume_sections import detect_resume_sections
 from app.services.skill_extractor import extract_skills
+from app.services.resume_extractor import parse_resume_to_candidate_profile
 
 from app.core.database import get_db
 from app.core.config import settings
@@ -16,6 +17,7 @@ from app.models.resume import Resume, ResumeSkill
 from app.models.skill import Skill
 from app.models.user import User
 from app.schemas.resume import ResumeUploadResponse, ResumeRead, ResumeDetail
+from app.schemas.profile import ResumeParseResponse, CandidateProfileCreate, ATSResult
 
 router = APIRouter(
     prefix="/resume",
@@ -30,7 +32,7 @@ ALLOWED_CONTENT_TYPES = {
 }
 
 async def get_or_create_default_user(db: AsyncSession) -> User:
-    result = await db.execute(select(User).where(User.email == 'local@career-companion.app'))
+    result = await db.execute(select(User).order_by(User.id.asc()))
     user = result.scalars().first()
     if not user:
         user = User(email='local@career-companion.app', full_name='Default User', hashed_password='not_used')
@@ -153,6 +155,90 @@ async def upload_resume(file: UploadFile = File(...), db: AsyncSession = Depends
         sections=sections,
         skills=skills,
         resume_id=resume.id
+    )
+
+@router.post("/parse", status_code=status.HTTP_200_OK, response_model=ResumeParseResponse)
+async def parse_resume(file: UploadFile = File(...), db: AsyncSession = Depends(get_db)):
+    """Parse resume into complete structured candidate profile and Google XYZ ATS score for onboarding review."""
+    extension = ALLOWED_CONTENT_TYPES.get(file.content_type or "")
+    # Fallback to extension check if content_type is octet-stream
+    if extension is None and file.filename:
+        if file.filename.lower().endswith(".pdf"):
+            extension = ".pdf"
+        elif file.filename.lower().endswith(".docx"):
+            extension = ".docx"
+
+    if extension is None:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail="Only PDF (.pdf) and Word (.docx) resumes are supported.",
+        )
+
+    content = await file.read()
+    if not content:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The uploaded resume file is empty.",
+        )
+    if len(content) > MAX_FILE_SIZE_BYTES:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail="Resume files must be 10 MB or smaller.",
+        )
+
+    UPLOADS_DIRECTORY.mkdir(parents=True, exist_ok=True)
+    stored_filename = f"{uuid4()}{extension}"
+    destination = UPLOADS_DIRECTORY / stored_filename
+    destination.write_bytes(content)
+
+    try:
+        extracted_text = extract_resume_text(destination)
+    except ResumeExtractionError as error:
+        destination.unlink(missing_ok=True)
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(error),
+        ) from error
+
+    # Run comprehensive structured extraction + Google XYZ audit
+    profile_data = parse_resume_to_candidate_profile(extracted_text, file.filename or "resume.pdf")
+
+    user = await get_or_create_default_user(db)
+
+    # Persist Resume record
+    sections = detect_resume_sections(extracted_text)
+    resume = Resume(
+        user_id=user.id,
+        title=file.filename or "Untitled Resume",
+        original_filename=file.filename or "unknown",
+        stored_filename=stored_filename,
+        file_type=extension.lstrip("."),
+        file_size_bytes=len(content),
+        raw_text=extracted_text,
+        sections=sections,
+        word_count=len(extracted_text.split()),
+        is_primary=True
+    )
+    db.add(resume)
+    await db.flush()
+
+    for skill_name in profile_data.get("skills", []):
+        skill_obj = await get_or_create_skill(db, skill_name)
+        rs = ResumeSkill(resume_id=resume.id, skill_id=skill_obj.id, confidence_score=1.0)
+        db.add(rs)
+
+    await db.commit()
+
+    profile_data["resume_id"] = resume.id
+    profile_data["resume_filename"] = file.filename or "resume.pdf"
+
+    return ResumeParseResponse(
+        profile=CandidateProfileCreate(**profile_data),
+        resume_id=resume.id,
+        original_filename=file.filename or "resume.pdf",
+        stored_filename=stored_filename,
+        word_count=len(extracted_text.split()),
+        ats=ATSResult(**profile_data.get("ats", {"score": 85, "issues": []}))
     )
 
 @router.get("/{resume_id}", response_model=ResumeDetail)

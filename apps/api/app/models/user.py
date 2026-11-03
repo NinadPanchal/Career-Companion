@@ -23,5 +23,8 @@ class User(Base):
     )
 
     # Relationships
+    profile: Mapped[Optional["CandidateProfile"]] = relationship(
+        "CandidateProfile", back_populates="user", cascade="all, delete-orphan", uselist=False
+    )
     resumes: Mapped[List["Resume"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     applications: Mapped[List["Application"]] = relationship(back_populates="user", cascade="all, delete-orphan")

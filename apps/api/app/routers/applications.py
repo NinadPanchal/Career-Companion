@@ -19,7 +19,7 @@ from app.schemas.application import (
 router = APIRouter(prefix="/applications", tags=["Applications"])
 
 async def get_or_create_default_user(db: AsyncSession) -> User:
-    result = await db.execute(select(User).where(User.email == 'local@career-companion.app'))
+    result = await db.execute(select(User).order_by(User.id.asc()))
     user = result.scalars().first()
     if not user:
         user = User(email='local@career-companion.app', full_name='Default User', hashed_password='not_used')

@@ -13,8 +13,10 @@ import {
   PanelLeftClose,
   PanelLeft,
   Sparkles,
+  X,
 } from "lucide-react";
 import { useResumeStore } from "../../features/resume/stores/resume.store";
+import { useProfileStore } from "../../features/profile/stores/profile.store";
 import { Tooltip } from "../ui/Tooltip";
 import { Button } from "../ui";
 import "./Sidebar.css";
@@ -35,10 +37,14 @@ export function Sidebar({
   onToggleCollapse,
 }: SidebarProps) {
   const { file } = useResumeStore();
+  const { profile } = useProfileStore();
   const [internalCollapsed, setInternalCollapsed] = useState(false);
 
-  const isCollapsed =
+  const rawCollapsed =
     controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
+
+  // When the mobile drawer is open, always show full labels and navigation
+  const isCollapsed = isOpen ? false : rawCollapsed;
 
   const toggleCollapse = () => {
     if (onToggleCollapse) {
@@ -47,6 +53,16 @@ export function Sidebar({
       setInternalCollapsed((prev) => !prev);
     }
   };
+
+  const initials = profile?.name
+    ? profile.name
+        .split(" ")
+        .filter(Boolean)
+        .map((part) => part[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : "CC";
 
   const navItems = [
     {
@@ -129,17 +145,30 @@ export function Sidebar({
               )}
             </NavLink>
 
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              onClick={toggleCollapse}
-              className="sidebar-collapse-trigger"
-              aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-              title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            >
-              {isCollapsed ? <PanelLeft size={15} /> : <PanelLeftClose size={15} />}
-            </Button>
+            {isOpen ? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                onClick={onNavigate}
+                className="lg:hidden text-[var(--text-muted)] hover:text-[var(--text)]"
+                aria-label="Close sidebar navigation"
+              >
+                <X size={16} />
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                onClick={toggleCollapse}
+                className="sidebar-collapse-trigger hidden lg:flex"
+                aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              >
+                {isCollapsed ? <PanelLeft size={15} /> : <PanelLeftClose size={15} />}
+              </Button>
+            )}
           </div>
 
           {/* Quick Search Action */}
@@ -322,7 +351,7 @@ export function Sidebar({
                 </span>
               </div>
               <span className="text-[var(--text-xs)] text-[var(--text)] truncate font-medium">
-                {file?.name || "parsed_resume_v2.pdf"}
+                {profile?.resume_filename || file?.name || "No resume uploaded"}
               </span>
             </NavLink>
           ) : (
@@ -339,14 +368,14 @@ export function Sidebar({
 
           {/* Profile Card */}
           <div className="sidebar-profile-card">
-            <div className="sidebar-profile-avatar">NP</div>
+            <div className="sidebar-profile-avatar">{initials}</div>
             {!isCollapsed && (
               <div className="min-w-0 flex-1 leading-tight">
                 <p className="text-[var(--text-xs)] font-semibold text-[var(--text)] truncate">
-                  Ninad Panchal
+                  {profile?.name || "Candidate"}
                 </p>
                 <p className="text-[11px] text-[var(--text-muted)] truncate">
-                  AI & DS Engineer
+                  {profile?.headline || "Job Seeker"}
                 </p>
               </div>
             )}

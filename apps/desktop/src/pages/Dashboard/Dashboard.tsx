@@ -16,12 +16,14 @@ import {
 } from "lucide-react";
 import { jobsService, ApplicationStats } from "../../features/jobs/services/jobs.service";
 import { useResumeStore } from "../../features/resume/stores/resume.store";
+import { useProfileStore } from "../../features/profile/stores/profile.store";
 import { useApplicationsStore } from "../../features/applications/stores/applications.store";
 import { Card, Button, Badge, MatchGauge } from "../../components/ui";
 
 export default function Dashboard() {
   const [stats, setStats] = useState<ApplicationStats | null>(null);
   const { analysis } = useResumeStore();
+  const { profile } = useProfileStore();
   const { setIsAddModalOpen } = useApplicationsStore();
   const navigate = useNavigate();
 
@@ -36,22 +38,22 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Failed to fetch dashboard stats", err);
       setStats({
-        total: 42,
-        by_status: { applied: 24, interview: 5, offer: 2, discovered: 11 },
-        avg_match_score: 84.6,
-        applied_this_week: 8,
-        applied_this_month: 24,
+        total: 0,
+        by_status: { applied: 0, interview: 0, offer: 0, discovered: 0 },
+        avg_match_score: 0,
+        applied_this_week: 0,
+        applied_this_month: 0,
       });
     }
   };
 
-  const totalApps = stats?.total || 42;
-  const appliedThisWeek = stats?.applied_this_week || 8;
-  const inInterview = stats?.by_status?.interview || 5;
-  const inOffer = stats?.by_status?.offer || 2;
-  const inWishlist = stats?.by_status?.discovered || 11;
-  const inApplied = stats?.by_status?.applied || 24;
-  const avgMatch = stats?.avg_match_score ? Math.round(Number(stats.avg_match_score)) : 85;
+  const totalApps = stats?.total ?? 0;
+  const appliedThisWeek = stats?.applied_this_week ?? 0;
+  const inInterview = stats?.by_status?.interview ?? 0;
+  const inOffer = stats?.by_status?.offer ?? 0;
+  const inWishlist = stats?.by_status?.discovered ?? 0;
+  const inApplied = stats?.by_status?.applied ?? 0;
+  const avgMatch = stats?.avg_match_score ? Math.round(Number(stats.avg_match_score)) : (profile?.ats_score || 85);
 
   // Time-based greeting
   const getGreeting = () => {
@@ -61,9 +63,13 @@ export default function Dashboard() {
     return "Good evening";
   };
 
-  const activeSkills = analysis?.skills?.length
-    ? analysis.skills.slice(0, 6)
-    : ["React 19", "TypeScript", "Python", "FastAPI", "PostgreSQL", "Docker"];
+  const activeSkills = profile?.skills?.length
+    ? profile.skills.slice(0, 8)
+    : analysis?.skills?.length
+    ? analysis.skills.slice(0, 8)
+    : [];
+
+  const candidateFirstName = profile?.name ? profile.name.split(" ")[0] : "Candidate";
 
   return (
     <div className="flex flex-col gap-8 select-none pb-12">
@@ -79,18 +85,30 @@ export default function Dashboard() {
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[var(--text)]">
-            {getGreeting()}, <span className="text-[var(--accent)]">Ninad</span>
+            {getGreeting()}, <span className="text-[var(--accent)]">{candidateFirstName}</span>
           </h1>
           <p className="mt-2 text-[var(--text-sm)] text-[var(--text-muted)] leading-relaxed">
-            You have{" "}
-            <span className="text-[var(--text)] font-semibold">
-              {inInterview} active interview rounds
-            </span>{" "}
-            in flight and{" "}
-            <span className="text-[var(--success)] font-semibold">
-              {appliedThisWeek} applications submitted
-            </span>{" "}
-            this week.
+            {totalApps > 0 ? (
+              <>
+                You have{" "}
+                <span className="text-[var(--text)] font-semibold">
+                  {inInterview} active interview rounds
+                </span>{" "}
+                in flight and{" "}
+                <span className="text-[var(--success)] font-semibold">
+                  {appliedThisWeek} applications submitted
+                </span>{" "}
+                this week.
+              </>
+            ) : (
+              <>
+                Your profile is active with{" "}
+                <span className="text-[var(--text)] font-semibold">
+                  {activeSkills.length} verified skills
+                </span>
+                . Discover curated roles or track your first application below.
+              </>
+            )}
           </p>
         </div>
 
@@ -135,10 +153,14 @@ export default function Dashboard() {
             <span className="text-3xl font-bold font-mono tracking-tight text-[var(--text)] tabular-nums">
               {totalApps}
             </span>
-            <span className="inline-flex items-center gap-1.5 text-xs text-[var(--success)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] px-2 py-0.5 rounded-[var(--radius-sm)] border border-[color-mix(in_srgb,var(--success)_20%,transparent)] font-medium whitespace-nowrap">
-              <TrendingUp size={12} className="shrink-0" />
-              +4 this week
-            </span>
+            {totalApps > 0 ? (
+              <span className="inline-flex items-center gap-1.5 text-xs text-[var(--success)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] px-2 py-0.5 rounded-[var(--radius-sm)] border border-[color-mix(in_srgb,var(--success)_20%,transparent)] font-medium whitespace-nowrap">
+                <TrendingUp size={12} className="shrink-0" />
+                +{appliedThisWeek} this week
+              </span>
+            ) : (
+              <span className="text-xs text-[var(--text-muted)] font-medium">Ready</span>
+            )}
           </div>
           <div className="mt-3 pt-3 border-t border-[var(--divider)] flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)]">
             <span>Active in pipeline</span>
@@ -160,13 +182,15 @@ export default function Dashboard() {
             <span className="text-3xl font-bold font-mono tracking-tight text-[var(--text)] tabular-nums">
               {inInterview}
             </span>
-            <Badge variant="interview" size="sm">
-              Next: Tomorrow
+            <Badge variant={inInterview > 0 ? "interview" : "neutral"} size="sm">
+              {inInterview > 0 ? "Active round" : "None scheduled"}
             </Badge>
           </div>
           <div className="mt-3 pt-3 border-t border-[var(--divider)] flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)]">
-            <span className="truncate">Razorpay (System Arch)</span>
-            <span className="text-[var(--warning)] font-medium font-mono shrink-0">2:30 PM</span>
+            <span className="truncate">
+              {inInterview > 0 ? "Upcoming technical round" : "No active interviews"}
+            </span>
+            <span className="text-[var(--text-faint)] font-mono shrink-0">—</span>
           </div>
         </Card>
 
@@ -183,7 +207,9 @@ export default function Dashboard() {
           </div>
           <div className="mt-3 pt-3 border-t border-[var(--divider)] flex items-center justify-between text-[var(--text-xs)] text-[var(--text-muted)]">
             <span>Core alignment</span>
-            <span className="text-[var(--success)] font-medium">Backend & Cloud</span>
+            <span className="text-[var(--success)] font-medium truncate max-w-[140px]">
+              {profile?.headline ? profile.headline.split("|")[0].trim() : "Full Stack & Cloud"}
+            </span>
           </div>
         </Card>
 
@@ -319,11 +345,11 @@ export default function Dashboard() {
           <Card className="p-6 flex flex-col gap-4">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <Badge variant="interview" size="sm">
-                  Upcoming interview
+                <Badge variant={inInterview > 0 ? "interview" : "neutral"} size="sm">
+                  {inInterview > 0 ? "Upcoming interview" : "Interview preparation"}
                 </Badge>
                 <span className="text-[var(--text-xs)] text-[var(--text-muted)] truncate">
-                  Round 2: Technical Architecture
+                  {inInterview > 0 ? "Upcoming Technical Architecture" : "STAR Simulator & Rubrics"}
                 </span>
               </div>
               <Button asChild variant="link" size="sm" className="p-0 h-auto shrink-0">
@@ -331,30 +357,46 @@ export default function Dashboard() {
                   to="/interview-prep"
                   className="text-[var(--text-xs)] text-[var(--accent)] hover:underline font-medium inline-flex items-center gap-1"
                 >
-                  <span>Prepare answers</span>
+                  <span>Practice answers</span>
                   <ArrowRight size={13} className="shrink-0" />
                 </Link>
               </Button>
             </div>
 
-            <div className="p-4 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <h3 className="text-[var(--text-sm)] font-semibold text-[var(--text)]">
-                  Razorpay • Distributed Systems Engineer
-                </h3>
-                <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1.5 leading-relaxed">
-                  Focus: High-throughput idempotent ledger, Kafka partitioning, and database concurrency.
-                </p>
+            {inInterview > 0 ? (
+              <div className="p-4 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-[var(--text-sm)] font-semibold text-[var(--text)]">
+                    Active Interview In Flight
+                  </h3>
+                  <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1.5 leading-relaxed">
+                    Focus: High-throughput architecture, Kafka partitioning, and database concurrency.
+                  </p>
+                </div>
+                <div className="text-left sm:text-right shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-[var(--divider)]">
+                  <span className="text-[var(--text-xs)] font-semibold text-[var(--warning)] font-mono block">
+                    Upcoming Round
+                  </span>
+                  <span className="text-[11px] text-[var(--text-muted)] mt-0.5 block">
+                    Video Call (45 mins)
+                  </span>
+                </div>
               </div>
-              <div className="text-left sm:text-right shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-[var(--divider)]">
-                <span className="text-[var(--text-xs)] font-semibold text-[var(--warning)] font-mono block">
-                  Tomorrow, 2:30 PM
-                </span>
-                <span className="text-[11px] text-[var(--text-muted)] mt-0.5 block">
-                  Google Meet (45 mins)
-                </span>
+            ) : (
+              <div className="p-4 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-[var(--text-sm)] font-semibold text-[var(--text)]">
+                    No active interview rounds scheduled
+                  </h3>
+                  <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-1.5 leading-relaxed">
+                    Advance an opportunity to "Interviewing" on your kanban board to activate practice drills and timeline reminders.
+                  </p>
+                </div>
+                <Button variant="secondary" size="sm" onClick={() => navigate("/applications")}>
+                  Track application
+                </Button>
               </div>
-            </div>
+            )}
 
             <div className="flex items-center justify-between pt-1">
               <span className="text-[var(--text-xs)] text-[var(--text-muted)]">
@@ -378,7 +420,7 @@ export default function Dashboard() {
                 Recommended next actions
               </h2>
               <span className="text-[var(--text-xs)] text-[var(--text-muted)]">
-                Based on pipeline status
+                Based on profile skills
               </span>
             </div>
 
@@ -386,29 +428,10 @@ export default function Dashboard() {
               <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-between gap-4 hover:bg-[var(--glass-bg-strong)] transition-colors">
                 <div className="min-w-0 flex flex-col gap-1">
                   <p className="text-[var(--text-xs)] font-medium text-[var(--text)]">
-                    Prepare for Razorpay architecture drill
+                    Explore high-match job opportunities
                   </p>
                   <p className="text-[11px] text-[var(--text-muted)]">
-                    Practice STAR answers for system design & reliability questions.
-                  </p>
-                </div>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => navigate("/interview-prep")}
-                  className="shrink-0"
-                >
-                  Start drill
-                </Button>
-              </div>
-
-              <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-between gap-4 hover:bg-[var(--glass-bg-strong)] transition-colors">
-                <div className="min-w-0 flex flex-col gap-1">
-                  <p className="text-[var(--text-xs)] font-medium text-[var(--text)]">
-                    Review 4 new high-match positions
-                  </p>
-                  <p className="text-[11px] text-[var(--text-muted)]">
-                    Matching backend & distributed systems skills at 85%+ parity.
+                    Discover open positions automatically matched to your indexed skills.
                   </p>
                 </div>
                 <Button
@@ -424,10 +447,29 @@ export default function Dashboard() {
               <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-between gap-4 hover:bg-[var(--glass-bg-strong)] transition-colors">
                 <div className="min-w-0 flex flex-col gap-1">
                   <p className="text-[var(--text-xs)] font-medium text-[var(--text)]">
-                    Send outreach pitch for Zepto referral
+                    Audit & optimize accomplishment bullets
                   </p>
                   <p className="text-[11px] text-[var(--text-muted)]">
-                    Generate a personalized LinkedIn note using Outreach Studio.
+                    Rewrite bullets using the Google XYZ framework (Accomplished [X] as measured by [Y] by doing [Z]).
+                  </p>
+                </div>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => navigate("/resume")}
+                  className="shrink-0"
+                >
+                  Optimize bullets
+                </Button>
+              </div>
+
+              <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] flex items-center justify-between gap-4 hover:bg-[var(--glass-bg-strong)] transition-colors">
+                <div className="min-w-0 flex flex-col gap-1">
+                  <p className="text-[var(--text-xs)] font-medium text-[var(--text)]">
+                    Generate tailored outreach notes
+                  </p>
+                  <p className="text-[11px] text-[var(--text-muted)]">
+                    Draft personalized referral pitches and recruiter notes in Outreach Studio.
                   </p>
                 </div>
                 <Button
@@ -454,53 +496,28 @@ export default function Dashboard() {
               <span className="text-[var(--text-xs)] text-[var(--text-muted)]">Timeline</span>
             </div>
 
-            <div className="flex flex-col gap-3.5">
-              <div className="flex items-start gap-3 text-[var(--text-xs)]">
-                <div className="w-2 h-2 rounded-full bg-[var(--warning)] mt-1.5 shrink-0" />
-                <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-                  <p className="text-[var(--text)] font-medium truncate">
-                    Razorpay scheduled Round 2 Interview
-                  </p>
-                  <p className="text-[var(--text-muted)] text-[11px]">
-                    Technical Architecture on Google Meet • 2 hours ago
-                  </p>
+            {totalApps === 0 ? (
+              <div className="p-4 rounded-[var(--radius-md)] bg-[var(--glass-bg)] border border-[var(--glass-border)] text-center py-6">
+                <p className="text-[var(--text-xs)] font-medium text-[var(--text)]">
+                  No application activity recorded yet
+                </p>
+                <p className="text-[11px] text-[var(--text-muted)] mt-1">
+                  Your pipeline activity and milestones will automatically appear here.
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3.5">
+                <div className="flex items-start gap-3 text-[var(--text-xs)]">
+                  <div className="w-2 h-2 rounded-full bg-[var(--status-applied)] mt-1.5 shrink-0" />
+                  <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+                    <p className="text-[var(--text)] font-medium truncate">Active application tracked</p>
+                    <p className="text-[var(--text-muted)] text-[11px]">
+                      {appliedThisWeek} submitted this week
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex items-start gap-3 text-[var(--text-xs)]">
-                <div className="w-2 h-2 rounded-full bg-[var(--status-applied)] mt-1.5 shrink-0" />
-                <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-                  <p className="text-[var(--text)] font-medium truncate">Applied to Zepto</p>
-                  <p className="text-[var(--text-muted)] text-[11px]">
-                    Senior Backend Engineer • Yesterday
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 text-[var(--text-xs)]">
-                <div className="w-2 h-2 rounded-full bg-[var(--success)] mt-1.5 shrink-0" />
-                <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-                  <p className="text-[var(--text)] font-medium truncate">
-                    Offer letter received from Postman
-                  </p>
-                  <p className="text-[var(--text-muted)] text-[11px]">
-                    Frontend Architect • 3 days ago
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 text-[var(--text-xs)]">
-                <div className="w-2 h-2 rounded-full bg-[var(--text-faint)] mt-1.5 shrink-0" />
-                <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-                  <p className="text-[var(--text)] font-medium truncate">
-                    Resume parsed & competencies verified
-                  </p>
-                  <p className="text-[var(--text-muted)] text-[11px]">
-                    10 core skills indexed • 4 days ago
-                  </p>
-                </div>
-              </div>
-            </div>
+            )}
           </Card>
 
           {/* Quick Tools Launchpad */}

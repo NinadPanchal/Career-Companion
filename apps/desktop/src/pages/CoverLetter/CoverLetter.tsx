@@ -12,9 +12,11 @@ import {
 import { Card, Button, Tabs, Badge, Input, Textarea, EmptyState } from "../../components/ui";
 import { aiService, CoverLetterResult } from "../../features/ai/services/ai.service";
 import { useResumeStore } from "../../features/resume/stores/resume.store";
+import { useProfileStore } from "../../features/profile/stores/profile.store";
 
 export default function CoverLetter() {
   const { analysis } = useResumeStore();
+  const { profile } = useProfileStore();
 
   const [jobTitle, setJobTitle] = useState("Senior Full Stack Engineer");
   const [companyName, setCompanyName] = useState("Razorpay");
@@ -28,6 +30,12 @@ export default function CoverLetter() {
   const [result, setResult] = useState<CoverLetterResult | null>(null);
   const [copied, setCopied] = useState(false);
 
+  const candidateSkills = profile?.skills?.length
+    ? profile.skills
+    : analysis?.skills?.length
+    ? analysis.skills
+    : ["React", "TypeScript", "Python", "System Design"];
+
   const handleGenerate = async () => {
     setIsLoading(true);
     try {
@@ -35,7 +43,7 @@ export default function CoverLetter() {
         job_title: jobTitle,
         company_name: companyName,
         job_description: jobDescription,
-        candidate_skills: analysis?.skills || ["React", "TypeScript", "Python", "System Design"],
+        candidate_skills: candidateSkills,
         tone,
         format_type: formatType
       });

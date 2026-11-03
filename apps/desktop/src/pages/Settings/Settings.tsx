@@ -13,25 +13,44 @@ import {
   Moon,
   Sun,
   Laptop,
+  Upload,
+  RotateCcw,
+  AlertTriangle,
+  FileText,
 } from "lucide-react";
-import { Card, Button, Badge, Input } from "../../components/ui";
+import { Card, Button, Badge, Input, Modal } from "../../components/ui";
 import { useTheme } from "../../context/ThemeContext";
 import { api } from "../../lib/api";
+import { useProfileStore } from "../../features/profile/stores/profile.store";
+import { profileService } from "../../features/profile/services/profile.service";
 
 export function Settings() {
   const { theme, setTheme } = useTheme();
-  const [userName, setUserName] = useState("Ninad Panchal");
-  const [userRole, setUserRole] = useState("AI & DS Engineer");
-  const [userEmail, setUserEmail] = useState("ninad.panchal@career-companion.app");
+  const { profile, setProfile, openOnboarding, resetWorkspace } = useProfileStore();
+
+  const [userName, setUserName] = useState(profile?.name || "");
+  const [userRole, setUserRole] = useState(profile?.headline || "");
+  const [userEmail, setUserEmail] = useState(profile?.email || "");
   const [apiKey, setApiKey] = useState("");
   const [showApiKey, setShowApiKey] = useState(false);
   const [apiStatus, setApiStatus] = useState<"checking" | "connected" | "offline">("checking");
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   useEffect(() => {
     checkApiConnection();
   }, []);
+
+  useEffect(() => {
+    if (profile) {
+      setUserName(profile.name || "");
+      setUserRole(profile.headline || "");
+      setUserEmail(profile.email || "");
+    }
+  }, [profile]);
 
   const checkApiConnection = async () => {
     setApiStatus("checking");
@@ -43,14 +62,43 @@ export function Settings() {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (userEmail && !userEmail.includes("@")) {
       setEmailError("Please enter a valid email address");
       return;
     }
     setEmailError("");
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+    setIsSaving(true);
+
+    try {
+      if (profile) {
+        const updated = await profileService.saveProfile({
+          ...profile,
+          name: userName.trim() || profile.name,
+          headline: userRole.trim(),
+          email: userEmail.trim(),
+        });
+        setProfile(updated);
+      }
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (err) {
+      console.error("Failed to save profile preferences", err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleConfirmReset = async () => {
+    setIsResetting(true);
+    try {
+      await resetWorkspace();
+      setIsResetModalOpen(false);
+    } catch (err) {
+      console.error("Failed to reset workspace", err);
+    } finally {
+      setIsResetting(false);
+    }
   };
 
   return (
@@ -322,8 +370,66 @@ export function Settings() {
           </div>
         </Card>
 
+        {/* Active Resume & Workspace Management */}
+        <Card className="p-6 flex flex-col gap-5">
+          <div className="flex items-center gap-3 pb-4 border-b border-[var(--divider)]">
+            <div className="w-8.5 h-8.5 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] flex items-center justify-center text-[var(--accent)] shrink-0">
+              <FileText size={17} />
+            </div>
+            <div>
+              <h2 className="text-[var(--text-md)] font-semibold text-[var(--text)]">Resume & Workspace Lifecycle</h2>
+              <p className="text-[var(--text-xs)] text-[var(--text-muted)] mt-0.5">
+                Update parsed documents or reset workspace state for live demos
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-[var(--radius-md)] bg-[var(--surface-solid)] border border-[var(--glass-border)]">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] border border-[color-mix(in_srgb,var(--success)_24%,transparent)] flex items-center justify-center text-[var(--success)] shrink-0">
+                <FileText size={18} />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-[var(--text-xs)] font-semibold text-[var(--text)] truncate">
+                    {profile?.resume_filename || "No active resume"}
+                  </span>
+                  <Badge variant={profile ? "success" : "neutral"} size="sm">
+                    {profile ? `${profile.ats_score || 85}% ATS` : "Unindexed"}
+                  </Badge>
+                </div>
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
+                  {profile?.skills?.length || 0} extracted technical skills • {profile?.experience?.length || 0} career roles
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={openOnboarding}
+                className="gap-2"
+                leftIcon={<Upload size={14} />}
+              >
+                <span>Replace resume</span>
+              </Button>
+
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => setIsResetModalOpen(true)}
+                className="gap-2"
+                leftIcon={<RotateCcw size={14} />}
+              >
+                <span>Reset workspace</span>
+              </Button>
+            </div>
+          </div>
+        </Card>
+
         {/* Action Button & Feedback */}
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
           {saveSuccess ? (
             <div className="flex items-center gap-2 px-3.5 py-2 rounded-[var(--radius-sm)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] border border-[color-mix(in_srgb,var(--success)_24%,transparent)] text-[var(--text-sm)] text-[var(--success)]">
               <CheckCircle2 size={16} className="shrink-0" />
@@ -333,12 +439,58 @@ export function Settings() {
             <div />
           )}
 
-          <Button variant="primary" size="md" onClick={handleSave} className="gap-2">
+          <Button
+            variant="primary"
+            size="md"
+            onClick={handleSave}
+            loading={isSaving}
+            className="gap-2 w-full sm:w-auto"
+          >
             <Save size={15} />
             <span>Save preferences</span>
           </Button>
         </div>
       </div>
+
+      {/* Reset Confirmation Modal */}
+      <Modal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        title={
+          <div className="flex items-center gap-2.5 text-[var(--danger)]">
+            <AlertTriangle size={18} />
+            <span className="font-semibold text-[var(--text-base)]">Reset Candidate Workspace?</span>
+          </div>
+        }
+        size="sm"
+      >
+        <div className="space-y-4 pt-1">
+          <p className="text-[var(--text-sm)] text-[var(--text-muted)] leading-relaxed">
+            This will permanently remove your candidate profile, parsed skills, and reset the application back to first-launch onboarding.
+          </p>
+          <div className="flex justify-end gap-2.5 pt-3 border-t border-[var(--divider)]">
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsResetModalOpen(false)}
+              disabled={isResetting}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              onClick={handleConfirmReset}
+              loading={isResetting}
+              leftIcon={<RotateCcw size={14} />}
+            >
+              Reset All Data
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

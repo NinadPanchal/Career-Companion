@@ -10,6 +10,7 @@ import {
   Target
 } from "lucide-react";
 import { useResumeStore, ResumeAnalysisResult } from "../../features/resume/stores/resume.store";
+import { useProfileStore } from "../../features/profile/stores/profile.store";
 import { resumeService } from "../../features/resume/services/resume.service";
 import { aiService } from "../../features/ai/services/ai.service";
 import { Card, Button, Badge, Tabs, ProgressRing } from "../../components/ui";
@@ -56,6 +57,7 @@ const DEFAULT_VARIATIONS: Variation[] = [
 
 export default function Resume() {
   const { file, analysis, setFile, setAnalysis } = useResumeStore();
+  const { profile } = useProfileStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [activeTab, setActiveTab] = useState<"ats" | "rewriter">("ats");
@@ -179,8 +181,8 @@ export default function Resume() {
                       <h3 className="text-[var(--text-sm)] font-semibold text-[var(--text)]">
                         Active document
                       </h3>
-                      <p className="text-[11px] text-[var(--text-muted)]">
-                        {file?.name || "parsed_resume_v2.pdf"}
+                      <p className="text-[11px] text-[var(--text-muted)] truncate max-w-[220px]">
+                        {profile?.resume_filename || file?.name || "No resume uploaded"}
                       </p>
                     </div>
                   </div>
